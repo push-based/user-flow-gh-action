@@ -9,7 +9,7 @@
     "@actions/core": "^1.10.0"
   },
   "devDependencies": {
-    "@nrwl/cli": "15.0.7",
+    "@nrwl/cli": "15.1.1",
     "@nrwl/eslint-plugin-nx": "15.0.7",
     "@nrwl/jest": "15.0.7",
     "@nrwl/js": "15.0.7",
