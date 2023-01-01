@@ -1,7 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-dist
+# dist needed as we have to have the compiled version og JS in the repo
 tmp
 /out-tsc
 
