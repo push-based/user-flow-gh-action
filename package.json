@@ -5,7 +5,8 @@
   "scripts": {
     "nx": "nx",
     "build": "nx build user-flow-gh-action",
-    "test": "nx test user-flow-gh-action"
+    "test": "nx test user-flow-gh-action",
+    "all": "npm run build && npm run test"
   },
   "private": true,
   "dependencies": {
