@@ -1,4 +1,4 @@
-name: 'Lighthouse User FLow Action'
+name: 'Lighthouse User Flow Action'
 description: "Audit URLs using Lighthouse user flow and test performance within PR's"
 inputs:
   milliseconds:
