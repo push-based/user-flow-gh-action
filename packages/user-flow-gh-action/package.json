@@ -1,5 +1,8 @@
 {
   "name": "@user-flow-gh-action-workspace/user-flow-gh-action",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
 }
