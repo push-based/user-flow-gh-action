@@ -1,0 +1,13 @@
+name: 'Lighthouse User FLow Action'
+description: "Audit URLs using Lighthouse user flow and test performance within PR's"
+inputs:
+  milliseconds:
+    description: 'random number to test action'
+  budgetPath:
+    description: 'Path to a Lighthouse budgets.json file'
+runs:
+  using: 'node16'
+  main: 'dist/packages/user-flow-gh-action/src/index.js'
+branding:
+  icon: 'bar-chart-2'
+  color: 'gray-dark'
