@@ -2,7 +2,11 @@
   "name": "user-flow-gh-action-workspace",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "nx": "nx",
+    "build": "nx build user-flow-gh-action",
+    "test": "nx test user-flow-gh-action"
+  },
   "private": true,
   "dependencies": {
     "tslib": "^2.3.0",
