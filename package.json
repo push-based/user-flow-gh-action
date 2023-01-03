@@ -10,19 +10,20 @@
   },
   "private": true,
   "dependencies": {
-    "tslib": "^2.3.0",
-    "@actions/core": "^1.10.0"
+    "@actions/core": "^1.10.0",
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@nrwl/cli": "15.0.7",
     "@nrwl/eslint-plugin-nx": "15.0.7",
-    "@nrwl/jest": "15.0.7",
+    "@nrwl/jest": "15.4.2",
     "@nrwl/js": "15.0.7",
     "@nrwl/linter": "15.0.7",
+    "@nrwl/node": "15.4.2",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/workspace": "15.0.7",
     "@types/jest": "28.1.1",
-    "@types/node": "16.11.7",
+    "@types/node": "16.18.11",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "eslint": "~8.15.0",
