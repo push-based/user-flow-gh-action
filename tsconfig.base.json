@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@user-flow-gh-action-workspace/user-flow-gh-action-e2e": [
+      "@push-based/user-flow-gh-action-e2e": [
         "packages/user-flow-gh-action-e2e/src/index.ts"
       ]
     }
