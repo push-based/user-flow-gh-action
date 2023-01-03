@@ -9,6 +9,10 @@
     "all": "npm run build && npm run test"
   },
   "private": true,
+  "engines": {
+    "node": "^16.19.0",
+    "npm": "^6.14.0"
+  },
   "dependencies": {
     "@actions/core": "^1.10.0",
     "tslib": "^2.3.0"
