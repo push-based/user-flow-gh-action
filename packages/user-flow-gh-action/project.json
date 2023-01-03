@@ -2,16 +2,37 @@
   "name": "user-flow-gh-action",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/user-flow-gh-action/src",
-  "projectType": "library",
+  "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "target": "node",
+        "compiler": "tsc",
         "outputPath": "dist/packages/user-flow-gh-action",
-        "main": "packages/user-flow-gh-action/src/index.ts",
-        "tsConfig": "packages/user-flow-gh-action/tsconfig.lib.json",
-        "assets": ["packages/user-flow-gh-action/*.md"]
+        "main": "packages/user-flow-gh-action/src/main.ts",
+        "tsConfig": "packages/user-flow-gh-action/tsconfig.app.json",
+        "assets": ["packages/user-flow-gh-action/src/action.yml"],
+        "externalDependencies": "none"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "user-flow-gh-action:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "user-flow-gh-action:build:production"
+        }
       }
     },
     "lint": {

@@ -1,11 +1,15 @@
 name: 'Lighthouse User Flow CI Action'
 description: 'Audit URLs using Lighthouse user flow and test performance in PRs'
 inputs:
+  milliseconds:
+    description: 'Milliseconds to wait before running Lighthouse'
+    required: false
+    default: '1000'
   rcPath:
     description: 'List of URL(s) to analyze'
 runs:
   using: 'node16'
-  main: 'dist/packages/user-flow-gh-action/src/index.js'
+  main: 'main.js'
 branding:
   icon: 'bar-chart-2'
   color: 'gray-dark'

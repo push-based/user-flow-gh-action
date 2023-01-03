@@ -7,7 +7,7 @@ inputs:
     description: 'Path to a Lighthouse budgets.json file'
 runs:
   using: 'node16'
-  main: 'dist/packages/user-flow-gh-action/src/index.js'
+  main: 'dist/packages/user-flow-gh-action/main.js'
 branding:
   icon: 'bar-chart-2'
   color: 'gray-dark'
