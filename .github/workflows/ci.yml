@@ -1,4 +1,4 @@
-name: 'build-test'
+name: 'CI'
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
@@ -6,7 +6,7 @@ on: # rebuild any PRs and main branch changes
       - main
 
 jobs:
-  build: # make sure build/ci work properly
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

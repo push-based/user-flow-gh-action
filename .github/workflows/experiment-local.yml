@@ -9,5 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Lighthouse User Flow Action
+      - name: Lighthouse User Flow CI Action
         uses: ./
