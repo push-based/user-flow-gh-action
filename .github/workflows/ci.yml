@@ -14,10 +14,12 @@ jobs:
         with:
           node-version: 16.x
           cache: npm
-      - run: |
-          npm install
-      - run: |
-          npm run all
+      - name: install
+        run: npm i
+      - name: build
+        run: npm run build
+      - name: test
+        run: npm run test
       - name: Run build user-flow-gh-action
         uses: ./dist/packages/user-flow-gh-action
         with:

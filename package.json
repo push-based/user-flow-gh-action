@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "build": "nx build user-flow-gh-action",
-    "test": "nx test user-flow-gh-action",
-    "all": "npm run build && npm run test"
+    "build": "npm run nx -- affected:build",
+    "test": "npm run nx -- affected:test",
+    "postBuildAction": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/post-build-action.ts"
   },
   "private": true,
   "engines": {
