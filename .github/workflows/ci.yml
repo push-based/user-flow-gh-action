@@ -28,7 +28,7 @@ jobs:
       - name: test
         run: npm run test
       - name: Run build user-flow-gh-action
-        uses: ./dist/packages/user-flow-gh-action
+        uses: ./
         with:
           milliseconds: '2000'
   test: # make sure the action works on a clean machine without building
