@@ -17,7 +17,7 @@ jobs:
       - name: install
         run: npm i
       - name: build
-        run: npm run nx -- affected:build --base=remotes/origin/master
+        run: npm run build
       - name: Commit build
         uses: EndBug/add-and-commit@v7
         with:
@@ -26,7 +26,7 @@ jobs:
           message: 'Persist build'
           add: '*'
       - name: test
-        run: npm run nx -- affected:test --base=remotes/origin/master
+        run: npm run test
       - name: Run build user-flow-gh-action
         uses: ./dist/packages/user-flow-gh-action
         with:
