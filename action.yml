@@ -1,10 +1,12 @@
-name: 'Lighthouse User Flow Action'
+name: 'Lighthouse User Flow CI Action'
 description: "Audit URLs using Lighthouse user flow and test performance within PR's"
 inputs:
   milliseconds:
-    description: 'random number to test action'
-  budgetPath:
-    description: 'Path to a Lighthouse budgets.json file'
+    description: 'Milliseconds to wait before running Lighthouse'
+    required: false
+    default: '1000'
+  rcPath:
+    description: 'List of URL(s) to analyze'
 runs:
   using: 'node16'
   main: 'dist/packages/user-flow-gh-action/main.js'
