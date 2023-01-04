@@ -1,7 +1,6 @@
 name: 'CI'
 on: # rebuild any PRs and main branch changes
   pull_request:
-  push:
     branches:
       - main
 
@@ -18,7 +17,7 @@ jobs:
         run: npm i
       - name: build
         run: npm run build
-      - name: Commit measures
+      - name: Commit build
         uses: EndBug/add-and-commit@v7
         with:
           author_name: push-based.io
