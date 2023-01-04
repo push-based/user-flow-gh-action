@@ -1,14 +1,14 @@
 import * as core from '@actions/core'
-import {wait} from './app/wait'
+import {executeUFCI} from './app/executeUFCI'
 
 export async function run(): Promise<void> {
   core.debug(`-> wait`)
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const rcPath: string = core.getInput('rcPath')
+    core.debug(`rcPath is ${rcPath} ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
 
     core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
+    await executeUFCI(rcPath)
     core.debug(new Date().toTimeString())
 
     core.setOutput('time', new Date().toTimeString())
