@@ -1762,22 +1762,22 @@ exports.checkBypass = checkBypass;
 
 /***/ }),
 
-/***/ "./packages/user-flow-gh-action/src/app/wait.ts":
+/***/ "./packages/user-flow-gh-action/src/app/executeUFCI.ts":
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wait = void 0;
-async function wait(milliseconds) {
+exports.executeUFCI = void 0;
+async function executeUFCI(rcPath) {
     return new Promise(resolve => {
-        if (isNaN(milliseconds)) {
-            throw new Error('milliseconds not a number');
+        if (!isNaN(rcPath)) {
+            throw new Error('rcPath is a number');
         }
-        setTimeout(() => resolve('done!'), milliseconds);
+        setTimeout(() => resolve(`rcPath is ${rcPath}`), 1000);
     });
 }
-exports.wait = wait;
+exports.executeUFCI = executeUFCI;
 
 
 /***/ }),
@@ -2753,14 +2753,14 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
-const wait_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/wait.ts");
+const executeUFCI_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/executeUFCI.ts");
 async function run() {
     core.debug(`-> wait`);
     try {
-        const ms = core.getInput('milliseconds');
-        core.debug(`Waiting ${ms} milliseconds ...`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+        const rcPath = core.getInput('rcPath');
+        core.debug(`rcPath is ${rcPath} ...`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
         core.debug(new Date().toTimeString());
-        await (0, wait_1.wait)(parseInt(ms, 10));
+        await (0, executeUFCI_1.executeUFCI)(rcPath);
         core.debug(new Date().toTimeString());
         core.setOutput('time', new Date().toTimeString());
     }
