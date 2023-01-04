@@ -1,7 +1,6 @@
 // A majority of this code is borrowed from [lhci-gh-action](https://github.com/treosh/lighthouse-ci-action)
 import * as core from '@actions/core';
-import { RcJson } from '@push-based/user-flow';
-import { readRcConfig } from '@push-based/user-flow/src/lib/global/rc-json';
+import { RcJson, readRcConfig } from '@push-based/user-flow';
 import { get } from 'lodash';
 import { resolve } from 'path';
 
