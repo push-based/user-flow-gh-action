@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "build": "npm run nx -- affected:build",
-    "test": "npm run nx -- affected:test",
+    "build": "npm run nx -- affected:build --base=remotes/origin/master",
+    "test": "npm run nx -- affected:test --base=remotes/origin/master",
     "postBuildAction": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/post-build-action.ts"
   },
   "private": true,
