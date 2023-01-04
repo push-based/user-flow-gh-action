@@ -19,12 +19,9 @@ jobs:
       - run: |
           npm run all
       - name: Run build user-flow-gh-action
-        uses: dist/packages/user-flow-gh-action
+        uses: ./dist/packages/user-flow-gh-action
         with:
           milliseconds: '2000'
-          rcPath:
-            - https://example.com
-            - https://push-based.io
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
