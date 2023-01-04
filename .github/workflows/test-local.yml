@@ -1,13 +1,15 @@
-name: 'experiment-local'
+name: 'test-local'
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
     branches:
       - main
 jobs:
-  experiment: # make sure build/ci work properly
+  test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Lighthouse User Flow CI Action
         uses: ./
+        with:
+          milliseconds: 1000
