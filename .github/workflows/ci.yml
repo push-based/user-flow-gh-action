@@ -1,4 +1,4 @@
-name: 'build-test'
+name: 'CI'
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
@@ -6,7 +6,7 @@ on: # rebuild any PRs and main branch changes
       - main
 
 jobs:
-  build: # make sure build/ci work properly
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -14,18 +14,20 @@ jobs:
         with:
           node-version: 16.x
           cache: npm
-      - run: |
-          npm install
-      - run: |
-          npm run all
+      - name: install
+        run: npm i
+      - name: build
+        run: npm run build
+      - name: Commit build
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: push-based.io
+          author_email: opensource@push-based.io
+          message: 'Persist build'
+          add: '*'
+      - name: test
+        run: npm run test
       - name: Run build user-flow-gh-action
-        uses: ./dist/packages/user-flow-gh-action
+        uses: ./
         with:
           milliseconds: '2000'
-  test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./
-        with:
-          milliseconds: 1000

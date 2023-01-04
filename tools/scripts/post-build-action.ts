@@ -4,7 +4,7 @@ import {join} from 'path';
 type ProjectJson = {
   sourceRoot: string;
   targets: {
-    build: {
+    "build-app": {
       options: {
         outputPath: string
       }
@@ -16,8 +16,8 @@ const projectJsonPath = './packages/user-flow-gh-action/project.json';
 const projectJson: ProjectJson = JSON.parse(fs.readFileSync(projectJsonPath, {encoding: 'utf8'}));
 
 const actionFileName = 'action.yml';
-const distPath = join(projectJson.targets.build.options.outputPath);
-const distActionPath = join(projectJson.targets.build.options.outputPath, actionFileName);
+const distPath = join(projectJson.targets['build-app'].options.outputPath);
+const distActionPath = join(projectJson.targets['build-app'].options.outputPath, actionFileName);
 const rootActionPath = join('./', actionFileName);
 
 console.log(`Process post build`);

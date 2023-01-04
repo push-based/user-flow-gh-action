@@ -1,5 +1,5 @@
 name: 'Lighthouse User Flow CI Action'
-description: "Audit URLs using Lighthouse user flow and test performance within PR's"
+description: "Audit URL's using Lighthouse user flow and test performance within PR's"
 inputs:
   milliseconds:
     description: 'Milliseconds to wait before running Lighthouse'
