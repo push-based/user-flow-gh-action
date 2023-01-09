@@ -3,7 +3,7 @@ import * as core from '@actions/core';
 import { RcJson, readRcConfig } from '@push-based/user-flow';
 import { resolve } from 'path';
 
-type GhActionParams = {
+type GhActionInputs = {
   // global
   rcPath: string;
   // collect
@@ -16,45 +16,47 @@ type GhActionParams = {
   basicAuthPassword: string;
 }
 
-export function getInput(): GhActionParams {
+export function getInputs(): GhActionInputs {
   const serverBaseUrl: string = core.getInput('serverBaseUrl');
   const serverToken: string = core.getInput('serverToken');
 
   // Make sure we don't have UFCI xor API token
   if (!!serverBaseUrl != !!serverToken) {
     // Fail and exit
-    core.setFailed(`Need both a UFCI server url and an API token.`)
-    process.exit(1)
+    core.setFailed(`Need both a UFCI server url and an API token.`);
+    throw new Error(`Need both a UFCI server url and an API token.`);
   }
 
-  let url: string | null = null
-
   // Inspect user-flowrc file for malformations
-  const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null
+  const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
+
+  let url: string | null = null;
   if (rcPath) {
     const rcFileObj: RcJson = readRcConfig(rcPath);
 
-    // Check if we have a static-dist-dir
+    // Check if we have a url
     if (rcFileObj.collect) {
       if (rcFileObj.collect.url) {
-        url = rcFileObj.collect.url
+        url = rcFileObj.collect.url;
       }
+    }
+    if(!url) {
+      throw new Error(`URL not given in Rc config.`);
     }
   } else {
     // Fail and exit
-    core.setFailed(`Need user-flowrc json to run.`)
-    process.exit(1)
+    core.setFailed(`Need rcPath to run.`);
+    throw new Error(`Need rcPath to run.`);
   }
-
 
   // Get and interpolate URL's
   url = interpolateProcessIntoUrls([url])[0];
 
-  // Make sure we have either urls or a static-dist-dir
+  // Make sure we have a url
   if (!url) {
     // Fail and exit
-    core.setFailed(`Need either 'urls' in action parameters or a 'static_dist_dir' in user-flowrc file`)
-    process.exit(1)
+    core.setFailed(`Need either 'url' in user-flowrc file`);
+    throw new Error(`Need either 'url' in user-flowrc file`);
   }
 
   return {
@@ -67,7 +69,7 @@ export function getInput(): GhActionParams {
     serverToken,
     basicAuthUsername: core.getInput('basicAuthUsername') || 'user-flow',
     basicAuthPassword: core.getInput('basicAuthPassword')
-  }
+  };
 }
 
 /**
@@ -76,9 +78,9 @@ export function getInput(): GhActionParams {
  * @param {string | null} rcPath
  */
 export function hasAssertConfig(rcPath: string): boolean {
-  if (!rcPath) return false
-  const rcFileObj = readRcConfig(rcPath)
-  return Boolean(rcFileObj.assert)
+  if (!rcPath) return false;
+  const rcFileObj = readRcConfig(rcPath);
+  return Boolean(rcFileObj.assert);
 }
 
 /**
@@ -87,9 +89,9 @@ export function hasAssertConfig(rcPath: string): boolean {
  * @param {string} arg
  */
 function getList(arg, separator = '\n') {
-  const input = core.getInput(arg)
-  if (!input) return []
-  return input.split(separator).map((url) => url.trim())
+  const input = core.getInput(arg);
+  if (!input) return [];
+  return input.split(separator).map((url) => url.trim());
 }
 
 /**
@@ -100,12 +102,12 @@ function getList(arg, separator = '\n') {
  */
 function interpolateProcessIntoUrls(urls: string[]): string[] {
   return urls.map((url) => {
-    if (!url.includes('$')) return url
+    if (!url.includes('$')) return url;
     Object.keys(process.env).forEach((key) => {
       if (url.includes(`${key}`)) {
-        url = url.replace(`$${key}`, `${process.env[key]}`)
+        url = url.replace(`$${key}`, `${process.env[key]}`);
       }
-    })
-    return url
-  })
+    });
+    return url;
+  });
 }
