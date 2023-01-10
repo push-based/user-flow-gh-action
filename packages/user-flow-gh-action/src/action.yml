@@ -4,10 +4,10 @@ inputs:
   rcPath:
     description: 'Path to a UFCI user-flowrc.json file'
     required: false
-      default: 'user-flowrc.json'
+    default: 'user-flowrc.json'
   artifactName:
     description: 'Name of the artifact group if using uploadArtifacts. default: lighthouse-results'
-    default: lighthouse-results
+    default: 'lighthouse-results'
   serverBaseUrl:
     description: 'Address of a UFCI server'
   serverToken:
@@ -18,7 +18,7 @@ inputs:
     description: 'Basic auth password for UFCI server'
 runs:
   using: 'node16'
-  main: 'main.js'
+  main: 'dist/packages/user-flow-gh-action/main.js'
 branding:
   icon: 'bar-chart-2'
   color: 'gray-dark'
