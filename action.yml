@@ -7,7 +7,7 @@ inputs:
     default: 'user-flowrc.json'
   artifactName:
     description: 'Name of the artifact group if using uploadArtifacts. default: lighthouse-results'
-    default: lighthouse-results
+    default: 'lighthouse-results'
   serverBaseUrl:
     description: 'Address of a UFCI server'
   serverToken:
