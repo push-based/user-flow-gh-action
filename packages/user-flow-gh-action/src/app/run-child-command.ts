@@ -1,10 +1,11 @@
-import * as childProcess from 'child_process';
-import * as ufCliBin from '@push-based/user-flow/src/cli.js';
+import { execSync } from 'child_process';
 
-export function runChildCommand(command, args = []) {
-  const combinedArgs = [ufCliBin, command, ...args]
-  const { status = -1 } = childProcess.spawnSync(process.argv[0], combinedArgs, {
-    stdio: 'inherit',
-  })
-  return status || 0
+export function runChildCommand(bin: string, command: string, args: string[] = []) {
+  const combinedArgs = [bin, command, ...args];
+
+  return execSync(combinedArgs.join(' '), {
+    cwd: process.cwd(),
+    env: process.env,
+    encoding: 'utf-8'
+  });
 }
