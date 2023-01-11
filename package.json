@@ -5,9 +5,9 @@
   "scripts": {
     "nx": "nx",
     "build": "nx build user-flow-gh-action",
-    "build:affected": "npm run nx -- affected:build --base=remotes/origin/master",
+    "build:affected": "npm run nx -- affected:build --base=origin/main",
     "test": "nx test user-flow-gh-action",
-    "test:affected": "npm run nx -- affected:test --base=remotes/origin/master",
+    "test:affected": "npm run nx -- affected:test --base=origin/main",
     "postBuildAction": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/post-build-action.ts"
   },
   "private": true,
