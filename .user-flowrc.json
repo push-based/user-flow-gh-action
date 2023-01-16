@@ -1,0 +1,13 @@
+{
+  "collect": {
+    "url": "https://google.com",
+    "ufPath": "./user-flows"
+  },
+  "persist": {
+    "outPath": "./measures",
+    "format": [
+      "json"
+    ]
+  },
+  "assert": {}
+}
