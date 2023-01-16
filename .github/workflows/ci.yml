@@ -29,5 +29,3 @@ jobs:
         run: npm run test
       - name: Run build user-flow-gh-action
         uses: ./
-        with:
-          milliseconds: '2000'

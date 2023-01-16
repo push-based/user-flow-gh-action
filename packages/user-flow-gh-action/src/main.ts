@@ -8,7 +8,7 @@ import { getInputs } from './app/get-inputs';
 // 3. handle comments
 // 4. save result
 export async function run(): Promise<void> {
-  core.debug(`-> wait`)
+  core.debug(`-> collect inputs`);
   try {
     const ghActionParams = getInputs()
     core.debug(`ghActionParams are ${JSON.stringify(ghActionParams)}`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
@@ -16,6 +16,10 @@ export async function run(): Promise<void> {
 
     core.setOutput('CLI result is', r)
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) core.setFailed(error.message);
+    process.exitCode = 1;
+    process.exit(1)
   }
 }
+
+run();
