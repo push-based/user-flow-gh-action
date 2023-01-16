@@ -29,3 +29,6 @@ jobs:
         run: npm run test
       - name: Run test user-flow-gh-action locally
         uses: ./
+        with:
+          serverBaseUrl: push-based.io
+          serverToken: 123
