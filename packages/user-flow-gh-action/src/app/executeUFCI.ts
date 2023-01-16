@@ -12,7 +12,7 @@ export async function executeUFCI(
     if(!rcPath) {
       reject('rcPath not given');
     }
-    const res = run('user-flow', 'collect', processParamsToParamsArray({ rcPath }));
+    const res = run('npx @push-based/user-flow', 'collect', processParamsToParamsArray({ rcPath }));
     resolve(res);
   });
 }
