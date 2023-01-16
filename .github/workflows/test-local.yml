@@ -11,3 +11,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: Lighthouse User Flow CI Action
         uses: ./
+        with:
+          rcPath: './.user-flowrc.json'
