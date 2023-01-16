@@ -21,7 +21,7 @@ export function getInputs(): GhActionInputs {
   let url: string | null = null;
   if (rcPath) {
     const rcFileObj: RcJson = readRcConfig(rcPath);
-    core.setFailed(`rcFileObj id ${JSON.stringify(rcFileObj)}`);
+    core.debug(`rcFileObj id ${JSON.stringify(rcFileObj)}`);
     // Check if we have a url
     if (rcFileObj.collect) {
       if (rcFileObj.collect.url) {
@@ -43,8 +43,8 @@ export function getInputs(): GhActionInputs {
   // Make sure we have a url
   if (!url) {
     // Fail and exit
-    core.setFailed(`Need either 'url' in user-flowrc file`);
-    throw new Error(`Need either 'url' in user-flowrc file`);
+    core.setFailed(`Need 'url' in user-flowrc file`);
+    throw new Error(`Need 'url' in user-flowrc file`);
   }
 
   return {
