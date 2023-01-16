@@ -27,5 +27,5 @@ jobs:
           add: '*'
       - name: test
         run: npm run test
-      - name: Run build user-flow-gh-action
+      - name: Run test user-flow-gh-action locally
         uses: ./
