@@ -21,7 +21,7 @@ export function getInputs(): GhActionInputs {
   let url: string | null = null;
   if (rcPath) {
     const rcFileObj: RcJson = readRcConfig(rcPath);
-
+    core.setFailed(`rcFileObj id ${JSON.stringify(rcFileObj)}`);
     // Check if we have a url
     if (rcFileObj.collect) {
       if (rcFileObj.collect.url) {
