@@ -22,4 +22,5 @@ export async function run(): Promise<void> {
   }
 }
 
-run();
+run().catch((err) => core.setFailed(err.message))
+  .then(() => core.debug(`done in ${process.uptime()}s`))
