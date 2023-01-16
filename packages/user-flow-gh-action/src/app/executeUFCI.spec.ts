@@ -15,7 +15,7 @@ describe('executeUFCI mock', () => {
       return `bin is ${JSON.stringify(args[0])} command is collect param is ${JSON.stringify(args[2])}` as any;
     };
     const res = await executeUFCI(({ rcPath } as unknown as any), run);
-    expect(res).toBe(`bin is "user-flow" command is collect param is ["--rcPath=${rcPath}"]`);
+    expect(res).toBe(`bin is "npx @push-based/user-flow" command is collect param is ["--rcPath=${rcPath}"]`);
   });
 
 });
