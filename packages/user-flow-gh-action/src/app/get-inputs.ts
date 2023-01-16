@@ -17,11 +17,12 @@ export function getInputs(): GhActionInputs {
 
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
+  core.debug(`rcPath is ${rcPath}`);
 
   let url: string | null = null;
   if (rcPath) {
     const rcFileObj: RcJson = readRcConfig(rcPath);
-    core.debug(`rcFileObj id ${JSON.stringify(rcFileObj)}`);
+    core.debug(`rcFileObj is ${JSON.stringify(rcFileObj)}`);
     // Check if we have a url
     if (rcFileObj.collect) {
       if (rcFileObj.collect.url) {
