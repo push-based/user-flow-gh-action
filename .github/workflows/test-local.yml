@@ -12,4 +12,4 @@ jobs:
       - name: Lighthouse User Flow CI Action
         uses: ./
         with:
-          rcPath: './.user-flowrc.json'
+          rcPath: '.user-flowrc.json'
