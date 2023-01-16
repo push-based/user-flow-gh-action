@@ -11,5 +11,3 @@ jobs:
       - uses: actions/checkout@v3
       - name: Lighthouse User Flow CI Action
         uses: ./
-        with:
-          milliseconds: 1000
