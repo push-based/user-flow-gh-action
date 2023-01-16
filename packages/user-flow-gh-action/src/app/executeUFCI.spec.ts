@@ -1,15 +1,21 @@
-import {executeUFCI} from './executeUFCI'
-import {expect, test} from '@jest/globals'
+import { executeUFCI } from './executeUFCI';
+import { expect, test } from '@jest/globals';
 
-test('throws invalid number', async () => {
-  const input = 42 as unknown as string;
-  await expect(executeUFCI(input)).rejects.toThrow('rcPath is a number')
-})
 
-test('wait 500 ms', async () => {
-  const start = new Date()
-  await executeUFCI('user-flowrc.json')
-  const end = new Date()
-  var delta = Math.abs(end.getTime() - start.getTime())
-  expect(delta).toBeGreaterThan(450)
-})
+describe('executeUFCI mock', () => {
+
+  test('throws invalid number', async () => {
+    const p = ({ rcPath: false } as unknown as any);
+    expect(executeUFCI(p)).rejects.toEqual('rcPath not given');
+  });
+
+  test('is call with run inside', async () => {
+    const rcPath = 'user-flowrc.json';
+    const run = (...args: any) => {
+      return `bin is ${JSON.stringify(args[0])} command is collect param is ${JSON.stringify(args[2])}` as any;
+    };
+    const res = await executeUFCI(({ rcPath } as unknown as any), run);
+    expect(res).toBe(`bin is "user-flow" command is collect param is ["--rcPath=${rcPath}"]`);
+  });
+
+});

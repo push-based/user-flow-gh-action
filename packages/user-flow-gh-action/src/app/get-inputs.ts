@@ -2,19 +2,7 @@
 import * as core from '@actions/core';
 import { RcJson, readRcConfig } from '@push-based/user-flow';
 import { resolve } from 'path';
-
-type GhActionInputs = {
-  // global
-  rcPath: string;
-  // collect
-  url: string;
-  // assert
-  // upload
-  serverBaseUrl: string;
-  serverToken: string;
-  basicAuthUsername: string;
-  basicAuthPassword: string;
-}
+import { GhActionInputs } from './types';
 
 export function getInputs(): GhActionInputs {
   const serverBaseUrl: string = core.getInput('serverBaseUrl');
