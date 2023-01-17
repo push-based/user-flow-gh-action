@@ -10,7 +10,7 @@ export const noUrlError = `URL not given in rc config.`;
 export const wrongVerboseValue = (val: string) => `verbose is ${val} but can only be set to 'on' or 'off'.`;
 
 export function getInputs(): GhActionInputs {
-  core.debug(`Get inputs form action.yml`);
+  core.startGroup(`Get inputs form action.yml`);
 
   // GLOBAL PARAMS
 
@@ -70,6 +70,8 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
   const basicAuthPassword =  core.getInput('basicAuthPassword');
   core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
+
+  core.endGroup();
 
   return {
     rcPath,
