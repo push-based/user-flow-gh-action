@@ -43,7 +43,7 @@ let prjCfgWithWrongUrl = {
 const rcPathError = 'Need rcPath to run.';
 const serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
 const noUrlError = `URL not given in Rc config.`;
-const wrongVerboseValue = `verbose can only be set to 'on' or 'off'`;
+const wrongVerboseValue = (val: string) => `verbose is ${val} but can only be set to 'on' or 'off'.`;
 
 function resetProcessParams(): void {
   delete process.env['INPUT_RCPATH'];
