@@ -43,6 +43,7 @@ let prjCfgWithWrongUrl = {
 const rcPathError = 'Need rcPath to run.';
 const serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
 const noUrlError = `URL not given in Rc config.`;
+const wrongVerboseValue = `verbose can only be set to 'on' or 'off'`;
 
 function resetProcessParams(): void {
   delete process.env['INPUT_RCPATH'];
@@ -73,6 +74,13 @@ describe('getInputs', () => {
 
   test('should throw if serverBaseUrl is given and serverToken is not', () => {
     process.env['INPUT_RCPATH'] = 'path/to/rcFile';
+    process.env['INPUT_VERBOSE'] = 'wrongValue';
+    expect(() => getInputs()).toThrow(wrongVerboseValue);
+  });
+
+
+  test('should throw if serverBaseUrl is given and serverToken is not', () => {
+    process.env['INPUT_RCPATH'] = 'path/to/rcFile';
     process.env['INPUT_SERVERBASEURL'] = 'http://my.thing.test';
     expect(() => getInputs()).toThrow(serverBaseUrlServerTokenXorError);
   });
@@ -96,12 +104,14 @@ describe('getInputs', () => {
 
   test('rcPath returns cgf object filled with action params', () => {
     process.env['INPUT_RCPATH'] = join(rootPath, DEFAULT_RC_NAME);
+    process.env['INPUT_VERBOSE'] = 'on';
     process.env['INPUT_SERVERBASEURL'] = 'INPUT_SERVERBASEURL';
     process.env['INPUT_SERVERTOKEN'] = 'INPUT_SERVERTOKEN';
     process.env['INPUT_BASICAUTHUSERNAME'] = 'INPUT_BASICAUTHUSERNAME';
     process.env['INPUT_BASICAUTHPASSWORD'] = 'INPUT_BASICAUTHPASSWORD';
     const res = getInputs();
     expect(res.rcPath).toBe(process.env['INPUT_RCPATH']);
+    expect(res.verbose).toBe(process.env['INPUT_VERBOSE']);
     expect(res.url).toBe(RcJSON.collect.url);
     expect(res.serverBaseUrl).toBe('INPUT_SERVERBASEURL');
     expect(res.serverToken).toBe('INPUT_SERVERTOKEN');

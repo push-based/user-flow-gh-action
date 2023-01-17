@@ -1,6 +1,10 @@
 name: 'Lighthouse User Flow CI Action'
 description: "Audit URL's using Lighthouse user flow and test performance within PR's"
 inputs:
+  verbose:
+    description: 'Verbose logging flag ("on" or "off")'
+    required: false
+    default: 'on'
   rcPath:
     description: 'Path to a UFCI user-flowrc.json file'
     required: false

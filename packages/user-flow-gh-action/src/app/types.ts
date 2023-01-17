@@ -1,5 +1,7 @@
+export type VerboseValue = 'on' | 'off';
 export type GhActionInputs = {
   // global
+  verbose: VerboseValue,
   rcPath: string;
   // collect
   url: string;

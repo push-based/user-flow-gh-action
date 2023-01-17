@@ -6,6 +6,12 @@ import { GhActionInputs } from './types';
 
 export function getInputs(): GhActionInputs {
   core.debug(`Collect inputs`);
+
+  let verbose = core.getInput('verbose') || 'off';
+  if (verbose !== 'on' && verbose !== 'off') {
+    throw new Error(`verbose can only be set to 'on' or 'off'`);
+  }
+
   const serverBaseUrl: string = core.getInput('serverBaseUrl');
   const serverToken: string = core.getInput('serverToken');
 
@@ -30,7 +36,7 @@ export function getInputs(): GhActionInputs {
         url = rcFileObj.collect.url;
       }
     }
-    if(!url) {
+    if (!url) {
       throw new Error(`URL not given in Rc config.`);
     }
   } else {
@@ -57,6 +63,7 @@ export function getInputs(): GhActionInputs {
     // upload
     serverBaseUrl,
     serverToken,
+    verbose,
     basicAuthUsername: core.getInput('basicAuthUsername') || 'user-flow',
     basicAuthPassword: core.getInput('basicAuthPassword')
   };
