@@ -75,7 +75,7 @@ describe('getInputs', () => {
   test('should throw if wrong value is passed as verbose', () => {
     process.env['INPUT_RCPATH'] = 'path/to/rcFile';
     process.env['INPUT_VERBOSE'] = 'wrongValue';
-    expect(() => getInputs()).toThrow(wrongVerboseValue);
+    expect(() => getInputs()).toThrow(wrongVerboseValue(process.env['INPUT_VERBOSE']));
   });
 
 
