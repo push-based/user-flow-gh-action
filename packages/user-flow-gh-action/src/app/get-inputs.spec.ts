@@ -72,7 +72,7 @@ describe('getInputs', () => {
     expect(() => getInputs()).toThrow(rcPathError);
   });
 
-  test('should throw if serverBaseUrl is given and serverToken is not', () => {
+  test('should throw if wrong value is passed as verbose', () => {
     process.env['INPUT_RCPATH'] = 'path/to/rcFile';
     process.env['INPUT_VERBOSE'] = 'wrongValue';
     expect(() => getInputs()).toThrow(wrongVerboseValue);
