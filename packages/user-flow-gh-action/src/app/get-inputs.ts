@@ -5,6 +5,7 @@ import { resolve } from 'path';
 import { GhActionInputs } from './types';
 
 export function getInputs(): GhActionInputs {
+  core.debug(`Collect inputs`);
   const serverBaseUrl: string = core.getInput('serverBaseUrl');
   const serverToken: string = core.getInput('serverToken');
 
