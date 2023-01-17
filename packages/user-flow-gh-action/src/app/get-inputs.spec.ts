@@ -111,7 +111,7 @@ describe('getInputs', () => {
     process.env['INPUT_BASICAUTHPASSWORD'] = 'INPUT_BASICAUTHPASSWORD';
     const res = getInputs();
     expect(res.rcPath).toBe(process.env['INPUT_RCPATH']);
-    expect(res.verbose).toBe(process.env['INPUT_VERBOSE']);
+    expect(res.verbose).toBe(process.env['INPUT_VERBOSE'] === 'on');
     expect(res.url).toBe(RcJSON.collect.url);
     expect(res.serverBaseUrl).toBe('INPUT_SERVERBASEURL');
     expect(res.serverToken).toBe('INPUT_SERVERTOKEN');
