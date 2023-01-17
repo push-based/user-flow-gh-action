@@ -7,9 +7,9 @@ import { GhActionInputs } from './types';
 export function getInputs(): GhActionInputs {
   core.debug(`Collect inputs`);
 
-  let verboseInput = core.getInput('verbose') || 'off';
+  let verboseInput = core.getInput('verbose');
   if (verboseInput !== 'on' && verboseInput !== 'off') {
-    throw new Error(`verbose can only be set to 'on' or 'off'`);
+    throw new Error(`verbose is ${verboseInput} but can only be set to 'on' or 'off'.`);
   }
   // convert action onput to boolean
   const verbose = verboseInput === 'on';
