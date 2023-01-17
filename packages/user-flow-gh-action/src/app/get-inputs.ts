@@ -10,13 +10,13 @@ export const noUrlError = `URL not given in rc config.`;
 export const wrongVerboseValue = (val: string) => `verbose is ${val} but can only be set to 'on' or 'off'.`;
 
 export function getInputs(): GhActionInputs {
-  core.debug(`Collect inputs`);
+  core.startGroup(`Get inputs form action.yml`);
 
   // GLOBAL PARAMS
 
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
-  core.debug(`rcPath is ${rcPath}`);
+  core.debug(`Input rcPath is ${rcPath}`);
   if (!rcPath) {
     // Fail and exit
     core.setFailed(rcPathError);
@@ -30,8 +30,9 @@ export function getInputs(): GhActionInputs {
   if (verboseInput !== 'on' && verboseInput !== 'off') {
     throw new Error(wrongVerboseValue(verboseInput));
   }
-  // convert action onput to boolean
+  // convert action input to boolean
   const verbose = verboseInput === 'on';
+  core.debug(`Input verbose is ${verbose}`);
 
   // RC JSON
   const rcFileObj: RcJson = readRcConfig(rcPath, { fail: true });
@@ -55,13 +56,22 @@ export function getInputs(): GhActionInputs {
 
   // upload (action only?)
   const serverBaseUrl: string = core.getInput('serverBaseUrl');
+  core.debug(`Input serverBaseUrl is ${serverBaseUrl}`);
   const serverToken: string = core.getInput('serverToken');
+  core.debug(`Input serverToken is ${serverToken}`);
   // Make sure we don't have UFCI xor API token
   if (!!serverBaseUrl != !!serverToken) {
     // Fail and exit
     core.setFailed(serverBaseUrlServerTokenXorError);
     throw new Error(serverBaseUrlServerTokenXorError);
   }
+
+  const basicAuthUsername = core.getInput('basicAuthUsername') || 'user-flow';
+  core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
+  const basicAuthPassword =  core.getInput('basicAuthPassword');
+  core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
+
+  core.endGroup();
 
   return {
     rcPath,
@@ -72,8 +82,8 @@ export function getInputs(): GhActionInputs {
     serverBaseUrl,
     serverToken,
     verbose,
-    basicAuthUsername: core.getInput('basicAuthUsername') || 'user-flow',
-    basicAuthPassword: core.getInput('basicAuthPassword')
+    basicAuthUsername,
+    basicAuthPassword
   };
 }
 
