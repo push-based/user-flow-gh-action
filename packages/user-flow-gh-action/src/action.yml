@@ -4,7 +4,8 @@ inputs:
   verbose:
     description: 'Verbose logging flag ("on" or "off")'
     required: false
-    default: 'on'
+    # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
+    default: 'off'
   rcPath:
     description: 'Path to a UFCI user-flowrc.json file'
     required: false
