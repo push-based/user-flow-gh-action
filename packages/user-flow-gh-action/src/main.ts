@@ -14,7 +14,7 @@ export async function run(): Promise<void> {
     core.debug(`ghActionParams are ${JSON.stringify(ghActionParams)}`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
     const r = await executeUFCI(ghActionParams)
 
-    core.setOutput('result', r)
+    core.setOutput('result', r);
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
     process.exitCode = 1;
