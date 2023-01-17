@@ -1,6 +1,7 @@
-import * as core from '@actions/core'
-import {executeUFCI} from './app/executeUFCI'
+import * as core from '@actions/core';
+import { executeUFCI } from './app/executeUFCI';
 import { getInputs } from './app/get-inputs';
+import { processResult } from './app/process-result';
 
 
 // 1. get inputs form action
@@ -10,11 +11,13 @@ import { getInputs } from './app/get-inputs';
 export async function run(): Promise<void> {
   core.debug(`Run main`);
   try {
-    const ghActionParams = getInputs()
-    core.debug(`ghActionParams are ${JSON.stringify(ghActionParams)}`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-    const r = await executeUFCI(ghActionParams)
+    const ghActionInputs = getInputs()
+    core.debug(`ghActionInputs are ${JSON.stringify(ghActionInputs)}`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const res = await executeUFCI(ghActionInputs);
 
-    core.setOutput('result', r);
+    const result = processResult(ghActionInputs);
+
+    core.setOutput('result', result);
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
     process.exitCode = 1;
