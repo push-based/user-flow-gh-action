@@ -5,6 +5,7 @@ import { resolve } from 'path';
 import { GhActionInputs } from './types';
 
 export function getInputs(): GhActionInputs {
+  core.debug(`Collect inputs`);
   const serverBaseUrl: string = core.getInput('serverBaseUrl');
   const serverToken: string = core.getInput('serverToken');
 
@@ -17,11 +18,12 @@ export function getInputs(): GhActionInputs {
 
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
+  core.debug(`rcPath is ${rcPath}`);
 
   let url: string | null = null;
   if (rcPath) {
     const rcFileObj: RcJson = readRcConfig(rcPath);
-
+    core.debug(`rcFileObj is ${JSON.stringify(rcFileObj)}`);
     // Check if we have a url
     if (rcFileObj.collect) {
       if (rcFileObj.collect.url) {
@@ -43,8 +45,8 @@ export function getInputs(): GhActionInputs {
   // Make sure we have a url
   if (!url) {
     // Fail and exit
-    core.setFailed(`Need either 'url' in user-flowrc file`);
-    throw new Error(`Need either 'url' in user-flowrc file`);
+    core.setFailed(`Need 'url' in user-flowrc file`);
+    throw new Error(`Need 'url' in user-flowrc file`);
   }
 
   return {
