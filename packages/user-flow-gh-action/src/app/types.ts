@@ -1,5 +1,6 @@
 export type GhActionInputs = {
   // global
+  verbose: boolean,
   rcPath: string;
   // collect
   url: string;

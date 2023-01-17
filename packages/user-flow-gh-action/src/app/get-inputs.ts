@@ -4,49 +4,63 @@ import { RcJson, readRcConfig } from '@push-based/user-flow';
 import { resolve } from 'path';
 import { GhActionInputs } from './types';
 
+export const rcPathError = 'Need rcPath to run.';
+export const serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
+export const noUrlError = `URL not given in rc config.`;
+export const wrongVerboseValue = (val: string) => `verbose is ${val} but can only be set to 'on' or 'off'.`;
+
 export function getInputs(): GhActionInputs {
   core.debug(`Collect inputs`);
-  const serverBaseUrl: string = core.getInput('serverBaseUrl');
-  const serverToken: string = core.getInput('serverToken');
 
-  // Make sure we don't have UFCI xor API token
-  if (!!serverBaseUrl != !!serverToken) {
-    // Fail and exit
-    core.setFailed(`Need both a UFCI server url and an API token.`);
-    throw new Error(`Need both a UFCI server url and an API token.`);
-  }
+  // GLOBAL PARAMS
 
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
   core.debug(`rcPath is ${rcPath}`);
-
-  let url: string | null = null;
-  if (rcPath) {
-    const rcFileObj: RcJson = readRcConfig(rcPath);
-    core.debug(`rcFileObj is ${JSON.stringify(rcFileObj)}`);
-    // Check if we have a url
-    if (rcFileObj.collect) {
-      if (rcFileObj.collect.url) {
-        url = rcFileObj.collect.url;
-      }
-    }
-    if(!url) {
-      throw new Error(`URL not given in Rc config.`);
-    }
-  } else {
+  if (!rcPath) {
     // Fail and exit
-    core.setFailed(`Need rcPath to run.`);
-    throw new Error(`Need rcPath to run.`);
+    core.setFailed(rcPathError);
+    throw new Error(rcPathError);
   }
 
-  // Get and interpolate URL's
-  url = interpolateProcessIntoUrls([url])[0];
+  let verboseInput = core.getInput('verbose', { trimWhitespace: true });
+  if (verboseInput === '') {
+    verboseInput = 'off';
+  }
+  if (verboseInput !== 'on' && verboseInput !== 'off') {
+    throw new Error(wrongVerboseValue(verboseInput));
+  }
+  // convert action onput to boolean
+  const verbose = verboseInput === 'on';
 
-  // Make sure we have a url
+  // RC JSON
+  const rcFileObj: RcJson = readRcConfig(rcPath, { fail: true });
+  core.debug(`rcFileObj is ${JSON.stringify(rcFileObj)}`);
+
+  const { collect, persist, assert } = rcFileObj;
+  // COLLECT PARAMS
+  if (!collect) {
+    throw new Error(`collect configuration has to be present in rc config.`);
+  }
+
+  let { url } = collect;
+
+  // Check if we have a url
   if (!url) {
+    core.setFailed(noUrlError);
+    throw new Error(noUrlError);
+  }
+  // Get and interpolate URL's
+  url = interpolateProcessIntoUrl(url);
+
+  // upload (action only?)
+  const serverBaseUrl: string = core.getInput('serverBaseUrl');
+  const serverToken: string = core.getInput('serverToken');
+  // Make sure we don't have UFCI xor API token
+  if (!!serverBaseUrl != !!serverToken) {
     // Fail and exit
-    core.setFailed(`Need 'url' in user-flowrc file`);
-    throw new Error(`Need 'url' in user-flowrc file`);
+    core.setFailed(serverBaseUrlServerTokenXorError);
+    throw new Error(serverBaseUrlServerTokenXorError);
   }
 
   return {
@@ -57,6 +71,7 @@ export function getInputs(): GhActionInputs {
     // upload
     serverBaseUrl,
     serverToken,
+    verbose,
     basicAuthUsername: core.getInput('basicAuthUsername') || 'user-flow',
     basicAuthPassword: core.getInput('basicAuthPassword')
   };
@@ -74,30 +89,16 @@ export function hasAssertConfig(rcPath: string): boolean {
 }
 
 /**
- * Wrapper for core.getInput for a list input.
- *
- * @param {string} arg
- */
-function getList(arg, separator = '\n') {
-  const input = core.getInput(arg);
-  if (!input) return [];
-  return input.split(separator).map((url) => url.trim());
-}
-
-/**
  * Takes a set of URL strings and interpolates
  * any declared ENV vars into them
  *
- * @param {string[]} urls
  */
-function interpolateProcessIntoUrls(urls: string[]): string[] {
-  return urls.map((url) => {
-    if (!url.includes('$')) return url;
-    Object.keys(process.env).forEach((key) => {
-      if (url.includes(`${key}`)) {
-        url = url.replace(`$${key}`, `${process.env[key]}`);
-      }
-    });
-    return url;
+function interpolateProcessIntoUrl(url: string): string {
+  if (!url.includes('$')) return url;
+  Object.keys(process.env).forEach((key) => {
+    if (url.includes(`${key}`)) {
+      url = url.replace(`$${key}`, `${process.env[key]}`);
+    }
   });
+  return url;
 }

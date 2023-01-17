@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals';
-import { getInputs } from './get-inputs';
+import { getInputs, noUrlError, rcPathError, serverBaseUrlServerTokenXorError, wrongVerboseValue } from './get-inputs';
 import { CliProject, ProjectConfig } from '@push-based/node-cli-testing';
 import { DEFAULT_RC_NAME } from '@push-based/user-flow';
 import { join } from 'path';
@@ -39,13 +39,11 @@ let prjCfgWithWrongUrl = {
     }
   }
 };
-
-const rcPathError = 'Need rcPath to run.';
-const serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
-const noUrlError = `URL not given in Rc config.`;
+let rcPath: string;
 
 function resetProcessParams(): void {
   delete process.env['INPUT_RCPATH'];
+  delete process.env['INPUT_VERBOSE'];
   delete process.env['INPUT_SERVERBASEURL'];
   delete process.env['INPUT_SERVERTOKEN'];
   delete process.env['INPUT_BASICAUTHUSERNAME'];
@@ -55,9 +53,10 @@ function resetProcessParams(): void {
 describe('getInputs', () => {
 
   beforeAll(async () => {
-    process.chdir(rootPath);
     prj = await CliProjectFactory.create(prjCfg);
     prj.setup();
+    rcPath = join(prj.root, DEFAULT_RC_NAME)
+    process.chdir(rootPath);
   });
 
   beforeEach(() => {
@@ -71,20 +70,27 @@ describe('getInputs', () => {
     expect(() => getInputs()).toThrow(rcPathError);
   });
 
+  test('should throw if wrong value is passed as verbose', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_VERBOSE'] = 'wrongValue';
+    expect(() => getInputs()).toThrow(wrongVerboseValue(process.env['INPUT_VERBOSE']));
+  });
+
+
   test('should throw if serverBaseUrl is given and serverToken is not', () => {
-    process.env['INPUT_RCPATH'] = 'path/to/rcFile';
+    process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_SERVERBASEURL'] = 'http://my.thing.test';
     expect(() => getInputs()).toThrow(serverBaseUrlServerTokenXorError);
   });
 
   test('should throw if serverToken is given and serverBaseUrl is not', () => {
-    process.env['INPUT_RCPATH'] = 'path/to/rcFile';
+    process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_SERVERTOKEN'] = '1234';
     expect(() => getInputs()).toThrow(serverBaseUrlServerTokenXorError);
   });
 
   test('rcPath returns default cgf object', () => {
-    process.env['INPUT_RCPATH'] = join(rootPath, DEFAULT_RC_NAME);
+    process.env['INPUT_RCPATH'] = rcPath;
     const res = getInputs();
     expect(res.rcPath).toBe(process.env['INPUT_RCPATH']);
     expect(res.url).toBe(RcJSON.collect.url);
@@ -95,13 +101,15 @@ describe('getInputs', () => {
   });
 
   test('rcPath returns cgf object filled with action params', () => {
-    process.env['INPUT_RCPATH'] = join(rootPath, DEFAULT_RC_NAME);
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_VERBOSE'] = 'on';
     process.env['INPUT_SERVERBASEURL'] = 'INPUT_SERVERBASEURL';
     process.env['INPUT_SERVERTOKEN'] = 'INPUT_SERVERTOKEN';
     process.env['INPUT_BASICAUTHUSERNAME'] = 'INPUT_BASICAUTHUSERNAME';
     process.env['INPUT_BASICAUTHPASSWORD'] = 'INPUT_BASICAUTHPASSWORD';
     const res = getInputs();
     expect(res.rcPath).toBe(process.env['INPUT_RCPATH']);
+    expect(res.verbose).toBe(process.env['INPUT_VERBOSE'] === 'on');
     expect(res.url).toBe(RcJSON.collect.url);
     expect(res.serverBaseUrl).toBe('INPUT_SERVERBASEURL');
     expect(res.serverToken).toBe('INPUT_SERVERTOKEN');
@@ -116,6 +124,7 @@ describe('getInputs with wrong RC', () => {
   beforeAll(async () => {
     prj = await CliProjectFactory.create(prjCfgWithWrongUrl);
     prj.setup();
+    rcPath = join(prj.root, DEFAULT_RC_NAME)
     process.chdir(rootPath);
   });
   beforeEach(() => {
@@ -126,7 +135,7 @@ describe('getInputs with wrong RC', () => {
   })
 
   test('rcPath has NO collect.url given', () => {
-    process.env['INPUT_RCPATH'] = join(prj.root, DEFAULT_RC_NAME);
+    process.env['INPUT_RCPATH'] = rcPath;
     expect(() => getInputs()).toThrow(noUrlError);
   });
 
