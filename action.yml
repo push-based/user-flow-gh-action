@@ -21,6 +21,9 @@ inputs:
     description: 'Basic auth username for UFCI server'
   basicAuthPassword:
     description: 'Basic auth password for UFCI server'
+outputs:
+  results:
+    description: 'UFCI results'
 runs:
   using: 'node16'
   main: 'dist/packages/user-flow-gh-action/main.js'
