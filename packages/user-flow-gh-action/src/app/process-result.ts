@@ -12,8 +12,10 @@ export function processResult(ghActionInputs: GhActionInputs): string {
   if(!allResults.length) {
     throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
   }
-  const resultStr = readFileSync(join(rcFileObj.persist.outPath,allResults[0])).toString();
-  core.debug(`Processed results: ${resultStr}`);
+
+  const resultPath = join(rcFileObj.persist.outPath,allResults[0]);
+  core.debug(`Process results form: ${resultPath}`);
+  const resultStr = readFileSync(resultPath).toString();
   const reducedResult = userFlowReportToMdTable(JSON.parse(resultStr));
   core.debug(`Reduced results: ${reducedResult}`);
   core.endGroup();
