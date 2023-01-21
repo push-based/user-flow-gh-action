@@ -1,5 +1,5 @@
 import { GhActionInputs } from './types';
-import { RcJson, readRcConfig, createReducedReport } from '@push-based/user-flow';
+import { RcJson, readRcConfig } from '@push-based/user-flow';
 import { userFlowReportToMdTable } from '@push-based/user-flow/src/lib/commands/assert/utils/md-table';
 import { readdirSync, readFileSync } from 'fs';
 import {join} from 'path';
