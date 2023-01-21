@@ -25,6 +25,9 @@ let prjCfgWrong = {
 };
 
 const rcJson: RcJson = {
+  collect: {
+    url: 'https://google.com'
+  },
   persist: {
     outPath: 'measures'
   }
