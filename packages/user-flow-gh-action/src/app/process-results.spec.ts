@@ -78,6 +78,6 @@ describe('processResults', () => {
   });
 
   test('returns the reduced report as string', async () => {
-   // expect(processResult({ rcPath, ...rcJson } as unknown as any)).toContain('| Gather Mode | Performance | Accessibility | Best Practices | Seo | Pwa |');
+   expect(processResult({ rcPath, ...rcJson } as unknown as any)).toContain('| Gather Mode | Performance | Accessibility | Best Practices | Seo | Pwa |');
   });
 });
