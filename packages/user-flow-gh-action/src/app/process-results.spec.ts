@@ -7,6 +7,7 @@ import { processResult } from './process-result';
 import { getReportContent } from '@user-flow-gh-action-workspace/test-data';
 
 
+const originalPath = process.cwd();
 const rootFolder = 'user-flow-gh-action-e2e';
 const rootPath = join(__dirname, '..', '..', '..', rootFolder);
 let prj: CliProject<any>;
@@ -54,6 +55,7 @@ describe('processResults with wrong values', () => {
 
   afterAll(async () => {
     prj.teardown();
+    process.chdir(originalPath);
   });
 
   test('throws for invalid rcPath', async () => {
@@ -78,6 +80,7 @@ describe('processResults', () => {
 
   afterAll(async () => {
     prj.teardown();
+    process.chdir(originalPath);
   });
 
   test('returns the reduced report as string', async () => {
