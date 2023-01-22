@@ -1,25 +1,27 @@
-import * as path from 'path';
 import { expect, test } from '@jest/globals';
-import { OUT_PATH } from '../support/constants';
-import * as core from '@actions/core';
-import { Options } from 'execa';
-import { testProcessE2e } from '@push-based/node-cli-testing';
+import { RcJson } from '@push-based/user-flow';
+import { CliProject } from '@push-based/node-cli-testing';
+import { CliProjectFactory } from '../../../test-data/src/lib/cli-project-factory';
+import { REMOTE_PRJ_CFG, REMOTE_RC_NAME } from '@user-flow-gh-action-workspace/test-data';
 
 describe('main.js', () => {
 
   test('runs', async () => {
+    let prj: CliProject<RcJson> = await CliProjectFactory.create<RcJson>({
+      ...REMOTE_PRJ_CFG, env: {
+        INPUT_RCPATH: REMOTE_RC_NAME
+      }
+    });
+    prj.setup();
 
-    process.env['INPUT_RCPATH'] = '.user-flowrc.json';
-    const bin = path.join('..', '..', OUT_PATH, 'main.js');
-    const options: Options = {
-      env: process.env,
-      cwd: process.cwd()
-    };
-    const {stdout, stderr, exitCode} = await testProcessE2e([bin], [], options);
+    const { stdout, stderr, exitCode } = await prj.exec();
 
     expect(stderr).toBe('');
     expect(stdout).toContain('Run main');
+    //const outputResult = process.env['OUTPUT_RESULT'];
+    //expect(stdout).toContain('outputResult');
     expect(exitCode).toBe(1);
+    prj.teardown();
 
   });
 
