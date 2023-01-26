@@ -1,7 +1,7 @@
 // A majority of this code is borrowed from [lhci-gh-action](https://github.com/treosh/lighthouse-ci-action)
 import * as core from '@actions/core';
-import { RcJson, readRcConfig } from '@push-based/user-flow';
 import { resolve } from 'path';
+import { readFileSync } from 'fs';
 import { GhActionInputs } from './types';
 
 export const rcPathError = 'Need rcPath to run.';
@@ -35,7 +35,7 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input verbose is ${verbose}`);
 
   // RC JSON
-  const rcFileObj: RcJson = readRcConfig(rcPath, { fail: true });
+  const rcFileObj: any = readJsonFileSync(rcPath);
   core.debug(`rcFileObj is ${JSON.stringify(rcFileObj)}`);
 
   const { collect, persist, assert } = rcFileObj;
@@ -68,7 +68,7 @@ export function getInputs(): GhActionInputs {
 
   const basicAuthUsername = core.getInput('basicAuthUsername') || 'user-flow';
   core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
-  const basicAuthPassword =  core.getInput('basicAuthPassword');
+  const basicAuthPassword = core.getInput('basicAuthPassword');
   core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
 
   core.endGroup();
@@ -94,7 +94,7 @@ export function getInputs(): GhActionInputs {
  */
 export function hasAssertConfig(rcPath: string): boolean {
   if (!rcPath) return false;
-  const rcFileObj = readRcConfig(rcPath);
+  const rcFileObj = readJsonFileSync(rcPath);
   return Boolean(rcFileObj.assert);
 }
 
@@ -111,4 +111,8 @@ function interpolateProcessIntoUrl(url: string): string {
     }
   });
   return url;
+}
+
+function readJsonFileSync(path: string) {
+  return JSON.parse(readFileSync(path, { encoding: 'utf8' }).toString());
 }
