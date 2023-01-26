@@ -3,12 +3,11 @@ import { DEFAULT_RC_NAME, RcJson } from '@push-based/user-flow';
 import { REMOTE_RC_JSON, REMOTE_RC_NAME } from './rc';
 import { REMOTE_USERFLOW_CONTENT, REMOTE_USERFLOW_NAME } from './flow1.uf';
 import { join } from 'path';
-import { BIN_PATH } from '../../../index';
 
 export const REMOTE_USERFLOW_PATH = join(REMOTE_RC_JSON.collect.ufPath, REMOTE_USERFLOW_NAME);
 export const REMOTE_PRJ_NAME = 'user-flow-gh-action-e2e';
 export const REMOTE_PRJ_ROOT = join(__dirname, '..', '..', '..', '..', '..', REMOTE_PRJ_NAME);
-export const REMOTE_PRJ_BIN = join(__dirname, '..', '..', '..', '..', '..', '..', BIN_PATH, 'main.js');
+export const REMOTE_PRJ_BIN = join(__dirname, '..', '..', '..', '..', '..', '..', 'dist/packages/user-flow-gh-action', 'main.js');
 
 export const REMOTE_PRJ_CFG: ProjectConfig<RcJson> = {
   root: REMOTE_PRJ_ROOT,
