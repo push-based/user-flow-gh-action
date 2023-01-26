@@ -4,6 +4,7 @@ import { getInputs } from './app/get-inputs';
 import { readJsonFileSync } from './app/utils';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from "path";
+import { processResult } from './app/process-result';
 
 // 1. get inputs form action
 // 2. execute CLI
@@ -24,8 +25,10 @@ export async function run(): Promise<void> {
     }
 
     const resultPath = join(rcFileObj.persist.outPath,allResults[0]);
-
     core.setOutput('result-path', resultPath);
+    const result = processResult(ghActionInputs);
+    core.setOutput('result', result);
+
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
     process.exitCode = 1;
