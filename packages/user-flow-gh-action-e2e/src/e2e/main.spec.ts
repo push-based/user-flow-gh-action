@@ -1,18 +1,19 @@
 import { expect, test } from '@jest/globals';
-import { RcJson } from '@push-based/user-flow';
 import { CliProject, ProjectConfig } from '@push-based/node-cli-testing';
 import { CliProjectFactory } from '../../../test-data/src/lib/cli-project-factory';
 import { REMOTE_PRJ_CFG, REMOTE_RC_JSON, REMOTE_RC_NAME } from '@user-flow-gh-action-workspace/test-data';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import * as core from '@actions/core';
 
 function withProject<T extends ProjectConfig<T>>(cfg: T, fn: (prj: CliProject<T>) => void): () => Promise<void> {
   return async () => {
     let prj: CliProject<T> = await CliProjectFactory.create<T>(cfg);
-    prj.setup();
+    await prj.setup();
+    const cwd = process.cwd();
+    process.chdir(prj.root);
     await fn(prj);
-    prj.teardown();
+    process.chdir(cwd);
+    await prj.teardown();
   }
 }
 
