@@ -1,6 +1,6 @@
 import { GhActionInputs } from './types';
 import { runUserFlowCliCommand } from './run-user-flow-cli-command';
-import { processParamsToParamsArray } from '@push-based/node-cli-testing';
+import { processParamsToParamsArray } from './utils';
 
 export async function executeUFCI(
   ghActionInputs: GhActionInputs,
@@ -9,7 +9,7 @@ export async function executeUFCI(
 ): Promise<string> {
   const { rcPath, ...actionInputs } = ghActionInputs;
   return new Promise((resolve, reject) => {
-    if(!rcPath) {
+    if (!rcPath) {
       reject('rcPath not given');
     }
     const res = run('npx @push-based/user-flow', 'collect', processParamsToParamsArray({ rcPath }));

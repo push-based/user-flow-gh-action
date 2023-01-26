@@ -30,6 +30,6 @@ jobs:
       - name: Run test user-flow-gh-action locally
         uses: ./
         with:
-          rcPath: .user-flowrc.json
+          rcPath: ./.user-flowrc.json
           serverBaseUrl: push-based.io
           serverToken: 123

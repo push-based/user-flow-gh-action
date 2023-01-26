@@ -1,7 +1,9 @@
-import * as core from '@actions/core'
-import {executeUFCI} from './app/executeUFCI'
+import * as core from '@actions/core';
+import { executeUFCI } from './app/executeUFCI';
 import { getInputs } from './app/get-inputs';
-
+import { readJsonFileSync } from './app/utils';
+import { readdirSync, readFileSync } from 'fs';
+import { join } from "path";
 
 // 1. get inputs form action
 // 2. execute CLI
@@ -15,10 +17,15 @@ export async function run(): Promise<void> {
     core.debug(`ghActionInputs are ${JSON.stringify(ghActionInputs)}`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
     const executeUFCIRes = await executeUFCI(ghActionInputs);
 
-    core.setOutput('result', executeUFCIRes);
-   // const result = processResult(ghActionInputs);
+    const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
+    const allResults = readdirSync(rcFileObj.persist.outPath);
+    if(!allResults.length) {
+      throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
+    }
 
-    core.setOutput('result', executeUFCIRes);
+    const resultPath = join(rcFileObj.persist.outPath,allResults[0]);
+
+    core.setOutput('result-path', resultPath);
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
     process.exitCode = 1;
