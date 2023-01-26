@@ -1,6 +1,6 @@
 import { ProjectConfig } from '@push-based/node-cli-testing';
 import { DEFAULT_RC_NAME, RcJson } from '@push-based/user-flow';
-import { REMOTE_RC_JSON } from './rc';
+import { REMOTE_RC_JSON, REMOTE_RC_NAME } from './rc';
 import { REMOTE_USERFLOW_CONTENT, REMOTE_USERFLOW_NAME } from './flow1.uf';
 import { join } from 'path';
 import { BIN_PATH } from '../../../index';
@@ -14,7 +14,7 @@ export const REMOTE_PRJ_CFG: ProjectConfig<RcJson> = {
   root: REMOTE_PRJ_ROOT,
   bin: REMOTE_PRJ_BIN,
   rcFile: {
-    [DEFAULT_RC_NAME]: REMOTE_RC_JSON
+    [REMOTE_RC_NAME]: REMOTE_RC_JSON
   },
   create: {
     [REMOTE_RC_JSON.collect.ufPath]: undefined,

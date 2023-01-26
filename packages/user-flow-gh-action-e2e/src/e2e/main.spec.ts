@@ -18,11 +18,12 @@ describe('main.js', () => {
 
     expect(stderr).toBe('');
     expect(stdout).toContain('Run main');
-    //const outputResult = process.env['OUTPUT_RESULT'];
-    //expect(stdout).toContain('outputResult');
+    expect(stdout).toContain('::set-output name=result::');
+    const outputResult = process.env['OUTPUT_RESULT'];
+    expect(outputResult).toContain('outputResult');
     expect(exitCode).toBe(1);
     prj.teardown();
 
-  });
+  }, 180_000);
 
 });
