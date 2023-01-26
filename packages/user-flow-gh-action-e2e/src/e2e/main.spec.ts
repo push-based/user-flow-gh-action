@@ -9,10 +9,10 @@ function withProject<T extends ProjectConfig<T>>(cfg: T, fn: (prj: CliProject<T>
   return async () => {
     let prj: CliProject<T> = await CliProjectFactory.create<T>(cfg);
     await prj.setup();
-    const cwd = process.cwd();
-    process.chdir(prj.root);
+  //  const cwd = process.cwd();
+  //  process.chdir(prj.root);
     await fn(prj);
-    process.chdir(cwd);
+  //  process.chdir(cwd);
     await prj.teardown();
   }
 }
