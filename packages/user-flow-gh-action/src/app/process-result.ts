@@ -1,13 +1,13 @@
 import { GhActionInputs } from './types';
-import { RcJson, readRcConfig } from '@push-based/user-flow';
 import { userFlowReportToMdTable } from '@push-based/user-flow/src/lib/commands/assert/utils/md-table';
 import { readdirSync, readFileSync } from 'fs';
 import {join} from 'path';
 import * as core from '@actions/core';
+import { readJsonFileSync } from './utils';
 
 export function processResult(ghActionInputs: GhActionInputs): string {
   core.startGroup(`Process result`);
-  const rcFileObj: RcJson = readRcConfig(ghActionInputs.rcPath, { fail: true });
+  const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
   const allResults = readdirSync(rcFileObj.persist.outPath);
   if(!allResults.length) {
     throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);

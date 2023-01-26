@@ -1,3 +1,5 @@
+import { readFileSync } from "fs";
+
 export function processParamsToParamsArray(params: Record<string, string | boolean | string[]> ): string[] {
   return Object.entries(params).flatMap(([key, value]) => {
     if (key === '_') {
@@ -14,3 +16,9 @@ export function processParamsToParamsArray(params: Record<string, string | boole
     }
   }) as string[];
 }
+
+
+export function readJsonFileSync(path: string) {
+  return JSON.parse(readFileSync(path, { encoding: 'utf8' }).toString());
+}
+

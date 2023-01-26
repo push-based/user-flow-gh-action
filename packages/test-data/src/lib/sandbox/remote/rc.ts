@@ -8,7 +8,7 @@ export const REMOTE_RC_JSON: RcJson = {
   },
   'persist': {
     'outPath': './src/lib/measures', //DEFAULT_PERSIST_OUT_PATH,
-    'format': ['json']
+    'format': ['md']
   },
   'assert': {}
 };

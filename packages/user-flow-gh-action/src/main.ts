@@ -1,7 +1,6 @@
 import * as core from '@actions/core';
 import { executeUFCI } from './app/executeUFCI';
 import { getInputs } from './app/get-inputs';
-import { processResult } from './app/process-result';
 
 // 1. get inputs form action
 // 2. execute CLI
@@ -16,9 +15,9 @@ export async function run(): Promise<void> {
     const executeUFCIRes = await executeUFCI(ghActionInputs);
 
     core.setOutput('result', executeUFCIRes);
-    const result = processResult(ghActionInputs);
+    // const result = processResult(ghActionInputs);
 
-    core.setOutput('result', result);
+    core.setOutput('result', executeUFCIRes);
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
     process.exitCode = 1;

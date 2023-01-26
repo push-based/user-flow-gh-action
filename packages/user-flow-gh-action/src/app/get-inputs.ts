@@ -3,6 +3,7 @@ import * as core from '@actions/core';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import { GhActionInputs } from './types';
+import { readJsonFileSync } from './utils';
 
 export const rcPathError = 'Need rcPath to run.';
 export const serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
@@ -111,8 +112,4 @@ function interpolateProcessIntoUrl(url: string): string {
     }
   });
   return url;
-}
-
-function readJsonFileSync(path: string) {
-  return JSON.parse(readFileSync(path, { encoding: 'utf8' }).toString());
 }
