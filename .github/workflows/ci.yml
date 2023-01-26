@@ -27,6 +27,8 @@ jobs:
           add: '*'
       - name: test
         run: npm run test
+      - name: e2e
+        run: npm run test:e2e
       - name: Run test user-flow-gh-action locally
         uses: ./
         with:
