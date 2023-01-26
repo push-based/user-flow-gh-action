@@ -5,6 +5,7 @@ import { CliProjectFactory } from '../../../test-data/src/lib/cli-project-factor
 import { REMOTE_PRJ_CFG, REMOTE_RC_JSON, REMOTE_RC_NAME } from '@user-flow-gh-action-workspace/test-data';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
+import * as core from '@actions/core';
 
 function withProject<T extends ProjectConfig<T>>(cfg: T, fn: (prj: CliProject<T>) => void): () => Promise<void> {
   return async () => {
