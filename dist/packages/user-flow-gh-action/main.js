@@ -2941,6 +2941,9 @@ exports.run = void 0;
 const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
 const executeUFCI_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/executeUFCI.ts");
 const get_inputs_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/get-inputs.ts");
+const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/utils.ts");
+const fs_1 = __webpack_require__("fs");
+const path_1 = __webpack_require__("path");
 // 1. get inputs form action
 // 2. execute CLI
 //     2.1. process result
@@ -2952,9 +2955,13 @@ async function run() {
         const ghActionInputs = (0, get_inputs_1.getInputs)();
         core.debug(`ghActionInputs are ${JSON.stringify(ghActionInputs)}`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
         const executeUFCIRes = await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
-        core.setOutput('result', executeUFCIRes);
-        // const result = processResult(ghActionInputs);
-        core.setOutput('result', executeUFCIRes);
+        const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
+        const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
+        if (!allResults.length) {
+            throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
+        }
+        const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+        core.setOutput('result-path', resultPath);
     }
     catch (error) {
         if (error instanceof Error)
