@@ -23,11 +23,11 @@
  * ```
  */
 // @TODO retrieve from file
-const resultPathExpected = './measures';
-const resultPath = process.argv[1];
+const resultPathExpected = 'user-flow-gh-action-e2e';
+const resultPath = process.argv[2];
 // @TODO retrieve from file
 const resultsExpected = 'Duration: ';
-const results = process.argv[2];
+const results = process.argv[3];
 
 console.log(`resultPath: ${resultPath}`);
 if(!resultPath.includes(resultPathExpected)) {
