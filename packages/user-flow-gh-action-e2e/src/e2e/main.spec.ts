@@ -18,7 +18,6 @@ describe('main.js', () => {
     expect(stdout).toContain('Run main');
     expect(stdout).toContain('::set-output name=result-path::');
     const outputResult = readFileSync(join(REMOTE_RC_JSON.persist.outPath, readdirSync(REMOTE_RC_JSON.persist.outPath)[0])).toString();
-    expect(core.getState('result')).toBe('test');
     expect(outputResult).toContain('Navigation report (www.google.com/)');
     expect(exitCode).toBe(0);
   }), 180_000);

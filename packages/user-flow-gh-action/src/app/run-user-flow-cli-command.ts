@@ -8,7 +8,7 @@ export function runUserFlowCliCommand(bin: string, command: 'collect' = 'collect
     cwd: cwd || process.cwd(),
     env: env || process.env
   };
-  core.debug(`CLI process options: ${options}`);
+  core.debug(`CLI process options: ${JSON.stringify(options)}`);
   // @TODO use childProcess.execSync to get stdout and forward it
   return execSync(combinedArgs.join(' '), options);
 }
