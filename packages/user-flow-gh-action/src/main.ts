@@ -26,8 +26,8 @@ export async function run(): Promise<void> {
 
     const resultPath = join(rcFileObj.persist.outPath,allResults[0]);
     core.setOutput('result-path', resultPath);
-    const result = processResult(ghActionInputs);
-    core.setOutput('result', result);
+    const mdResultsMap = processResult(ghActionInputs);
+    core.setOutput('result', mdResultsMap);
 
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);
