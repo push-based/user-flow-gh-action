@@ -1,11 +1,14 @@
-import { execSync } from 'child_process';
+import { execSync, ExecSyncOptions } from 'child_process';
+import * as core from '@actions/core';
 
-export function runUserFlowCliCommand(bin: string, command: 'collect' = 'collect', args: string[] = []) {
+export function runUserFlowCliCommand(bin: string, command: 'collect' = 'collect', args: string[] = [], processOptions: { cwd?: string, env?: {} } = {}) {
   const combinedArgs = [bin, command, ...args];
+  const { cwd, env } = processOptions;
+  const options: ExecSyncOptions = {
+    cwd: cwd || process.cwd(),
+    env: env || process.env
+  };
+  core.debug(`CLI process options: ${options}`);
   // @TODO use childProcess.execSync to get stdout and forward it
-  return execSync(combinedArgs.join(' '), {
-    cwd: process.cwd(),
-    env: process.env,
-    encoding: 'utf-8'
-  });
+  return execSync(combinedArgs.join(' '), options);
 }
