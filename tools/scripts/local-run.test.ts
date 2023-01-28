@@ -25,8 +25,15 @@
 // @TODO retrieve from file
 const resultPathExpected = './measures';
 const resultPath = process.argv[1];
+// @TODO retrieve from file
+const resultsExpected = 'Duration: ';
+const results = process.argv[2];
 
-console.log(`resultPath: ${process.argv}`);
-if(resultPath.includes('some/path')) {
+console.log(`resultPath: ${resultPath}`);
+if(!resultPath.includes(resultPathExpected)) {
   throw new Error(`Error wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
+}
+
+if(!results.includes(resultsExpected)) {
+  throw new Error(`Error wrong resultPath expected: ${resultsExpected} received: ${results}`);
 }
