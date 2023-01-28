@@ -1953,7 +1953,7 @@ function runUserFlowCliCommand(bin, command = 'collect', args = [], processOptio
         cwd: cwd || process.cwd(),
         env: env || process.env
     };
-    core.debug(`CLI process options: ${options}`);
+    core.debug(`CLI process options: ${JSON.stringify(options)}`);
     // @TODO use childProcess.execSync to get stdout and forward it
     return (0, child_process_1.execSync)(combinedArgs.join(' '), options);
 }
