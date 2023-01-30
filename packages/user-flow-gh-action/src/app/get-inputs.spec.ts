@@ -104,7 +104,6 @@ describe('getInputs global', () => {
   test('should throw if wrong value is passed as dryRun', () => {
     process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_DRYRUN'] = 'wrongValue';
-    const inputs = getInputs();
     expect(() => getInputs()).toThrow(wrongDryRunValue(process.env['INPUT_DRYRUN']));
   });
 
