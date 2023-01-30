@@ -8,7 +8,9 @@ import { readJsonFileSync } from './utils';
 export const rcPathError = 'Need rcPath to run.';
 export const serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
 export const noUrlError = `URL not given in rc config.`;
-export const wrongVerboseValue = (val: string) => `verbose is ${val} but can only be set to 'on' or 'off'.`;
+export const wrongBooleanValue = (val: string, prop: string) => `${prop} is ${val} but can only be set to 'on' or 'off'.`;
+export const wrongVerboseValue = (val: string) => wrongBooleanValue('verbose', val);
+export const wrongDryRunValue = (val: string) => wrongBooleanValue('dryRun', val);
 
 export function getInputs(): GhActionInputs {
   core.startGroup(`Get inputs form action.yml`);
@@ -23,6 +25,17 @@ export function getInputs(): GhActionInputs {
     core.setFailed(rcPathError);
     throw new Error(rcPathError);
   }
+
+  let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
+  if (dryRunInput === '') {
+    dryRunInput = 'off';
+  }
+  if (dryRunInput !== 'on' && dryRunInput !== 'off') {
+    throw new Error(wrongDryRunValue(dryRunInput));
+  }
+  // convert action input to boolean
+  const dryRun = dryRunInput === 'on';
+  core.debug(`Input dryRun is ${dryRun}`);
 
   let verboseInput = core.getInput('verbose', { trimWhitespace: true });
   if (verboseInput === '') {
@@ -76,13 +89,14 @@ export function getInputs(): GhActionInputs {
 
   return {
     rcPath,
+    verbose,
+    dryRun,
+    // assert
     // collect
     url,
-    // assert
-    // upload
     serverBaseUrl,
+    // upload
     serverToken,
-    verbose,
     basicAuthUsername,
     basicAuthPassword
   };

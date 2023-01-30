@@ -157,8 +157,11 @@ describe('getInputs', () => {
   });
 
   test('rcPath returns cgf object filled with action params', () => {
+    // GLOBAL
     process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_VERBOSE'] = 'on';
+    process.env['INPUT_DRYRUN'] = 'on';
+    // UPLOAD
     process.env['INPUT_SERVERBASEURL'] = 'INPUT_SERVERBASEURL';
     process.env['INPUT_SERVERTOKEN'] = 'INPUT_SERVERTOKEN';
     process.env['INPUT_BASICAUTHUSERNAME'] = 'INPUT_BASICAUTHUSERNAME';
@@ -166,6 +169,7 @@ describe('getInputs', () => {
     const res = getInputs();
     expect(res.rcPath).toBe(process.env['INPUT_RCPATH']);
     expect(res.verbose).toBe(process.env['INPUT_VERBOSE'] === 'on');
+    expect(res.verbose).toBe(process.env['INPUT_DRYRUN'] === 'on');
     expect(res.url).toBe(RcJSON.collect.url);
     expect(res.serverBaseUrl).toBe('INPUT_SERVERBASEURL');
     expect(res.serverToken).toBe('INPUT_SERVERTOKEN');
