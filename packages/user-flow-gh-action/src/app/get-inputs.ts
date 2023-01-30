@@ -9,8 +9,8 @@ export const rcPathError = 'Need rcPath to run.';
 export const serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
 export const noUrlError = `URL not given in rc config.`;
 export const wrongBooleanValue = (val: string, prop: string) => `${prop} is ${val} but can only be set to 'on' or 'off'.`;
-export const wrongVerboseValue = (val: string) => wrongBooleanValue('verbose', val);
-export const wrongDryRunValue = (val: string) => wrongBooleanValue('dryRun', val);
+export const wrongVerboseValue = (val: string) => wrongBooleanValue(val, 'verbose');
+export const wrongDryRunValue = (val: string) => wrongBooleanValue(val, 'dryRun');
 
 export function getInputs(): GhActionInputs {
   core.startGroup(`Get inputs form action.yml`);
