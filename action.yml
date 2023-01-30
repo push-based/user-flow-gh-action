@@ -28,6 +28,11 @@ inputs:
     description: 'Basic auth username for UFCI server'
   basicAuthPassword:
     description: 'Basic auth password for UFCI server'
+outputs:
+  resultPath: # path to md output
+    description: 'The path in with the user flow results are saved'
+  resultSummary: # md report as string of all user flows
+    description: 'The summary report of all user flow results of the urrent run'
 runs:
   using: 'node16'
   main: 'dist/packages/user-flow-gh-action/main.js'

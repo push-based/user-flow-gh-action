@@ -3036,9 +3036,9 @@ async function run() {
             throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
         }
         const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
-        core.setOutput('result-path', resultPath);
-        const mdResultsMap = (0, process_result_1.processResult)(ghActionInputs);
-        core.setOutput('result', mdResultsMap);
+        core.setOutput('resultPath', resultPath);
+        const resultSummary = (0, process_result_1.processResult)(ghActionInputs);
+        core.setOutput('resultSummary', resultSummary);
     }
     catch (error) {
         if (error instanceof Error)
