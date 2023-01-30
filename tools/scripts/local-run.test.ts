@@ -23,10 +23,21 @@
  * ```
  */
 // @TODO retrieve from file
-const resultPathExpected = './measures';
-const resultPath = process.argv[1];
+const resultPathExpected = 'user-flow-gh-action-e2e';
+const resultPath = process.argv[2];
 
-console.log(`resultPath: ${process.argv}`);
-if(resultPath.includes('some/path')) {
-  throw new Error(`Error wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
+console.log(`resultPath: ${resultPath}`);
+if(!resultPath.includes(resultPathExpected)) {
+  throw new Error(`wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
+}
+
+const date = resultPath.split('-').pop().split('.').shift();
+const y = date.slice(0,4);
+const m = date.slice(4,6);
+const d = date.slice(6,8);
+const resultSummaryExpected = `Date/Time: ${y}-${m}-${d}`;
+const resultSummary = process.argv[3];
+console.log(`resultSummaryExpected: ${resultSummary}`);
+if(!resultSummary.includes(resultSummaryExpected)) {
+  throw new Error(`wrong resultSummary expected: ${resultSummaryExpected} received: ${resultSummary}`);
 }

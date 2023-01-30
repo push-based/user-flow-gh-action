@@ -9,7 +9,8 @@
     "test": "nx test user-flow-gh-action",
     "test:e2e": "nx test user-flow-gh-action-e2e",
     "test:affected": "npm run nx -- affected:test --base=origin/main",
-    "postBuildAction": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/post-build-action.ts"
+    "postBuildAction": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/post-build-action.ts",
+    "postLocalCiRunTest": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/local-run.test.ts"
   },
   "private": true,
   "engines": {
@@ -19,7 +20,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@push-based/node-cli-testing": "^0.0.1",
-    "@push-based/user-flow": "^0.13.11",
+    "@push-based/user-flow": "^0.13.16",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

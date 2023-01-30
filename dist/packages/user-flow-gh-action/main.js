@@ -1770,16 +1770,22 @@ exports.checkBypass = checkBypass;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.executeUFCI = void 0;
 const run_user_flow_cli_command_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/run-user-flow-cli-command.ts");
+const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
 const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/utils.ts");
 async function executeUFCI(ghActionInputs, 
 // for testing
 run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
-    const { rcPath, ...actionInputs } = ghActionInputs;
+    const { rcPath, verbose, dryRun, ...unusedInputs } = ghActionInputs;
     return new Promise((resolve, reject) => {
         if (!rcPath) {
             reject('rcPath not given');
         }
-        const res = run('npx @push-based/user-flow', 'collect', (0, utils_1.processParamsToParamsArray)({ rcPath }));
+        const params = { rcPath, verbose, dryRun };
+        const script = 'npx @push-based/user-flow';
+        const command = 'collect';
+        const processedParams = (0, utils_1.processParamsToParamsArray)({ rcPath, verbose, dryRun });
+        core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(', ')}`);
+        const res = run(script, command, processedParams);
         resolve(res);
     });
 }
@@ -1938,11 +1944,12 @@ function processResult(ghActionInputs) {
     core.startGroup(`Process result`);
     const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
     const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
+    core.debug(`Output folder content: ${allResults.join(', ')}`);
     if (!allResults.length) {
         core.endGroup();
         throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
-    const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults.filter(v => v.endsWith('.json'))[0]);
+    const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
     core.debug(`Process results form: ${resultPath}`);
     let resultStr;
     try {
@@ -1969,14 +1976,22 @@ exports.processResult = processResult;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runUserFlowCliCommand = void 0;
 const child_process_1 = __webpack_require__("child_process");
-function runUserFlowCliCommand(bin, command = 'collect', args = []) {
+const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
+function runUserFlowCliCommand(bin, command = 'collect', args = [], processOptions = {}) {
     const combinedArgs = [bin, command, ...args];
+    let { cwd, env } = processOptions;
+    env = env || process.env;
+    // Ensure we run in cliMode "CI"
+    if (env['CI'] === undefined) {
+        env['CI'] = true;
+    }
+    const options = {
+        cwd: cwd || process.cwd(),
+        env
+    };
+    core.debug(`CLI process options: ${JSON.stringify(options.env.CI)}`);
     // @TODO use childProcess.execSync to get stdout and forward it
-    return (0, child_process_1.execSync)(combinedArgs.join(' '), {
-        cwd: process.cwd(),
-        env: process.env,
-        encoding: 'utf-8'
-    });
+    return (0, child_process_1.execSync)(combinedArgs.join(' '), options);
 }
 exports.runUserFlowCliCommand = runUserFlowCliCommand;
 
@@ -3021,9 +3036,9 @@ async function run() {
             throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
         }
         const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
-        core.setOutput('result-path', resultPath);
-        const mdResultsMap = (0, process_result_1.processResult)(ghActionInputs);
-        core.setOutput('result', mdResultsMap);
+        core.setOutput('resultPath', resultPath);
+        const resultSummary = (0, process_result_1.processResult)(ghActionInputs);
+        core.setOutput('resultSummary', resultSummary);
     }
     catch (error) {
         if (error instanceof Error)
