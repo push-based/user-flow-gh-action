@@ -1794,7 +1794,7 @@ exports.executeUFCI = executeUFCI;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.hasAssertConfig = exports.getInputs = exports.wrongVerboseValue = exports.noUrlError = exports.serverBaseUrlServerTokenXorError = exports.rcPathError = void 0;
+exports.hasAssertConfig = exports.getInputs = exports.wrongDryRunValue = exports.wrongVerboseValue = exports.wrongBooleanValue = exports.noUrlError = exports.serverBaseUrlServerTokenXorError = exports.rcPathError = void 0;
 // A majority of this code is borrowed from [lhci-gh-action](https://github.com/treosh/lighthouse-ci-action)
 const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
 const path_1 = __webpack_require__("path");
@@ -1802,8 +1802,12 @@ const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/util
 exports.rcPathError = 'Need rcPath to run.';
 exports.serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
 exports.noUrlError = `URL not given in rc config.`;
-const wrongVerboseValue = (val) => `verbose is ${val} but can only be set to 'on' or 'off'.`;
+const wrongBooleanValue = (val, prop) => `${prop} is ${val} but can only be set to 'on' or 'off'.`;
+exports.wrongBooleanValue = wrongBooleanValue;
+const wrongVerboseValue = (val) => (0, exports.wrongBooleanValue)(val, 'verbose');
 exports.wrongVerboseValue = wrongVerboseValue;
+const wrongDryRunValue = (val) => (0, exports.wrongBooleanValue)(val, 'dryRun');
+exports.wrongDryRunValue = wrongDryRunValue;
 function getInputs() {
     core.startGroup(`Get inputs form action.yml`);
     // GLOBAL PARAMS
@@ -1811,15 +1815,28 @@ function getInputs() {
     const rcPath = core.getInput('rcPath') ? (0, path_1.resolve)(core.getInput('rcPath')) : null;
     core.debug(`Input rcPath is ${rcPath}`);
     if (!rcPath) {
+        core.endGroup();
         // Fail and exit
         core.setFailed(exports.rcPathError);
         throw new Error(exports.rcPathError);
     }
+    let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
+    if (dryRunInput === '') {
+        dryRunInput = 'off';
+    }
+    if (dryRunInput !== 'on' && dryRunInput !== 'off') {
+        core.endGroup();
+        throw new Error((0, exports.wrongDryRunValue)(dryRunInput));
+    }
+    // convert action input to boolean
+    const dryRun = dryRunInput === 'on';
+    core.debug(`Input dryRun is ${dryRun}`);
     let verboseInput = core.getInput('verbose', { trimWhitespace: true });
     if (verboseInput === '') {
         verboseInput = 'off';
     }
     if (verboseInput !== 'on' && verboseInput !== 'off') {
+        core.endGroup();
         throw new Error((0, exports.wrongVerboseValue)(verboseInput));
     }
     // convert action input to boolean
@@ -1831,11 +1848,13 @@ function getInputs() {
     const { collect, persist, assert } = rcFileObj;
     // COLLECT PARAMS
     if (!collect) {
+        core.endGroup();
         throw new Error(`collect configuration has to be present in rc config.`);
     }
     let { url } = collect;
     // Check if we have a url
     if (!url) {
+        core.endGroup();
         core.setFailed(exports.noUrlError);
         throw new Error(exports.noUrlError);
     }
@@ -1848,6 +1867,7 @@ function getInputs() {
     core.debug(`Input serverToken is ${serverToken}`);
     // Make sure we don't have UFCI xor API token
     if (!!serverBaseUrl != !!serverToken) {
+        core.endGroup();
         // Fail and exit
         core.setFailed(exports.serverBaseUrlServerTokenXorError);
         throw new Error(exports.serverBaseUrlServerTokenXorError);
@@ -1859,13 +1879,14 @@ function getInputs() {
     core.endGroup();
     return {
         rcPath,
+        verbose,
+        dryRun,
+        // assert
         // collect
         url,
-        // assert
-        // upload
         serverBaseUrl,
+        // upload
         serverToken,
-        verbose,
         basicAuthUsername,
         basicAuthPassword
     };
@@ -1918,19 +1939,22 @@ function processResult(ghActionInputs) {
     const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
     const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
     if (!allResults.length) {
+        core.endGroup();
         throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
-    const results = allResults
-        .filter(f => f.endsWith('.md'))
-        .reduce((res, filename) => {
-        const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
-        core.debug(`Process results form: ${resultPath}`);
-        res.push({ [filename]: (0, fs_1.readFileSync)(resultPath, 'utf8').toString() });
-        return res;
-    }, []);
-    core.debug(`Reduced results: ${Object.keys(results).join(', ')}`);
+    const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults.filter(v => v.endsWith('.json'))[0]);
+    core.debug(`Process results form: ${resultPath}`);
+    let resultStr;
+    try {
+        resultStr = (0, fs_1.readFileSync)(resultPath).toString();
+    }
+    catch (e) {
+        core.endGroup();
+        throw e;
+    }
+    core.debug(`Results: ${resultStr}`);
     core.endGroup();
-    return results;
+    return resultStr;
 }
 exports.processResult = processResult;
 
@@ -1945,22 +1969,14 @@ exports.processResult = processResult;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runUserFlowCliCommand = void 0;
 const child_process_1 = __webpack_require__("child_process");
-const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
-function runUserFlowCliCommand(bin, command = 'collect', args = [], processOptions = {}) {
+function runUserFlowCliCommand(bin, command = 'collect', args = []) {
     const combinedArgs = [bin, command, ...args];
-    let { cwd, env } = processOptions;
-    env = env || process.env;
-    // Ensure we run in cliMode "CI"
-    if (env['CI'] === undefined) {
-        env['CI'] = true;
-    }
-    const options = {
-        cwd: cwd || process.cwd(),
-        env
-    };
-    core.debug(`CLI process options: ${JSON.stringify(options.env.CI)}`);
     // @TODO use childProcess.execSync to get stdout and forward it
-    return (0, child_process_1.execSync)(combinedArgs.join(' '), options);
+    return (0, child_process_1.execSync)(combinedArgs.join(' '), {
+        cwd: process.cwd(),
+        env: process.env,
+        encoding: 'utf-8'
+    });
 }
 exports.runUserFlowCliCommand = runUserFlowCliCommand;
 
