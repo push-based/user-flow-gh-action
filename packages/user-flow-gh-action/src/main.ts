@@ -24,9 +24,9 @@ export async function run(): Promise<void> {
       throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
 
-    const resultPath = join(rcFileObj.persist.outPath,allResults[0]);
-    core.setOutput('resultPath', resultPath);
-    const resultSummary = processResult(ghActionInputs);
+    const resPath = join(rcFileObj.persist.outPath,allResults[0]);
+    core.setOutput('resultPath', resPath);
+    const { resultSummary } = processResult(ghActionInputs);
     core.setOutput('resultSummary', resultSummary);
 
   } catch (error) {

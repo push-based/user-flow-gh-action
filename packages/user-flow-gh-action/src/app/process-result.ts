@@ -1,10 +1,10 @@
 import { GhActionInputs } from './types';
-import { readdirSync, readFileSync } from 'fs';
+import { readdirSync, readFileSync, rmSync } from 'fs';
 import {join} from 'path';
 import * as core from '@actions/core';
 import { readJsonFileSync } from './utils';
 
-export function processResult(ghActionInputs: GhActionInputs): string {
+export function processResult(ghActionInputs: GhActionInputs): { resultPath: string, resultSummary: string } {
   core.startGroup(`Process result`);
   const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
   const allResults = readdirSync(rcFileObj.persist.outPath);
@@ -14,17 +14,19 @@ export function processResult(ghActionInputs: GhActionInputs): string {
     throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
   }
 
-  const resultPath = join(rcFileObj.persist.outPath, allResults[0]);
+  const resultPath = join(rcFileObj.persist.outPath, allResults.filter(v => v.endsWith('.md'))[0]);
 
   core.debug(`Process results form: ${resultPath}`);
-  let resultStr: string;
+  let resultSummary: string;
   try {
-    resultStr = readFileSync(resultPath).toString();
-  } catch(e) {
+    resultSummary = readFileSync(resultPath).toString();
+    rmSync(resultPath);
+  } catch (e) {
     core.endGroup();
     throw e;
   }
-  core.debug(`Results: ${resultStr}`);
+
+  core.debug(`Results: ${resultSummary}`);
   core.endGroup();
-  return resultStr;
+  return { resultPath, resultSummary };
 }
