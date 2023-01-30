@@ -8,6 +8,7 @@ export function processResult(ghActionInputs: GhActionInputs): string {
   core.startGroup(`Process result`);
   const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
   const allResults = readdirSync(rcFileObj.persist.outPath);
+  core.debug(`Output folder content: ${allResults.join(', ')}`);
   if(!allResults.length) {
     core.endGroup();
     throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
