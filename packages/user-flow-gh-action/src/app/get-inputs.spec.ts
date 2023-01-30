@@ -42,14 +42,81 @@ let prjCfgWithWrongUrl = {
 let rcPath: string;
 
 function resetProcessParams(): void {
+  // GLOBAL
   delete process.env['INPUT_RCPATH'];
   delete process.env['INPUT_VERBOSE'];
+  delete process.env['INPUT_DRYRUN'];
+  // UPLOAD
   delete process.env['INPUT_SERVERBASEURL'];
   delete process.env['INPUT_SERVERTOKEN'];
   delete process.env['INPUT_BASICAUTHUSERNAME'];
   delete process.env['INPUT_BASICAUTHPASSWORD'];
 }
 
+describe('getInputs global', () => {
+  beforeAll(async () => {
+    prj = await CliProjectFactory.create(prjCfg);
+    prj.setup();
+    rcPath = join(prj.root, DEFAULT_RC_NAME)
+    process.chdir(rootPath);
+  });
+
+  beforeEach(() => {
+    resetProcessParams()
+  });
+  afterAll(async () => {
+    prj.teardown();
+  })
+  // rcPath
+  test('should throw if no rcPath is given', () => {
+    expect(() => getInputs()).toThrow(rcPathError);
+  });
+
+  // verbose
+  test('should throw if wrong value is passed as verbose', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_VERBOSE'] = 'wrongValue';
+    expect(() => getInputs()).toThrow(wrongVerboseValue(process.env['INPUT_VERBOSE']));
+  });
+
+  test('should parse verbose on to true', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_VERBOSE'] = 'on';
+    const { verbose } = getInputs();
+    expect(verbose).toBe(true);
+  });
+
+  test('should parse verbose off to false', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_VERBOSE'] = 'off';
+    const { verbose } = getInputs();
+    expect(verbose).toBe(false);
+  });
+
+  // dryRun
+  test('should throw if wrong value is passed as dryRun', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_DRYRUN'] = 'wrongValue';
+    const inputs = getInputs();
+    expect(() => getInputs()).toThrow(wrongVerboseValue(process.env['INPUT_DRYRUN']));
+  });
+
+  test('should parse verbose on to true', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_DRYRUN'] = 'on';
+    const { dryRun } = getInputs();
+    expect(dryRun).toBe(true);
+  });
+
+  test('should parse verbose off to false', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_DRYRUN'] = 'off';
+    const { dryRun } = getInputs();
+    expect(dryRun).toBe(false);
+  });
+
+
+});
 describe('getInputs', () => {
 
   beforeAll(async () => {
@@ -65,17 +132,6 @@ describe('getInputs', () => {
   afterAll(async () => {
     prj.teardown();
   })
-
-  test('no rcPath given', () => {
-    expect(() => getInputs()).toThrow(rcPathError);
-  });
-
-  test('should throw if wrong value is passed as verbose', () => {
-    process.env['INPUT_RCPATH'] = rcPath;
-    process.env['INPUT_VERBOSE'] = 'wrongValue';
-    expect(() => getInputs()).toThrow(wrongVerboseValue(process.env['INPUT_VERBOSE']));
-  });
-
 
   test('should throw if serverBaseUrl is given and serverToken is not', () => {
     process.env['INPUT_RCPATH'] = rcPath;
