@@ -25,14 +25,15 @@
 // @TODO retrieve from file
 const resultPathExpected = 'user-flow-gh-action-e2e';
 const resultPath = process.argv[2];
-// @TODO retrieve from file
-const resultSummaryExpected = '# test flow';
-const resultSummary = process.argv[3];
 
 console.log(`resultPath: ${resultPath}`);
 if(!resultPath.includes(resultPathExpected)) {
   throw new Error(`wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
 }
+
+const resultSummaryExpected = '# test flow';
+const resultSummary = process.argv[3];
+
 console.log(`resultSummaryExpected: ${resultSummaryExpected}`);
 if(!resultSummary.includes(resultSummaryExpected)) {
   throw new Error(`wrong resultSummary expected: ${resultSummaryExpected} received: ${resultSummary}`);
