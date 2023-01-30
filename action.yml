@@ -34,8 +34,13 @@ outputs:
   resultSummary: # md report as string of all user flows
     description: 'The summary report of all user flow results of the urrent run'
 runs:
-  using: 'node16'
-  main: 'dist/packages/user-flow-gh-action/main.js'
+ # using: 'node16'
+  using: "composite"
+    steps:
+     - name: Run user-flow-gh-action
+       id: localRun
+       uses: ./
+       main: 'dist/packages/user-flow-gh-action/main.js'
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
   color: 'gray-dark'
