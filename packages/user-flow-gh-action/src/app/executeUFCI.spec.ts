@@ -17,8 +17,8 @@ describe('executeUFCI mock', () => {
     };
 
     const params =  { rcPath, verbose: true, dryRun: false } as unknown as any;
-    const paramsFormatted =  processParamsToParamsArray({ rcPath });
     const res = await executeUFCI((params), run);
+    const paramsFormatted =  processParamsToParamsArray({ rcPath, verbose: true, dryRun: false });
     expect(res).toBe(`Execute CLI: npx @push-based/user-flow collect ${paramsFormatted.join(', ')}`);
   });
 
