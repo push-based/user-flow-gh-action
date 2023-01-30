@@ -36,7 +36,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: ./
+    - uses: './packages/user-flow-gh-action/src'
       with:
         rcPath: ${{ inputs.rcPath }}
         verbose: ${{ inputs.verbose }}
