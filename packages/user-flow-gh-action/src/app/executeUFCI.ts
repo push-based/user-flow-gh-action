@@ -16,7 +16,7 @@ export async function executeUFCI(
     const script =  'npx @push-based/user-flow';
     const command =  'collect';
     const params =  processParamsToParamsArray({ rcPath, verbose, dryRun });
-    core.debug(`Execute CLI: ${script} ${command} ${params}`);
+    core.debug(`Execute CLI: ${script} ${command} ${params.join(', ')}`);
 
     const res = run(script, command, params);
     resolve(res);
