@@ -34,8 +34,13 @@ outputs:
   resultSummary: # md report as string of all user flows
     description: 'The summary report of all user flow results of the urrent run'
 runs:
-  using: 'node16'
-  main: 'dist/packages/user-flow-gh-action/main.js'
+  using: "composite"
+  steps:
+    - run: echo rcPath ${{ inputs.rcPath }}.
+      shell: bash
+    - id: comments
+      run: echo verbose ${{ inputs.verbose }}.
+      shell: bash
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
   color: 'gray-dark'
