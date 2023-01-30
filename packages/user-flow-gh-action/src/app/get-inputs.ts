@@ -8,7 +8,9 @@ import { readJsonFileSync } from './utils';
 export const rcPathError = 'Need rcPath to run.';
 export const serverBaseUrlServerTokenXorError = 'Need both a UFCI server url and an API token.';
 export const noUrlError = `URL not given in rc config.`;
-export const wrongVerboseValue = (val: string) => `verbose is ${val} but can only be set to 'on' or 'off'.`;
+export const wrongBooleanValue = (val: string, prop: string) => `${prop} is ${val} but can only be set to 'on' or 'off'.`;
+export const wrongVerboseValue = (val: string) => wrongBooleanValue(val, 'verbose');
+export const wrongDryRunValue = (val: string) => wrongBooleanValue(val, 'dryRun');
 
 export function getInputs(): GhActionInputs {
   core.startGroup(`Get inputs form action.yml`);
@@ -19,16 +21,30 @@ export function getInputs(): GhActionInputs {
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
   core.debug(`Input rcPath is ${rcPath}`);
   if (!rcPath) {
+    core.endGroup();
     // Fail and exit
     core.setFailed(rcPathError);
     throw new Error(rcPathError);
   }
+
+  let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
+  if (dryRunInput === '') {
+    dryRunInput = 'off';
+  }
+  if (dryRunInput !== 'on' && dryRunInput !== 'off') {
+    core.endGroup();
+    throw new Error(wrongDryRunValue(dryRunInput));
+  }
+  // convert action input to boolean
+  const dryRun = dryRunInput === 'on';
+  core.debug(`Input dryRun is ${dryRun}`);
 
   let verboseInput = core.getInput('verbose', { trimWhitespace: true });
   if (verboseInput === '') {
     verboseInput = 'off';
   }
   if (verboseInput !== 'on' && verboseInput !== 'off') {
+    core.endGroup();
     throw new Error(wrongVerboseValue(verboseInput));
   }
   // convert action input to boolean
@@ -42,6 +58,7 @@ export function getInputs(): GhActionInputs {
   const { collect, persist, assert } = rcFileObj;
   // COLLECT PARAMS
   if (!collect) {
+    core.endGroup();
     throw new Error(`collect configuration has to be present in rc config.`);
   }
 
@@ -49,6 +66,7 @@ export function getInputs(): GhActionInputs {
 
   // Check if we have a url
   if (!url) {
+    core.endGroup();
     core.setFailed(noUrlError);
     throw new Error(noUrlError);
   }
@@ -62,6 +80,7 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input serverToken is ${serverToken}`);
   // Make sure we don't have UFCI xor API token
   if (!!serverBaseUrl != !!serverToken) {
+    core.endGroup();
     // Fail and exit
     core.setFailed(serverBaseUrlServerTokenXorError);
     throw new Error(serverBaseUrlServerTokenXorError);
@@ -76,13 +95,14 @@ export function getInputs(): GhActionInputs {
 
   return {
     rcPath,
+    verbose,
+    dryRun,
+    // assert
     // collect
     url,
-    // assert
-    // upload
     serverBaseUrl,
+    // upload
     serverToken,
-    verbose,
     basicAuthUsername,
     basicAuthPassword
   };

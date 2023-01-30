@@ -1,15 +1,22 @@
 name: 'Lighthouse User Flow CI Action'
 description: "Audit URL's using Lighthouse user flow and test performance within PR's"
 inputs:
+  # GLOBAL ============================================
+  rcPath:
+    description: 'Path to a UFCI user-flowrc.json file'
+    required: false
+    default: '.user-flowrc.json'
   verbose:
     description: 'Verbose logging flag ("on" or "off")'
     required: false
     # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
     default: 'off'
-  rcPath:
-    description: 'Path to a UFCI user-flowrc.json file'
+  dryRun:
+    description: 'Faster runs due to dummy results for reports ("on" or "off")'
     required: false
-    default: '.user-flowrc.json'
+    # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
+    default: 'off'
+  # UPLOAD ============================================
   artifactName:
     description: 'Name of the artifact group if using uploadArtifacts. default: lighthouse-results'
     default: 'lighthouse-results'
@@ -25,5 +32,5 @@ runs:
   using: 'node16'
   main: 'dist/packages/user-flow-gh-action/main.js'
 branding:
-  icon: 'bar-chart-2'
+  icon: 'bar-chart-2' # un-sorted bar chart
   color: 'gray-dark'

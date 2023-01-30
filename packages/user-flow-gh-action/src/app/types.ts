@@ -1,7 +1,8 @@
 export type GhActionInputs = {
   // global
-  verbose: boolean,
   rcPath: string;
+  verbose: boolean;
+  dryRun: boolean;
   // collect
   url: string;
   // assert
