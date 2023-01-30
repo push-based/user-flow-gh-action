@@ -1770,6 +1770,7 @@ exports.checkBypass = checkBypass;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.executeUFCI = void 0;
 const run_user_flow_cli_command_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/run-user-flow-cli-command.ts");
+const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
 const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/utils.ts");
 async function executeUFCI(ghActionInputs, 
 // for testing
@@ -1779,7 +1780,11 @@ run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
         if (!rcPath) {
             reject('rcPath not given');
         }
-        const res = run('npx @push-based/user-flow', 'collect', (0, utils_1.processParamsToParamsArray)({ rcPath }));
+        const script = 'npx @push-based/user-flow';
+        const command = 'collect';
+        const params = (0, utils_1.processParamsToParamsArray)({ rcPath });
+        core.debug(`Execute CLI: ${script}${command}${params}`);
+        const res = run(script, command, params);
         resolve(res);
     });
 }
