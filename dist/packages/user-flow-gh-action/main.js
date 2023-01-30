@@ -1949,7 +1949,7 @@ function processResult(ghActionInputs) {
         core.endGroup();
         throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
-    const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults.filter(v => v.endsWith('.json'))[0]);
+    const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
     core.debug(`Process results form: ${resultPath}`);
     let resultStr;
     try {
