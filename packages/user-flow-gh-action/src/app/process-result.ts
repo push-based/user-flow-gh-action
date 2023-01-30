@@ -1,5 +1,5 @@
 import { GhActionInputs } from './types';
-import { readdirSync, readFileSync } from 'fs';
+import { readdirSync, readFileSync, rmSync } from 'fs';
 import {join} from 'path';
 import * as core from '@actions/core';
 import { readJsonFileSync } from './utils';
@@ -20,6 +20,7 @@ export function processResult(ghActionInputs: GhActionInputs): string {
   let resultStr: string;
   try {
     resultStr = readFileSync(resultPath).toString();
+    rmSync(resultPath);
   } catch(e) {
     core.endGroup();
     throw e;
