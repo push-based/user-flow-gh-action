@@ -13,12 +13,14 @@ export async function executeUFCI(
     if (!rcPath) {
       reject('rcPath not given');
     }
+    const params =  { rcPath, verbose, dryRun };
+
     const script =  'npx @push-based/user-flow';
     const command =  'collect';
-    const params =  processParamsToParamsArray({ rcPath, verbose, dryRun });
-    core.debug(`Execute CLI: ${script} ${command} ${params.join(', ')}`);
+    const processedParams =  processParamsToParamsArray({ rcPath, verbose, dryRun });
+    core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(', ')}`);
 
-    const res = run(script, command, params);
+    const res = run(script, command, processedParams);
     resolve(res);
   });
 }
