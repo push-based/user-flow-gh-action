@@ -12,7 +12,7 @@ describe('executeUFCI mock', () => {
 
   test('is call with run inside', async () => {
     const rcPath = 'user-flowrc.json';
-    const run = (...args: any) => {
+    const run = (bin: string, command: 'init' | 'collect', args: string[]) => {
       return `Execute CLI: npx @push-based/user-flow collect ${args.join(', ')}` as any;
     };
 
