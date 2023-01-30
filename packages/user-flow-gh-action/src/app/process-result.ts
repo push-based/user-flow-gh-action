@@ -14,7 +14,7 @@ export function processResult(ghActionInputs: GhActionInputs): string {
     throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
   }
 
-  const resultPath = join(rcFileObj.persist.outPath, allResults.filter(v => v.endsWith('.json'))[0]);
+  const resultPath = join(rcFileObj.persist.outPath, allResults[0]);
 
   core.debug(`Process results form: ${resultPath}`);
   let resultStr: string;

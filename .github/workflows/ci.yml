@@ -31,7 +31,7 @@ jobs:
         id: localRun
         uses: ./
         with:
-          dryRun: 'on'
+          dryRun: 'off'
           verbose: 'on'
           rcPath: ./.user-flowrc.json
           serverBaseUrl: push-based.io
