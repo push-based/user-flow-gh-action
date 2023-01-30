@@ -1969,14 +1969,22 @@ exports.processResult = processResult;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runUserFlowCliCommand = void 0;
 const child_process_1 = __webpack_require__("child_process");
-function runUserFlowCliCommand(bin, command = 'collect', args = []) {
+const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
+function runUserFlowCliCommand(bin, command = 'collect', args = [], processOptions = {}) {
     const combinedArgs = [bin, command, ...args];
+    let { cwd, env } = processOptions;
+    env = env || process.env;
+    // Ensure we run in cliMode "CI"
+    if (env['CI'] === undefined) {
+        env['CI'] = true;
+    }
+    const options = {
+        cwd: cwd || process.cwd(),
+        env
+    };
+    core.debug(`CLI process options: ${JSON.stringify(options.env.CI)}`);
     // @TODO use childProcess.execSync to get stdout and forward it
-    return (0, child_process_1.execSync)(combinedArgs.join(' '), {
-        cwd: process.cwd(),
-        env: process.env,
-        encoding: 'utf-8'
-    });
+    return (0, child_process_1.execSync)(combinedArgs.join(' '), options);
 }
 exports.runUserFlowCliCommand = runUserFlowCliCommand;
 
