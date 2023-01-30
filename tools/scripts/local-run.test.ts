@@ -33,7 +33,7 @@ console.log(`resultPath: ${resultPath}`);
 if(!resultPath.includes(resultPathExpected)) {
   throw new Error(`Error wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
 }
-
+console.log(`resultsExpected: ${resultsExpected}`);
 if(!results.includes(resultsExpected)) {
   throw new Error(`Error wrong resultPath expected: ${resultsExpected} received: ${results}`);
 }
