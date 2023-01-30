@@ -1775,15 +1775,15 @@ const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/util
 async function executeUFCI(ghActionInputs, 
 // for testing
 run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
-    const { rcPath, ...actionInputs } = ghActionInputs;
+    const { rcPath, verbose, dryRun, ...actionInputs } = ghActionInputs;
     return new Promise((resolve, reject) => {
         if (!rcPath) {
             reject('rcPath not given');
         }
         const script = 'npx @push-based/user-flow';
         const command = 'collect';
-        const params = (0, utils_1.processParamsToParamsArray)({ rcPath });
-        core.debug(`Execute CLI: ${script}${command}${params}`);
+        const params = (0, utils_1.processParamsToParamsArray)({ rcPath, verbose, dryRun });
+        core.debug(`Execute CLI: ${script} ${command} ${params}`);
         const res = run(script, command, params);
         resolve(res);
     });
