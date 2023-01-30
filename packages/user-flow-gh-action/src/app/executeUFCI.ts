@@ -8,7 +8,7 @@ export async function executeUFCI(
   // for testing
   run: (bin: string, command: 'init' | 'collect', args: string[]) => any = runUserFlowCliCommand
 ): Promise<string> {
-  const { rcPath, verbose, dryRun, ...actionInputs } = ghActionInputs;
+  const { rcPath, verbose, dryRun, ...unusedInputs } = ghActionInputs;
   return new Promise((resolve, reject) => {
     if (!rcPath) {
       reject('rcPath not given');
