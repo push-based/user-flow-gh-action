@@ -1775,7 +1775,7 @@ const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/util
 async function executeUFCI(ghActionInputs, 
 // for testing
 run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
-    const { rcPath, verbose, dryRun, ...actionInputs } = ghActionInputs;
+    const { rcPath, verbose, dryRun, ...unusedInputs } = ghActionInputs;
     return new Promise((resolve, reject) => {
         if (!rcPath) {
             reject('rcPath not given');
