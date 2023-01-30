@@ -31,9 +31,12 @@ if(!resultPath.includes(resultPathExpected)) {
   throw new Error(`wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
 }
 
-const resultSummaryExpected = '# test flow';
+const date = resultPath.split('-').pop().split('.').shift();
+const y = date.slice(0,4);
+const m = date.slice(4,6);
+const d = date.slice(6,8);
+const resultSummaryExpected = `Date/Time:  ${y}-${m}-${d}`;
 const resultSummary = process.argv[3];
-
 console.log(`resultSummaryExpected: ${resultSummaryExpected}`);
 if(!resultSummary.includes(resultSummaryExpected)) {
   throw new Error(`wrong resultSummary expected: ${resultSummaryExpected} received: ${resultSummary}`);
