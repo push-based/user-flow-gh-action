@@ -1949,19 +1949,20 @@ function processResult(ghActionInputs) {
         core.endGroup();
         throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
-    const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+    const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults.filter(v => v.endsWith('.md'))[0]);
     core.debug(`Process results form: ${resultPath}`);
-    let resultStr;
+    let resultSummary;
     try {
-        resultStr = (0, fs_1.readFileSync)(resultPath).toString();
+        resultSummary = (0, fs_1.readFileSync)(resultPath).toString();
+        (0, fs_1.rmSync)(resultPath);
     }
     catch (e) {
         core.endGroup();
         throw e;
     }
-    core.debug(`Results: ${resultStr}`);
+    core.debug(`Results: ${resultSummary}`);
     core.endGroup();
-    return resultStr;
+    return { resultPath, resultSummary };
 }
 exports.processResult = processResult;
 
@@ -3035,9 +3036,9 @@ async function run() {
         if (!allResults.length) {
             throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
         }
-        const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
-        core.setOutput('resultPath', resultPath);
-        const resultSummary = (0, process_result_1.processResult)(ghActionInputs);
+        const resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+        core.setOutput('resultPath', resPath);
+        const { resultSummary } = (0, process_result_1.processResult)(ghActionInputs);
         core.setOutput('resultSummary', resultSummary);
     }
     catch (error) {
