@@ -1944,6 +1944,7 @@ function processResult(ghActionInputs) {
     core.startGroup(`Process result`);
     const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
     const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
+    core.debug(`Output folder content: ${allResults.join(', ')}`);
     if (!allResults.length) {
         core.endGroup();
         throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
