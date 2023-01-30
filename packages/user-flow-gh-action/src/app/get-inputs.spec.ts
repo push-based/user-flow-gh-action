@@ -1,5 +1,12 @@
 import { expect, test } from '@jest/globals';
-import { getInputs, noUrlError, rcPathError, serverBaseUrlServerTokenXorError, wrongVerboseValue } from './get-inputs';
+import {
+  getInputs,
+  noUrlError,
+  rcPathError,
+  serverBaseUrlServerTokenXorError,
+  wrongDryRunValue,
+  wrongVerboseValue
+} from './get-inputs';
 import { CliProject, ProjectConfig } from '@push-based/node-cli-testing';
 import { DEFAULT_RC_NAME } from '@push-based/user-flow';
 import { join } from 'path';
@@ -98,7 +105,7 @@ describe('getInputs global', () => {
     process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_DRYRUN'] = 'wrongValue';
     const inputs = getInputs();
-    expect(() => getInputs()).toThrow(wrongVerboseValue(process.env['INPUT_DRYRUN']));
+    expect(() => getInputs()).toThrow(wrongDryRunValue(process.env['INPUT_DRYRUN']));
   });
 
   test('should parse verbose on to true', () => {
