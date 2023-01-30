@@ -36,9 +36,10 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: echo rcPath ${{ inputs.rcPath }}.
+    - name: "Run user-flow"
+      run: node ${{ github.action_path }}/dist/user-flow-gh-action/main.js
       shell: bash
-    - id: comments
+    - name: "Add commment"
       run: echo verbose ${{ inputs.verbose }}.
       shell: bash
 branding:
