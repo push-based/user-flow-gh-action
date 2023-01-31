@@ -49,9 +49,12 @@ runs:
         echo "::set-output name=resultPath::${{ steps.auf.outputs.resultPath }}"
       # echo "resultSummary=\"$(cat ${{ steps.auf.outputs.resultSummary }})\"" >> $GITHUB_OUTPUT
       shell: bash
-    #- name: "Add comment"
-    #  run: echo --resultSummary "$(cat ${{ steps.auf.outputs.resultSummary }})" --resultPath "${{ steps.auf.outputs.resultPath }}"
-    #  shell: bash
+    - name: Add reduced report as comment to the PR
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: user flow summary report
+        message: ${{ steps.auf.outputs.resultSummary }}
+
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
   color: 'gray-dark'
