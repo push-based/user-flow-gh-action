@@ -1,0 +1,42 @@
+name: 'Build and test user-flow action'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: npm
+      - name: install
+        run: npm i
+      - name: npm run build:user-flow-gh-action
+        run: npm run build:user-flow-gh-action
+      - name: Commit build (GitHub needs it as JS)
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: push-based.io
+          author_email: opensource@push-based.io
+          message: 'Persist user-flow-gh-action'
+          add: '*'
+      - name: npm run test:user-flow-gh-action
+        run: npm run test:user-flow-gh-action
+      - name: npm run e2e
+        run: npm run nx test user-flow-gh-action-e2e
+      - name: Run test user-flow-gh-action locally
+        id: localRun
+        uses: ./dist/packages/user-flow-gh-action/
+        with:
+          dryRun: 'off'
+          verbose: 'on'
+          rcPath: ./.user-flowrc.json
+          serverBaseUrl: push-based.io
+          serverToken: 123
+      - name: local-test
+        run: npm run postLocalCiRunTest -- --rp=${{ steps.localRun.outputs.resultPath }} --r="${{ steps.localRun.outputs.resultSummary }}"

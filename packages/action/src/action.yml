@@ -1,5 +1,5 @@
 name: 'Lighthouse User Flow CI Action'
-description: "Audit URL's using Lighthouse user flow and test performance within PR's. Optionally show reports as a comment"
+description: "Audit URL's using Lighthouse user flow and test performance within PR's"
 inputs:
   # GLOBAL ============================================
   rcPath:
@@ -16,6 +16,18 @@ inputs:
     required: false
     # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
     default: 'off'
+  # UPLOAD ============================================
+  artifactName:
+    description: 'Name of the artifact group if using uploadArtifacts. default: lighthouse-results'
+    default: 'lighthouse-results'
+  serverBaseUrl:
+    description: 'Address of a UFCI server'
+  serverToken:
+    description: 'API token to push to UFCI server'
+  basicAuthUsername:
+    description: 'Basic auth username for UFCI server'
+  basicAuthPassword:
+    description: 'Basic auth password for UFCI server'
 outputs:
   resultPath: # path to md output
     description: 'The path in with the user flow results are saved'
@@ -26,7 +38,7 @@ runs:
   steps:
     - name: "Run user-flow"
       id: ruf
-      uses: ./dist/packages/user-flow-gh-action/
+      uses: ./dist/packages/user-flow-gh-action/src/
       with:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
@@ -36,7 +48,6 @@ runs:
       with:
         header: user flow summary report
         message: ${{ steps.ruf.outputs.resultSummary }}
-
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
   color: 'gray-dark'

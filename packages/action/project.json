@@ -1,7 +1,7 @@
 {
-  "name": "user-flow-gh-action",
+  "name": "action",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/user-flow-gh-action/src",
+  "sourceRoot": "packages/action/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -13,7 +13,11 @@
         }
       ],
       "options": {
-        "commands": []
+        "commands": [
+          {
+            "command": "npm run postBuildAction -- action"
+          }
+        ]
       }
     },
     "build-app": {
@@ -22,10 +26,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/packages/user-flow-gh-action",
-        "main": "packages/user-flow-gh-action/src/main.ts",
-        "tsConfig": "packages/user-flow-gh-action/tsconfig.app.json",
-        "assets": ["packages/user-flow-gh-action/src/action.yml"],
+        "outputPath": "dist/packages/action",
+        "main": "packages/action/src/main.ts",
+        "tsConfig": "packages/action/tsconfig.app.json",
+        "assets": ["packages/action/src/action.yml"],
         "externalDependencies": "none"
       },
       "configurations": {
@@ -39,11 +43,11 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "user-flow-gh-action:build"
+        "buildTarget": "action:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "user-flow-gh-action:build:production"
+          "buildTarget": "action:build:production"
         }
       }
     },
@@ -51,14 +55,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/user-flow-gh-action/**/*.ts"]
+        "lintFilePatterns": ["packages/action/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/user-flow-gh-action/jest.config.ts",
+        "jestConfig": "packages/action/jest.config.ts",
         "passWithNoTests": true
       }
     }

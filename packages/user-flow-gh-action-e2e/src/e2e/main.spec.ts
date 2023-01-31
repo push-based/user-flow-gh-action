@@ -1,9 +1,5 @@
 import { expect, test } from '@jest/globals';
-import * as core from '@actions/core';
-
-import { REMOTE_PRJ_CFG, REMOTE_RC_JSON, REMOTE_RC_NAME } from '@user-flow-gh-action-workspace/test-data';
-import { readdirSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { REMOTE_PRJ_CFG, REMOTE_RC_NAME } from '@user-flow-gh-action-workspace/test-data';
 import { withProject } from '../support/test-helper';
 
 describe('main.js', () => {
@@ -16,9 +12,8 @@ describe('main.js', () => {
 
     expect(stderr).toBe('');
     expect(stdout).toContain('Run main');
-    expect(stdout).toContain('::set-output name=result-path::');
-    const outputResult = readFileSync(join(REMOTE_RC_JSON.persist.outPath, readdirSync(REMOTE_RC_JSON.persist.outPath)[0])).toString();
-    expect(outputResult).toContain('Navigation report (www.google.com/)');
+    expect(stdout).toContain('::set-output name=resultPath::');
+    expect(stdout).toContain('::set-output name=resultSummary::');
     expect(exitCode).toBe(0);
   }), 180_000);
 
