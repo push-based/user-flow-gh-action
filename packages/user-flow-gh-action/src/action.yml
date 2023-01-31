@@ -37,7 +37,7 @@ runs:
   using: "composite"
   steps:
     - name: "Run user-flow"
-      uses: ./dist/packages/user-flow-gh-action/src/app/
+      uses: ./packages/user-flow-gh-action/src/app/
       with:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
