@@ -46,7 +46,7 @@ runs:
     - name: "port action output"
       run: |
         echo "resultPath=${{ steps.auf.outputs.resultPath }}" >> $GITHUB_OUTPUT
-        echo "resultSummary=\"$(cat ${{ steps.auf.outputs.resultSummary }})\"" >> $GITHUB_OUTPUT
+      # echo "resultSummary=\"$(cat ${{ steps.auf.outputs.resultSummary }})\"" >> $GITHUB_OUTPUT
       shell: bash
     #- name: "Add comment"
     #  run: echo --resultSummary "$(cat ${{ steps.auf.outputs.resultSummary }})" --resultPath "${{ steps.auf.outputs.resultPath }}"
