@@ -27,14 +27,10 @@ jobs:
           add: '*'
       - name: test
         run: npm run test
-      - name: Run test user-flow-gh-action locally
+      - name: Run test action locally
         id: localRun
         uses: ./
         with:
           dryRun: 'off'
           verbose: 'on'
           rcPath: ./.user-flowrc.json
-          serverBaseUrl: push-based.io
-          serverToken: 123
-      - name: local-test
-        run: npm run postLocalCiRunTest -- --rp=${{ steps.localRun.outputs.resultPath }} --r="${{ steps.localRun.outputs.resultSummary }}"
