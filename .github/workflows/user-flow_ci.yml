@@ -23,7 +23,7 @@ jobs:
         with:
           author_name: push-based.io
           author_email: opensource@push-based.io
-          message: 'Persist build'
+          message: 'Persist user-flow-gh-action'
           add: '*'
       - name: npm run test:user-flow-gh-action
         run: npm run test:user-flow-gh-action
