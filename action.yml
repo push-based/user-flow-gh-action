@@ -44,7 +44,7 @@ runs:
         verbose: ${{ inputs.verbose }}
         rcPath: ${{ inputs.rcPath }}
     - name: "Add comment"
-      run: echo verbose ${{ inputs.verbose }} steps-- ${{ steps.auf }} -- ${{ steps.auf.outputs.resultSummary }} -- ${{ steps.auf.outputs.resultPath }}.
+      run: echo --resultSummary "${{ steps.auf.outputs.resultSummary }}" --resultPath "${{ steps.auf.outputs.resultPath }}"
       shell: bash
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
