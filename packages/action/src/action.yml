@@ -21,7 +21,7 @@ runs:
   steps:
     - name: "Run user-flow"
       id: ruf
-      uses: ./dist/packages/user-flow-gh-action/
+      uses: push-based/user-flow-gh-action/dist/packages/user-flow-gh-action/
       with:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
