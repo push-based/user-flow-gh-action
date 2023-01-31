@@ -13,11 +13,7 @@
         }
       ],
       "options": {
-        "commands": [
-          {
-            "command": "npm run postBuildAction"
-          }
-        ]
+        "commands": []
       }
     },
     "build-app": {
