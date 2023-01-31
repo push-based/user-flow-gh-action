@@ -19,7 +19,7 @@
  * 2. In addition to that we assume that this script is called in the following way in the following sep:
  * ```yml
  * - name: Test the action output
- *   run: ts-node local.run.ts --rp=${{ steps.localRun.outputs.result-path }} --r=${{ steps.localRun.outputs.results }}
+ *   run: ts-node local.run.ts --rp=${{ steps.localRun.outputs.resultPath }} --r=${{ steps.localRun.outputs.resultSummary }}
  * ```
  */
 // @TODO retrieve from file

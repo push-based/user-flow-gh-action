@@ -37,4 +37,4 @@ jobs:
           serverBaseUrl: push-based.io
           serverToken: 123
       - name: local-test
-        run: npm run postLocalCiRunTest -- --rp=${{ steps.localRun.outputs.resultPath }} --r="${{ steps.localRun.outputs.resultSummary }}"
+        run: npm run postLocalCiRunTest -- --rp=${{ steps.localRun.outputs }} --r="${{ steps.localRun.outputs.resultSummary }}"
