@@ -17,7 +17,7 @@ jobs:
       - name: install
         run: npm i
       - name: build
-        run: npm run build
+        run: npm run build:user-flow-gh-action
       - name: Commit build
         uses: EndBug/add-and-commit@v7
         with:
@@ -29,7 +29,7 @@ jobs:
         run: npm run test
       - name: Run test user-flow-gh-action locally
         id: localRun
-        uses: ./
+        uses: ./packages/user-flow-gh-action/
         with:
           dryRun: 'off'
           verbose: 'on'
