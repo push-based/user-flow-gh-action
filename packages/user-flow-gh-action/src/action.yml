@@ -48,7 +48,7 @@ runs:
         echo "resultPath=${{ steps.auf.outputs.resultPath }}" >> $GITHUB_OUTPUT && echo "resultSummary=$(cat ${{ steps.auf.outputs.resultSummary }})" >> $GITHUB_OUTPUT
       shell: bash
     - name: "Add comment"
-      run: echo --resultSummary "${{ steps.auf.outputs.resultSummary }}" --resultPath "${{ steps.auf.outputs.resultPath }}"
+      run: echo --resultSummary "$(cat ${{ steps.auf.outputs.resultSummary }})" --resultPath "${{ steps.auf.outputs.resultPath }}"
       shell: bash
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
