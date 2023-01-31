@@ -16,17 +16,17 @@ jobs:
           cache: npm
       - name: install
         run: npm i
-      - name: build
+      - name: npm run build:user-flow-gh-action
         run: npm run build:user-flow-gh-action
-      - name: Commit build
+      - name: Commit build (GitHub needs it as JS)
         uses: EndBug/add-and-commit@v7
         with:
           author_name: push-based.io
           author_email: opensource@push-based.io
           message: 'Persist build'
           add: '*'
-      - name: test
-        run: npm run test
+      - name: npm run test:user-flow-gh-action
+        run: npm run test:user-flow-gh-action
       - name: Run test user-flow-gh-action locally
         id: localRun
         uses: ./dist/packages/user-flow-gh-action/

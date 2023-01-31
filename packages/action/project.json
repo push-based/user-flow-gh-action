@@ -15,7 +15,7 @@
       "options": {
         "commands": [
           {
-            "command": "npm run postBuildAction"
+            "command": "npm run postBuildAction -- action"
           }
         ]
       }

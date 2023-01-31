@@ -7,10 +7,11 @@
     "build": "nx build action",
     "build:user-flow-gh-action": "nx build user-flow-gh-action",
     "build:affected": "npm run nx -- affected:build --base=origin/main",
-    "test": "nx test user-flow-gh-action",
+    "test": "nx test action",
+    "test:user-flow-gh-action": "nx test user-flow-gh-action",
     "test:e2e": "nx test user-flow-gh-action-e2e",
     "test:affected": "npm run nx -- affected:test --base=origin/main",
-    "postBuildAction": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/post-build-action.ts prj",
+    "postBuildAction": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/post-build-action.ts",
     "postLocalCiRunTest": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/local-run.test.ts"
   },
   "private": true,
