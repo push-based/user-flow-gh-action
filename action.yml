@@ -45,8 +45,8 @@ runs:
         rcPath: ${{ inputs.rcPath }}
     - name: "port action output"
       run: |
-        echo "::set-output name=output_resultPath::${{ steps.auf.outputs.resultPath }}" \
-        && echo "::set-output name=output_resultSummary::${{ steps.auf.outputs.resultSummary }}"
+        echo "{resultPath}={${{ steps.auf.outputs.resultPath }}}" >> $GITHUB_OUTPUT
+        && echo "{resultSummary}={${{ steps.auf.outputs.resultSummary }}}" >> $GITHUB_OUTPUT
       shell: bash
     - name: "Add comment"
       run: echo --resultSummary "${{ steps.auf.outputs.resultSummary }}" --resultPath "${{ steps.auf.outputs.resultPath }}"
