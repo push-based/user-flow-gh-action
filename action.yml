@@ -37,13 +37,14 @@ runs:
   using: "composite"
   steps:
     - name: "Run user-flow"
+      id: auf
       uses: ./packages/user-flow-gh-action/src/app/
       with:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
         rcPath: ${{ inputs.rcPath }}
     - name: "Add comment"
-      run: echo verbose ${{ inputs.verbose }}.
+      run: echo verbose ${{ inputs.verbose }} -- ${{ steps.auf.outputs.resultSummary }}.
       shell: bash
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
