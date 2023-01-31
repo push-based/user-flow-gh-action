@@ -19,12 +19,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo "${{ github.action_path }}"
-      shell: bash
+    - name: Checkout code
+      uses: actions/checkout@v2
     # Rune user-flow CLI in the CI and forward the md report to the step output
     - name: "Run user-flow"
       id: ruf
-      uses: push-based/user-flow-gh-action/dist/packages/user-flow-gh-action
+      uses: ./dist/packages/user-flow-gh-action
       with:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
