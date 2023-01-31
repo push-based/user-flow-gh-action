@@ -44,7 +44,9 @@ runs:
         verbose: ${{ inputs.verbose }}
         rcPath: ${{ inputs.rcPath }}
     - name: "port action output"
-      run: echo "::set-output name=resultSummary::${{ steps.auf.outputs.resultSummary }}"
+      run: |
+        echo "::set-output name=output_resultPath::${{ steps.auf.outputs.resultPath }}" \
+        && echo "::set-output name=output_resultSummary::${{ steps.auf.outputs.resultSummary }}"
       shell: bash
     - name: "Add comment"
       run: echo --resultSummary "${{ steps.auf.outputs.resultSummary }}" --resultPath "${{ steps.auf.outputs.resultPath }}"
