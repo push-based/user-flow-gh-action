@@ -37,9 +37,9 @@ runs:
   using: "composite"
   steps:
     - name: "Run user-flow"
-      run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js
+      run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js --INPUT_RCPATH=${{ inputs.rcPath }}
       shell: bash
-    - name: "Add commment"
+    - name: "Add comment"
       run: echo verbose ${{ inputs.verbose }}.
       shell: bash
 branding:
