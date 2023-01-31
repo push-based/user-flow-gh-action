@@ -37,7 +37,7 @@ runs:
   using: "composite"
   steps:
     - name: "Run user-flow"
-      uses: ${{ github.action_path }}/dist/packages/user-flow-gh-action/action-uf.yml
+      uses: ./dist/packages/user-flow-gh-action/action-uf.yml
       with:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
