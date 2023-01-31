@@ -19,10 +19,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - run: echo "${{ github.action_path }}"
+      shell: bash
     # Rune user-flow CLI in the CI and forward the md report to the step output
     - name: "Run user-flow"
       id: ruf
-      uses: ${{ env.GITHUB_REPOSITORY }}/dist/packages/user-flow-gh-action/
+      uses: dist/packages/user-flow-gh-action/
       with:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
