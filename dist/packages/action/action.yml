@@ -34,8 +34,20 @@ outputs:
   resultSummary: # md report as string of all user flows
     description: 'The summary report of all user flow results of the current run'
 runs:
-  using: 'node16'
-  main: './packages/user-flow-gh-action/main.ts'
+  using: "composite"
+  steps:
+    - name: "Run user-flow"
+      id: ruf
+      uses: ./dist/packages/user-flow-gh-action/src/
+      with:
+        dryRun: ${{ inputs.dryRun }}
+        verbose: ${{ inputs.verbose }}
+        rcPath: ${{ inputs.rcPath }}
+    - name: Add reduced report as comment to the PR
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: user flow summary report
+        message: ${{ steps.ruf.outputs.resultSummary }}
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
   color: 'gray-dark'
