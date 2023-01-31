@@ -19,6 +19,7 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # Rune user-flow CLI in the CI and forward the md report to the step output
     - name: "Run user-flow"
       id: ruf
       uses: push-based/user-flow-gh-action/dist/packages/user-flow-gh-action/
@@ -26,6 +27,7 @@ runs:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
         rcPath: ${{ inputs.rcPath }}
+    # Reads to user flow report form the step output and adds a comment to the PR
     - name: Add reduced report as comment to the PR
       uses: marocchino/sticky-pull-request-comment@v2
       with:
