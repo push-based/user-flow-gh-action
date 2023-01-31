@@ -15,6 +15,9 @@
       "options": {
         "commands": [
           {
+            "command": "nx build user-flow-gh-action"
+          },
+          {
             "command": "npm run postBuildAction -- action"
           }
         ]

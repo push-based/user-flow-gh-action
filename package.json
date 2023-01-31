@@ -5,7 +5,6 @@
   "scripts": {
     "nx": "nx",
     "build": "nx build action",
-    "build:user-flow-gh-action": "nx build user-flow-gh-action",
     "build:affected": "npm run nx -- affected:build --base=origin/main",
     "test": "nx test action",
     "test:user-flow-gh-action": "nx test user-flow-gh-action",

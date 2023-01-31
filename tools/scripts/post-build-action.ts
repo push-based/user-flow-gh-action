@@ -11,8 +11,7 @@ type ProjectJson = {
     }
   }
 };
-console.log('process.argv', process.argv[2]);
-/*
+
 const projectName = process.argv[2];
 const projectJsonPath = `./packages/${projectName}/project.json`;
 const projectJson: ProjectJson = JSON.parse(fs.readFileSync(projectJsonPath, {encoding: 'utf8'}));
@@ -32,4 +31,3 @@ fs.writeFileSync(rootActionPath, newYml, {encoding: 'utf8'});
 fs.rmSync(distActionPath);
 
 console.log(`Moved action.yml from '${distPath}' to ${rootActionPath}`);
-*/
