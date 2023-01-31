@@ -36,8 +36,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: "port inputs to user-flow action"
-      id: auf
+    - name: "Run user-flow"
       uses: ./packages/user-flow-gh-action/src/app/
       with:
         dryRun: ${{ inputs.dryRun }}
