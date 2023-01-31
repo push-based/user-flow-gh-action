@@ -11,9 +11,9 @@ type ProjectJson = {
     }
   }
 };
-console.log('process.argv', process.argv[1], process.argv);
+console.log('process.argv', process.argv[2]);
 /*
-const projectName = 'action';
+const projectName = process.argv[2];
 const projectJsonPath = `./packages/${projectName}/project.json`;
 const projectJson: ProjectJson = JSON.parse(fs.readFileSync(projectJsonPath, {encoding: 'utf8'}));
 
