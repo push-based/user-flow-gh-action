@@ -19,8 +19,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
     # Rune user-flow CLI in the CI and forward the md report to the step output
     - name: "Run user-flow"
       id: ruf
