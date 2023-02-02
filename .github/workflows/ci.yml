@@ -25,9 +25,9 @@ jobs:
           author_email: opensource@push-based.io
           message: 'Persist action build'
           add: '*'
-      - name: test:action
+      - name: test-unit:action
         run: npm run nx test action
-      - name: Run test action locally
+      - name: run:action
         id: localRun
         uses: ./
         with:
