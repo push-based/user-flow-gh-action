@@ -26,10 +26,13 @@ runs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: Install the dependencies
+      shell: bash
       run: npm ci
-    - name: "Run user-flow"
-      id: ruf2
+      env:
+        INPUT_NAME: ${{ inputs.name }}
     - name: run:user-flow
+      id: ruf2
+      shell: bash
       run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js
     #- name: "Run user-flow"
     #  id: ruf
