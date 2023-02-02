@@ -19,12 +19,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo ${{ github.action_path }}/test/script.sh
+    - run: echo ${{ github.action_path }}/dist/packages/user-flow-gh-action
       shell: bash
     # Runs user-flow CLI in the CI and forward the md report to the step output
     - name: "Run user-flow"
       id: ruf
-      uses: ./dist/packages/user-flow-gh-action
+      uses:  ${{ github.action_path }}/dist/packages/user-flow-gh-action
       with:
         dryRun: ${{ inputs.dryRun }}
         verbose: ${{ inputs.verbose }}
