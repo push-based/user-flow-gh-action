@@ -19,16 +19,25 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo ${{ github.action_path }}/dist/packages/user-flow-gh-action
-      shell: bash
-    # Runs user-flow CLI in the CI and forward the md report to the step output
-    - name: "Run user-flow"
-      id: ruf
-      uses:  ${{ github.action_path }}/dist/packages/user-flow-gh-action
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup Nodejs
+      uses: actions/setup-node@v2
       with:
-        dryRun: ${{ inputs.dryRun }}
-        verbose: ${{ inputs.verbose }}
-        rcPath: ${{ inputs.rcPath }}
+        node-version: ${{ env.NODE_VERSION }}
+    - name: Install the dependencies
+      run: npm ci
+    - name: "Run user-flow"
+      id: ruf2
+    - name: run:user-flow
+      run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js
+    #- name: "Run user-flow"
+    #  id: ruf
+    #  uses:  ${{ github.action_path }}/dist/packages/user-flow-gh-action
+    #  with:
+    #    dryRun: ${{ inputs.dryRun }}
+    #    verbose: ${{ inputs.verbose }}
+    #    rcPath: ${{ inputs.rcPath }}
     # Reads to user flow report form the step output and adds a comment to the PR
     - name: Add reduced report as comment to the PR
       uses: marocchino/sticky-pull-request-comment@v2
