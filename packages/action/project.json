@@ -13,9 +13,6 @@
           },
           {
             "command": "nx build-app action"
-          },
-          {
-            "command": "npm run postBuildAction -- action"
           }
         ],
         "parallel": false
