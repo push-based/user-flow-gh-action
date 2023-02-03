@@ -19,8 +19,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: setup:repository
-      uses: actions/checkout@v2
     - name: run:user-flow
       id: ruf
       shell: bash
