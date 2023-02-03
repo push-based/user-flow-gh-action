@@ -31,12 +31,12 @@ const distActionString: string = fs.readFileSync(distActionPath, {encoding: 'utf
 if(!distActionString) {
   throw new Error(`distPath: ${distPath} has no content`);
 }
+// run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js
+const matcher = `run: node ./dist/packages/user-flow-gh-action/main.js`;
+const newYml = distActionString.replace(matcher, 'run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js');
+console.log(`updated yml ${distActionPath}`);
 
-// const matcher = /^(  main: ')([a-zA-Z\/.])*(')$/m;
-// const newYml = distActionString.replace(matcher, `$1${join(distPath, 'main.js')}$3`);
-// console.log(`updated yml ${distActionPath}`);
-
-fs.writeFileSync(rootActionPath, distActionString, {encoding: 'utf8'});
+fs.writeFileSync(rootActionPath, newYml, {encoding: 'utf8'});
 console.log(`Wrote action to rootActionPath: ${rootActionPath}`);
 fs.rmSync(distActionPath);
 
