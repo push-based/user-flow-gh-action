@@ -38,6 +38,6 @@ if(!distActionString) {
 
 fs.writeFileSync(rootActionPath, distActionString, {encoding: 'utf8'});
 console.log(`Wrote action to rootActionPath: ${rootActionPath}`);
-//fs.rmSync(distActionPath);
+fs.rmSync(distActionPath);
 
 console.log(`Moved action.yml from '${distPath}' to ${rootPath}`);
