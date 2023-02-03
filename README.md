@@ -3,6 +3,8 @@
 This repository maintains a GitHub action to run [@push-based/user-flow](https://github.com/push-based/user-flow) in a workflow.
 It automatically detects flows, executes them and produces md reports as comments in your PR.
 
+![user-flow-gh-action-cover](https://user-images.githubusercontent.com/10064416/216605948-b8fffdda-3459-48c9-975a-75ec95544d30.png)
+
 **Inputs:**  
 | Name                         |  Type     | Default                     |  Description                                                                                               |  
 |------------------------------| --------- | --------------------------- |----------------------------------------------------------------------------------------------------------- |  
