@@ -1,6 +1,6 @@
-# user-flow-gh-action
+# Chrome Lighthouse user flows as GitHub action
 
-This repository maintains a GitHub action to run [@push-based/user-flow]() in a workflow.
+This repository maintains a GitHub action to run [@push-based/user-flow](https://github.com/push-based/user-flow) in a workflow.
 It automatically detects flows, executes them and produces md reports as comments in your PR.
 
 **Inputs:**  
@@ -33,4 +33,7 @@ jobs:
         uses: push-based/user-flow-gh-action@v0.0.0-alpha.20
 ```
 
-# Configure
+This should produce the following output in your PR similar thi this:
+
+<img width="676" alt="gh-ci-comment" src="https://user-images.githubusercontent.com/10064416/216602892-1b379fdd-5f4d-46f9-ba83-9fc3ca72983f.PNG">
+
