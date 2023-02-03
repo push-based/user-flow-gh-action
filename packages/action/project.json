@@ -6,18 +6,16 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "dependsOn": [
-        {
-          "target": "build-app",
-          "projects": "self"
-        }
-      ],
       "options": {
         "commands": [
           {
-            "command": "npm run postBuildAction -- action"
+            "command": "nx build user-flow-gh-action"
+          },
+          {
+            "command": "nx build-app action"
           }
-        ]
+        ],
+        "parallel": false
       }
     },
     "build-app": {

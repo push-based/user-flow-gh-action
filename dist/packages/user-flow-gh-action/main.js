@@ -3020,17 +3020,13 @@ const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/util
 const fs_1 = __webpack_require__("fs");
 const path_1 = __webpack_require__("path");
 const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/process-result.ts");
-// 1. get inputs form action
-// 2. execute CLI
-//     2.1. process result
-//     2.2. persist result
-// 3. handle comments
 async function run() {
     core.debug(`Run main`);
     try {
         const ghActionInputs = (0, get_inputs_1.getInputs)();
         core.debug(`ghActionInputs are ${JSON.stringify(ghActionInputs)}`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-        const executeUFCIRes = await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
+        // @TODO retrieve result
+        await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
         const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
         const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
         if (!allResults.length) {

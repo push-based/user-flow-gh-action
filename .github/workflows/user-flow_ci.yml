@@ -16,20 +16,20 @@ jobs:
           cache: npm
       - name: install
         run: npm i
-      - name: npm run build:user-flow-gh-action
-        run: npm run build:user-flow-gh-action
-      - name: Commit build (GitHub needs it as JS)
+      - name: build:user-flow-gh-action
+        run: npm run nx build user-flow-gh-action
+      - name: commit:build:user-flow-gh-action (GitHub's registry is GitHub so we need it compiled)
         uses: EndBug/add-and-commit@v7
         with:
           author_name: push-based.io
           author_email: opensource@push-based.io
           message: 'Persist user-flow-gh-action'
           add: '*'
-      - name: npm run test:user-flow-gh-action
-        run: npm run test:user-flow-gh-action
-      - name: npm run e2e
+      - name: test-unit:user-flow-gh-action
+        run: npm run nx test user-flow-gh-action
+      - name: test-integration:user-flow-gh-action
         run: npm run nx test user-flow-gh-action-e2e
-      - name: Run test user-flow-gh-action locally
+      - name: run:user-flow-gh-action (needed to test-e2e the outputs)
         id: localRun
         uses: ./dist/packages/user-flow-gh-action/
         with:
@@ -38,5 +38,5 @@ jobs:
           rcPath: ./.user-flowrc.json
           serverBaseUrl: push-based.io
           serverToken: 123
-      - name: local-test
+      - name: test-e2e:user-flow-gh-action
         run: npm run postLocalCiRunTest -- --rp=${{ steps.localRun.outputs.resultPath }} --r="${{ steps.localRun.outputs.resultSummary }}"

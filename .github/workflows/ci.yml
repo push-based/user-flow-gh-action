@@ -16,18 +16,18 @@ jobs:
           cache: npm
       - name: install
         run: npm i
-      - name: build
-        run: npm run build
-      - name: Commit build
+      - name: build:action
+        run: npm run nx build action && npm run postBuildAction -- action
+      - name: commit:build:action (GitHub's registry is GitHub so we need it compiled)
         uses: EndBug/add-and-commit@v7
         with:
           author_name: push-based.io
           author_email: opensource@push-based.io
           message: 'Persist action build'
           add: '*'
-      - name: test
-        run: npm run test
-      - name: Run test action locally
+      - name: test-unit:action
+        run: npm run nx test action
+      - name: run:action
         id: localRun
         uses: ./
         with:

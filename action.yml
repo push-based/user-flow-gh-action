@@ -1,5 +1,5 @@
 name: 'Lighthouse User Flow CI Action'
-description: "Audit URL's using Lighthouse user flow and test performance within PR's. Optionally show reports as a comment"
+description: "Audit URL's using Lighthouse user flow and test performance within PR's"
 inputs:
   # GLOBAL ============================================
   rcPath:
@@ -16,27 +16,39 @@ inputs:
     required: false
     # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
     default: 'off'
-outputs:
-  resultPath: # path to md output
-    description: 'The path in with the user flow results are saved'
-  resultSummary: # md report as string of all user flows
-    description: 'The summary report of all user flow results of the current run'
 runs:
   using: "composite"
   steps:
-    - name: "Run user-flow"
-      id: ruf
-      uses: ./dist/packages/user-flow-gh-action/
+    - name: setup:repository
+      uses: actions/checkout@v2
+    - name: setup:nodejs
+      uses: actions/setup-node@v2
       with:
-        dryRun: ${{ inputs.dryRun }}
-        verbose: ${{ inputs.verbose }}
-        rcPath: ${{ inputs.rcPath }}
+        node-version: ${{ env.NODE_VERSION }}
+    - name: install:npm
+      shell: bash
+      run: npm ci
+    - name: run:user-flow
+      id: ruf
+      shell: bash
+      run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js
+      env:
+        INPUT_RCPATH: ${{ inputs.rcPath }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
+        INPUT_DRYRUN: ${{ inputs.dryRun }}
+    #- name: "Run user-flow"
+    #  id: ruf
+    #  uses:  ${{ github.action_path }}/dist/packages/user-flow-gh-action
+    #  with:
+    #    dryRun: ${{ inputs.dryRun }}
+    #    verbose: ${{ inputs.verbose }}
+    #    rcPath: ${{ inputs.rcPath }}
+    # Reads to user flow report form the step output and adds a comment to the PR
     - name: Add reduced report as comment to the PR
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         header: user flow summary report
         message: ${{ steps.ruf.outputs.resultSummary }}
-
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
   color: 'gray-dark'

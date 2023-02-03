@@ -16,33 +16,34 @@ inputs:
     required: false
     # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
     default: 'off'
-  # UPLOAD ============================================
-  artifactName:
-    description: 'Name of the artifact group if using uploadArtifacts. default: lighthouse-results'
-    default: 'lighthouse-results'
-  serverBaseUrl:
-    description: 'Address of a UFCI server'
-  serverToken:
-    description: 'API token to push to UFCI server'
-  basicAuthUsername:
-    description: 'Basic auth username for UFCI server'
-  basicAuthPassword:
-    description: 'Basic auth password for UFCI server'
-outputs:
-  resultPath: # path to md output
-    description: 'The path in with the user flow results are saved'
-  resultSummary: # md report as string of all user flows
-    description: 'The summary report of all user flow results of the current run'
 runs:
   using: "composite"
   steps:
-    - name: "Run user-flow"
-      id: ruf
-      uses: ./dist/packages/user-flow-gh-action/src/
+    - name: setup:repository
+      uses: actions/checkout@v2
+    - name: setup:nodejs
+      uses: actions/setup-node@v2
       with:
-        dryRun: ${{ inputs.dryRun }}
-        verbose: ${{ inputs.verbose }}
-        rcPath: ${{ inputs.rcPath }}
+        node-version: ${{ env.NODE_VERSION }}
+    - name: install:npm
+      shell: bash
+      run: npm ci
+    - name: run:user-flow
+      id: ruf
+      shell: bash
+      run: node ./dist/packages/user-flow-gh-action/main.js
+      env:
+        INPUT_RCPATH: ${{ inputs.rcPath }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
+        INPUT_DRYRUN: ${{ inputs.dryRun }}
+    #- name: "Run user-flow"
+    #  id: ruf
+    #  uses:  ${{ github.action_path }}/dist/packages/user-flow-gh-action
+    #  with:
+    #    dryRun: ${{ inputs.dryRun }}
+    #    verbose: ${{ inputs.verbose }}
+    #    rcPath: ${{ inputs.rcPath }}
+    # Reads to user flow report form the step output and adds a comment to the PR
     - name: Add reduced report as comment to the PR
       uses: marocchino/sticky-pull-request-comment@v2
       with:
