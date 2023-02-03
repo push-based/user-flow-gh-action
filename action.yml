@@ -31,7 +31,7 @@ runs:
     - name: run:user-flow
       id: ruf
       shell: bash
-      run: node ./dist/packages/user-flow-gh-action/main.js
+      run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js
       env:
         INPUT_RCPATH: ${{ inputs.rcPath }}
         INPUT_VERBOSE: ${{ inputs.verbose }}
