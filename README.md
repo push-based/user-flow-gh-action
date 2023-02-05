@@ -16,7 +16,10 @@ It automatically detects flows, executes them and produces md reports as comment
 
 1. Create a file called `user-flow-ci.yml` in `./.github/workflows`.
 
-2. Paste the following content into `user-flow-ci.yml`:
+This can be done by using the `init`:  
+`npx user-flow --generateGhWorkflow`  
+
+2. The generated `user-flow-ci.yml` file should have the following content:
 
 ```yml
 name: user-flow-ci
@@ -35,7 +38,18 @@ jobs:
         uses: push-based/user-flow-gh-action@v0.0.0-alpha.20
 ```
 
-This should produce the following output in your PR similar thi this:
+# How to test the setup
 
-<img width="676" alt="gh-ci-comment" src="https://user-images.githubusercontent.com/10064416/216602892-1b379fdd-5f4d-46f9-ba83-9fc3ca72983f.PNG">
+1. If you open a new PR in your repository you should see the runner execution your user-flow in the CI
+
+<img width="672" alt="gh-ci-running" title="Action is executing" src="https://user-images.githubusercontent.com/10064416/216594684-ea9e3a5e-007e-47d6-b438-c16d2158f940.PNG">
+<img width="583" alt="gh-ci-complete" title="Action completed" src="https://user-images.githubusercontent.com/10064416/216594803-65cb2cfd-1924-44ae-84ec-8b1d09e49ada.PNG">
+
+2. After the user flow executed you should see a mark down report as comment attached to your PR
+
+<img width="676" alt="gh-ci-comment" title="Action created comment in PR" src="https://user-images.githubusercontent.com/10064416/216596391-35a041e2-9839-4cf5-b8c5-b55e93cb622e.PNG">
+
+---
+
+made with ❤ by [push-based.io](https://www.push-based.io)
 
