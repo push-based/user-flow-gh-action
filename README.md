@@ -17,7 +17,7 @@ It automatically detects flows, executes them and produces md reports as comment
 1. Create a file called `user-flow-ci.yml` in `./.github/workflows`.
 
 This can be done by using the `init`:  
-`npx user-flow --generateGhWorkflow`  
+`npx @push-based/user-flow init --generateGhWorkflow`  
 
 2. The generated `user-flow-ci.yml` file should have the following content:
 
