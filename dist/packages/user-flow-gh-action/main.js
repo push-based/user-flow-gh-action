@@ -1933,12 +1933,10 @@ const path_1 = __webpack_require__("path");
 const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
 const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/utils.ts");
 function processResult(ghActionInputs) {
-    core.startGroup(`Process result`);
     const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
     const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
     core.debug(`Output folder content: ${allResults.join(', ')}`);
     if (!allResults.length) {
-        core.endGroup();
         throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
     const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults.filter(v => v.endsWith('.md'))[0]);
@@ -1949,11 +1947,9 @@ function processResult(ghActionInputs) {
         (0, fs_1.rmSync)(resultPath);
     }
     catch (e) {
-        core.endGroup();
         throw e;
     }
     core.debug(`Results: ${resultSummary}`);
-    core.endGroup();
     return { resultPath, resultSummary };
 }
 exports.processResult = processResult;
@@ -3031,8 +3027,8 @@ async function run() {
         const resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
         core.endGroup();
         core.startGroup(`Process results`);
-        const { resultSummary } = (0, process_result_1.processResult)(ghActionInputs);
-        core.setOutput('resultPath', resPath);
+        const { resultSummary, resultPath } = (0, process_result_1.processResult)(ghActionInputs);
+        core.setOutput('resultPath', resultPath);
         core.setOutput('resultSummary', resultSummary);
         core.endGroup();
     }
