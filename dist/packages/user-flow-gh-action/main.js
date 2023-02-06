@@ -3014,26 +3014,34 @@ const path_1 = __webpack_require__("path");
 const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/process-result.ts");
 async function run() {
     core.debug(`Run main`);
-    core.startGroup(`Get inputs form action.yml`);
-    let ghActionInputs = (0, get_inputs_1.getInputs)();
-    core.endGroup();
-    core.startGroup(`Execute user-flow`);
-    // @TODO retrieve result
-    await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
-    core.endGroup();
-    core.startGroup(`Validate results`);
-    const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
-    const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
-    if (!allResults.length) {
-        throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
+    try {
+        core.startGroup(`Get inputs form action.yml`);
+        let ghActionInputs = (0, get_inputs_1.getInputs)();
+        core.endGroup();
+        core.startGroup(`Execute user-flow`);
+        // @TODO retrieve result
+        await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
+        core.endGroup();
+        core.startGroup(`Validate results`);
+        const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
+        const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
+        if (!allResults.length) {
+            throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
+        }
+        const resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+        core.endGroup();
+        core.startGroup(`Process results`);
+        const { resultSummary } = (0, process_result_1.processResult)(ghActionInputs);
+        core.setOutput('resultPath', resPath);
+        core.setOutput('resultSummary', resultSummary);
+        core.endGroup();
     }
-    const resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
-    core.endGroup();
-    core.startGroup(`Process results`);
-    const { resultSummary } = (0, process_result_1.processResult)(ghActionInputs);
-    core.setOutput('resultPath', resPath);
-    core.setOutput('resultSummary', resultSummary);
-    core.endGroup();
+    catch (error) {
+        if (error instanceof Error)
+            core.setFailed(error.message);
+        process.exitCode = 1;
+        process.exit(1);
+    }
 }
 exports.run = run;
 function exit(error) {
