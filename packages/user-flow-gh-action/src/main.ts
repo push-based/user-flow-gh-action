@@ -11,8 +11,7 @@ export async function run(): Promise<void> {
   core.debug(`Run main`);
 
   core.startGroup(`Get inputs form action.yml`);
-  let ghActionInputs: GhActionInputs | undefined = undefined;
-  ghActionInputs = getInputs();
+  let ghActionInputs: GhActionInputs = getInputs();
   core.endGroup();
 
   core.startGroup(`Execute user-flow`);
@@ -21,13 +20,12 @@ export async function run(): Promise<void> {
   core.endGroup();
 
   core.startGroup(`Validate results`);
-  let resPath = '';
   const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
   const allResults = readdirSync(rcFileObj.persist.outPath);
   if (!allResults.length) {
     throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
   }
-  resPath = join(rcFileObj.persist.outPath, allResults[0]);
+  const resPath = join(rcFileObj.persist.outPath, allResults[0]);
   core.endGroup();
 
   core.startGroup(`Process results`);
