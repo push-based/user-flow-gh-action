@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
 import { REMOTE_PRJ_CFG, REMOTE_RC_NAME } from '@user-flow-gh-action-workspace/test-data';
-import { withProject } from '../support/test-helper';
+import { withProject } from '@push-based/node-cli-testing';
 
 describe('main.js', () => {
   test('runs', withProject<any>({

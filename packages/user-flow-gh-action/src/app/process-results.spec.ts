@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals';
 import { existsSync } from 'fs';
 import { processResult } from './process-result';
-import { withProject } from '../../../user-flow-gh-action-e2e/src/support/test-helper';
+import { withProject } from '@push-based/node-cli-testing';
 import {
   getReportContent,
   REMOTE_PRJ_CFG,
