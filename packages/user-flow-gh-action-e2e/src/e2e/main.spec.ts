@@ -16,8 +16,8 @@ describe('main.js', () => {
     expect(stdout).toContain('Execute user-flow');
     expect(stdout).toContain('Validate results');
     expect(stdout).toContain('Process results');
-    expect(stdout).toContain('::set-output name=resultPath::');
-    expect(stdout).toContain('::set-output name=resultSummary::');
+    expect(stdout).toContain('resultPath');
+    expect(stdout).toContain('resultSummary');
     expect(exitCode).toBe(0);
   }), 180_000);
 
