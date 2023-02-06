@@ -3015,21 +3015,19 @@ const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src
 async function run() {
     core.debug(`Run main`);
     core.startGroup(`Get inputs form action.yml`);
-    let ghActionInputs = undefined;
-    ghActionInputs = (0, get_inputs_1.getInputs)();
+    let ghActionInputs = (0, get_inputs_1.getInputs)();
     core.endGroup();
     core.startGroup(`Execute user-flow`);
     // @TODO retrieve result
     await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
     core.endGroup();
     core.startGroup(`Validate results`);
-    let resPath = '';
     const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
     const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
     if (!allResults.length) {
         throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
-    resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+    const resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
     core.endGroup();
     core.startGroup(`Process results`);
     const { resultSummary } = (0, process_result_1.processResult)(ghActionInputs);
