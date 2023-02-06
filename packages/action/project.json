@@ -78,14 +78,16 @@
       "executor": "@jscutlery/semver:version",
       "options": {
         "preset": "conventional",
-        "commitMessage": "release: bump ${projectName} to ${version} [skip ci]"
+        "tagPrefix": "v",
+        "commitMessageFormat": "release: bump ${projectName} to ${version} [skip ci]",
+        "postTargets": ["action:github"]
       }
     },
     "github": {
       "executor": "@jscutlery/semver:github",
       "options": {
         "tag": "${tag}",
-        "notesFile": "./libs/my-project/CHANGELOG.md"
+        "notesFile": "./packages/action/CHANGELOG.md"
       }
     }
   },
