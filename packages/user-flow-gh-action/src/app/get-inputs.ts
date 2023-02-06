@@ -13,15 +13,12 @@ export const wrongVerboseValue = (val: string) => wrongBooleanValue(val, 'verbos
 export const wrongDryRunValue = (val: string) => wrongBooleanValue(val, 'dryRun');
 
 export function getInputs(): GhActionInputs {
-  core.startGroup(`Get inputs form action.yml`);
-
   // GLOBAL PARAMS
 
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
   core.debug(`Input rcPath is ${rcPath}`);
   if (!rcPath) {
-    core.endGroup();
     // Fail and exit
     core.setFailed(rcPathError);
     throw new Error(rcPathError);
@@ -32,7 +29,6 @@ export function getInputs(): GhActionInputs {
     dryRunInput = 'off';
   }
   if (dryRunInput !== 'on' && dryRunInput !== 'off') {
-    core.endGroup();
     throw new Error(wrongDryRunValue(dryRunInput));
   }
   // convert action input to boolean
@@ -44,7 +40,6 @@ export function getInputs(): GhActionInputs {
     verboseInput = 'off';
   }
   if (verboseInput !== 'on' && verboseInput !== 'off') {
-    core.endGroup();
     throw new Error(wrongVerboseValue(verboseInput));
   }
   // convert action input to boolean
@@ -58,7 +53,6 @@ export function getInputs(): GhActionInputs {
   const { collect, persist, assert } = rcFileObj;
   // COLLECT PARAMS
   if (!collect) {
-    core.endGroup();
     throw new Error(`collect configuration has to be present in rc config.`);
   }
 
@@ -66,7 +60,6 @@ export function getInputs(): GhActionInputs {
 
   // Check if we have a url
   if (!url) {
-    core.endGroup();
     core.setFailed(noUrlError);
     throw new Error(noUrlError);
   }
@@ -80,7 +73,6 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input serverToken is ${serverToken}`);
   // Make sure we don't have UFCI xor API token
   if (!!serverBaseUrl != !!serverToken) {
-    core.endGroup();
     // Fail and exit
     core.setFailed(serverBaseUrlServerTokenXorError);
     throw new Error(serverBaseUrlServerTokenXorError);
@@ -90,8 +82,6 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
   const basicAuthPassword = core.getInput('basicAuthPassword');
   core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
-
-  core.endGroup();
 
   return {
     rcPath,
