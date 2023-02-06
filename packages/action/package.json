@@ -1,0 +1,12 @@
+{
+  "name": "user-flow-gh-action",
+  "version": "0.1.0",
+  "license": "MIT",
+  "engines": {
+    "node": "^16.19.0",
+    "npm": "^8.19.3"
+  },
+  "dependencies": {
+    "@push-based/user-flow": "^0.13.16"
+  }
+}
