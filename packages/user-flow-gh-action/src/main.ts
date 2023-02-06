@@ -29,8 +29,8 @@ export async function run(): Promise<void> {
     core.endGroup();
 
     core.startGroup(`Process results`);
-    const { resultSummary } = processResult(ghActionInputs);
-    core.setOutput('resultPath', resPath);
+    const { resultSummary, resultPath } = processResult(ghActionInputs);
+    core.setOutput('resultPath', resultPath);
     core.setOutput('resultSummary', resultSummary);
     core.endGroup();
   } catch (error) {

@@ -5,12 +5,10 @@ import * as core from '@actions/core';
 import { readJsonFileSync } from './utils';
 
 export function processResult(ghActionInputs: GhActionInputs): { resultPath: string, resultSummary: string } {
-  core.startGroup(`Process result`);
   const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
   const allResults = readdirSync(rcFileObj.persist.outPath);
   core.debug(`Output folder content: ${allResults.join(', ')}`);
   if(!allResults.length) {
-    core.endGroup();
     throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
   }
 
@@ -22,11 +20,9 @@ export function processResult(ghActionInputs: GhActionInputs): { resultPath: str
     resultSummary = readFileSync(resultPath).toString();
     rmSync(resultPath);
   } catch (e) {
-    core.endGroup();
     throw e;
   }
 
   core.debug(`Results: ${resultSummary}`);
-  core.endGroup();
   return { resultPath, resultSummary };
 }
