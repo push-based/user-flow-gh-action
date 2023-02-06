@@ -1815,13 +1815,11 @@ exports.wrongVerboseValue = wrongVerboseValue;
 const wrongDryRunValue = (val) => (0, exports.wrongBooleanValue)(val, 'dryRun');
 exports.wrongDryRunValue = wrongDryRunValue;
 function getInputs() {
-    core.startGroup(`Get inputs form action.yml`);
     // GLOBAL PARAMS
     // Inspect user-flowrc file for malformations
     const rcPath = core.getInput('rcPath') ? (0, path_1.resolve)(core.getInput('rcPath')) : null;
     core.debug(`Input rcPath is ${rcPath}`);
     if (!rcPath) {
-        core.endGroup();
         // Fail and exit
         core.setFailed(exports.rcPathError);
         throw new Error(exports.rcPathError);
@@ -1831,7 +1829,6 @@ function getInputs() {
         dryRunInput = 'off';
     }
     if (dryRunInput !== 'on' && dryRunInput !== 'off') {
-        core.endGroup();
         throw new Error((0, exports.wrongDryRunValue)(dryRunInput));
     }
     // convert action input to boolean
@@ -1842,7 +1839,6 @@ function getInputs() {
         verboseInput = 'off';
     }
     if (verboseInput !== 'on' && verboseInput !== 'off') {
-        core.endGroup();
         throw new Error((0, exports.wrongVerboseValue)(verboseInput));
     }
     // convert action input to boolean
@@ -1854,13 +1850,11 @@ function getInputs() {
     const { collect, persist, assert } = rcFileObj;
     // COLLECT PARAMS
     if (!collect) {
-        core.endGroup();
         throw new Error(`collect configuration has to be present in rc config.`);
     }
     let { url } = collect;
     // Check if we have a url
     if (!url) {
-        core.endGroup();
         core.setFailed(exports.noUrlError);
         throw new Error(exports.noUrlError);
     }
@@ -1873,7 +1867,6 @@ function getInputs() {
     core.debug(`Input serverToken is ${serverToken}`);
     // Make sure we don't have UFCI xor API token
     if (!!serverBaseUrl != !!serverToken) {
-        core.endGroup();
         // Fail and exit
         core.setFailed(exports.serverBaseUrlServerTokenXorError);
         throw new Error(exports.serverBaseUrlServerTokenXorError);
@@ -1882,7 +1875,6 @@ function getInputs() {
     core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
     const basicAuthPassword = core.getInput('basicAuthPassword');
     core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
-    core.endGroup();
     return {
         rcPath,
         verbose,
@@ -3022,29 +3014,70 @@ const path_1 = __webpack_require__("path");
 const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/process-result.ts");
 async function run() {
     core.debug(`Run main`);
+    let error = undefined;
+    core.startGroup(`Get inputs form action.yml`);
+    let ghActionInputs = undefined;
     try {
-        const ghActionInputs = (0, get_inputs_1.getInputs)();
+        ghActionInputs = (0, get_inputs_1.getInputs)();
         core.debug(`ghActionInputs are ${JSON.stringify(ghActionInputs)}`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    }
+    catch (e) {
+        error = e;
+    }
+    finally {
+        core.endGroup();
+        exit(error);
+    }
+    core.startGroup(`Execute user-flow`);
+    try {
         // @TODO retrieve result
         await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
+    }
+    catch (e) {
+        error = e;
+    }
+    finally {
+        core.endGroup();
+        exit(error);
+    }
+    core.startGroup(`Validate results`);
+    let resPath = '';
+    try {
         const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
         const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
         if (!allResults.length) {
             throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
         }
-        const resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
-        core.setOutput('resultPath', resPath);
+        resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+    }
+    catch (e) {
+        error = e;
+    }
+    finally {
+        core.endGroup();
+        exit(error);
+    }
+    core.startGroup(`Process results`);
+    try {
         const { resultSummary } = (0, process_result_1.processResult)(ghActionInputs);
+        core.setOutput('resultPath', resPath);
         core.setOutput('resultSummary', resultSummary);
     }
-    catch (error) {
-        if (error instanceof Error)
-            core.setFailed(error.message);
-        process.exitCode = 1;
-        process.exit(1);
+    catch (e) {
+        error = e;
+    }
+    finally {
+        core.endGroup();
+        exit(error);
     }
 }
 exports.run = run;
+function exit(error) {
+    if (error instanceof Error)
+        core.setFailed(error.message);
+    process.exitCode = 1;
+    process.exit(1);
+}
 run().catch((err) => core.setFailed(err.message))
     .then(() => core.debug(`done in ${process.uptime()}s`));
 
