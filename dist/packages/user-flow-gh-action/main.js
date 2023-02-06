@@ -3014,69 +3014,37 @@ const path_1 = __webpack_require__("path");
 const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/process-result.ts");
 async function run() {
     core.debug(`Run main`);
-    let error = undefined;
     core.startGroup(`Get inputs form action.yml`);
     let ghActionInputs = undefined;
-    try {
-        ghActionInputs = (0, get_inputs_1.getInputs)();
-        core.debug(`ghActionInputs are ${JSON.stringify(ghActionInputs)}`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-    }
-    catch (e) {
-        error = e;
-    }
-    finally {
-        core.endGroup();
-        exit(error);
-    }
+    ghActionInputs = (0, get_inputs_1.getInputs)();
+    core.endGroup();
     core.startGroup(`Execute user-flow`);
-    try {
-        // @TODO retrieve result
-        await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
-    }
-    catch (e) {
-        error = e;
-    }
-    finally {
-        core.endGroup();
-        exit(error);
-    }
+    // @TODO retrieve result
+    await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
+    core.endGroup();
     core.startGroup(`Validate results`);
     let resPath = '';
-    try {
-        const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
-        const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
-        if (!allResults.length) {
-            throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
-        }
-        resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+    const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
+    const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
+    if (!allResults.length) {
+        throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
-    catch (e) {
-        error = e;
-    }
-    finally {
-        core.endGroup();
-        exit(error);
-    }
+    resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+    core.endGroup();
     core.startGroup(`Process results`);
-    try {
-        const { resultSummary } = (0, process_result_1.processResult)(ghActionInputs);
-        core.setOutput('resultPath', resPath);
-        core.setOutput('resultSummary', resultSummary);
-    }
-    catch (e) {
-        error = e;
-    }
-    finally {
-        core.endGroup();
-        exit(error);
-    }
+    const { resultSummary } = (0, process_result_1.processResult)(ghActionInputs);
+    core.setOutput('resultPath', resPath);
+    core.setOutput('resultSummary', resultSummary);
+    core.endGroup();
 }
 exports.run = run;
 function exit(error) {
-    if (error instanceof Error)
+    if (error instanceof Error) {
+        throw new Error('error.message');
         core.setFailed(error.message);
-    process.exitCode = 1;
-    process.exit(1);
+        process.exitCode = 1;
+        process.exit(1);
+    }
 }
 run().catch((err) => core.setFailed(err.message))
     .then(() => core.debug(`done in ${process.uptime()}s`));
