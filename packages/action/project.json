@@ -79,7 +79,8 @@
       "options": {
         "preset": "conventional",
         "tagPrefix": "v",
-        "commitMessageFormat": "ci(${projectName}): bump to ${version}"
+        "commitMessageFormat": "ci(${projectName}): bump to ${version}",
+        "push": false
       }
     },
     "github": {
