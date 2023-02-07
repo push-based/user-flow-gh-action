@@ -80,7 +80,7 @@
         "preset": "conventional",
         "tagPrefix": "v",
         "commitMessageFormat": "ci(${projectName}): bump to ${version}",
-        "push": false,
+        "push": true,
         "postTargets": ["action:github"]
       }
     },
