@@ -36,9 +36,11 @@ runs:
         INPUT_DRYRUN: ${{ inputs.dryRun }}
     - name: Add reduced report as comment to the PR
       uses: marocchino/sticky-pull-request-comment@v2
+      env:
+        commentDelete: ${{ input.keepComments}} === "off" }}
       with:
-        delete: ${{input.keepComments}} === "off"
-        recreate: true
+        delete: ${{commentDelete}}
+        append: true
         header: user flow summary report
         message: ${{ steps.ruf.outputs.resultSummary }}
 branding:
