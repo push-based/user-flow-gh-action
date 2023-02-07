@@ -80,14 +80,15 @@
         "preset": "conventional",
         "tagPrefix": "v",
         "commitMessageFormat": "ci(${projectName}): bump to ${version}",
-        "push": false
+        "push": false,
+        "postTargets": ["action:github"]
       }
     },
     "github": {
       "executor": "@jscutlery/semver:github",
       "options": {
         "tag": "${tag}",
-        "notesFile": "./packages/action/CHANGELOG.md"
+        "notes": "${notes}"
       }
     }
   },
