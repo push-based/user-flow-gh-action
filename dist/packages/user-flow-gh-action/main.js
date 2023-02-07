@@ -1783,7 +1783,7 @@ run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
         const params = { rcPath, verbose, dryRun };
         const script = 'npx @push-based/user-flow';
         const command = 'collect';
-        const processedParams = (0, utils_1.processParamsToParamsArray)({ rcPath, verbose, dryRun });
+        const processedParams = (0, utils_1.processParamsToParamsArray)({ rcPath, verbose, dryRun, format: ['md'] });
         core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(', ')}`);
         const res = run(script, command, processedParams);
         resolve(res);
