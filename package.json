@@ -11,7 +11,8 @@
     "test:user-flow-gh-action:e2e": "nx test user-flow-gh-action-e2e",
     "test:affected": "npm run nx -- affected:test --base=origin/main",
     "postBuildAction": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/post-build-action.ts",
-    "postLocalCiRunTest": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/local-run.test.ts"
+    "postLocalCiRunTest": "ts-node -P ./tools/tsconfig.tools.json ./tools/scripts/local-run.test.ts",
+    "prepare": "husky install"
   },
   "private": true,
   "engines": {
@@ -25,6 +26,9 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.0",
+    "@commitlint/config-conventional": "^17.0.0",
+    "@jscutlery/semver": "^2.29.3",
     "@nrwl/cli": "15.4.2",
     "@nrwl/eslint-plugin-nx": "15.4.2",
     "@nrwl/jest": "15.4.2",
@@ -42,6 +46,7 @@
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-github": "^4.3.2",
     "eslint-plugin-jest": "^25.3.2",
+    "husky": "^8.0.0",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
     "nx": "15.4.2",

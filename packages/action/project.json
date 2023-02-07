@@ -20,14 +20,18 @@
     },
     "build-app": {
       "executor": "@nrwl/webpack:webpack",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "target": "node",
         "compiler": "tsc",
         "outputPath": "dist/packages/action",
         "main": "packages/action/src/main.ts",
         "tsConfig": "packages/action/tsconfig.app.json",
-        "assets": ["packages/action/src/action.yml"],
+        "assets": [
+          "packages/action/src/action.yml"
+        ],
         "externalDependencies": "none"
       },
       "configurations": {
@@ -51,17 +55,38 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["packages/action/**/*.ts"]
+        "lintFilePatterns": [
+          "packages/action/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "packages/action/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventional",
+        "tagPrefix": "v",
+        "commitMessageFormat": "ci(${projectName}): bump to ${version} [skip ci]"
+      }
+    },
+    "github": {
+      "executor": "@jscutlery/semver:github",
+      "options": {
+        "tag": "${tag}",
+        "notesFile": "./packages/action/CHANGELOG.md"
       }
     }
   },
