@@ -37,7 +37,7 @@ runs:
     - name: Add reduced report as comment to the PR
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        hide: ${{input.keepComments}}
+        delete: ${{input.keepComments === 'off'}}
         recreate: true
         header: user flow summary report
         message: ${{ steps.ruf.outputs.resultSummary }}
