@@ -11,6 +11,7 @@ export const noUrlError = `URL not given in rc config.`;
 export const wrongBooleanValue = (val: string, prop: string) => `${prop} is ${val} but can only be set to 'on' or 'off'.`;
 export const wrongVerboseValue = (val: string) => wrongBooleanValue(val, 'verbose');
 export const wrongDryRunValue = (val: string) => wrongBooleanValue(val, 'dryRun');
+export const wrongKeepCommentsValue = (val: string) => wrongBooleanValue(val, 'keepComments');
 
 export function getInputs(): GhActionInputs {
   // GLOBAL PARAMS
@@ -24,27 +25,17 @@ export function getInputs(): GhActionInputs {
     throw new Error(rcPathError);
   }
 
-  let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
-  if (dryRunInput === '') {
-    dryRunInput = 'off';
-  }
-  if (dryRunInput !== 'on' && dryRunInput !== 'off') {
-    throw new Error(wrongDryRunValue(dryRunInput));
-  }
   // convert action input to boolean
-  const dryRun = dryRunInput === 'on';
+  const dryRun =  parseOnOff('dryRun', wrongDryRunValue);
   core.debug(`Input dryRun is ${dryRun}`);
 
-  let verboseInput = core.getInput('verbose', { trimWhitespace: true });
-  if (verboseInput === '') {
-    verboseInput = 'off';
-  }
-  if (verboseInput !== 'on' && verboseInput !== 'off') {
-    throw new Error(wrongVerboseValue(verboseInput));
-  }
   // convert action input to boolean
-  const verbose = verboseInput === 'on';
+  const verbose = parseOnOff('verbose', wrongVerboseValue);
   core.debug(`Input verbose is ${verbose}`);
+
+  // convert action input to boolean
+  const keepComments = parseOnOff('keepComments', wrongKeepCommentsValue);
+  core.debug(`Input keepComments is ${keepComments}`);
 
   // RC JSON
   const rcFileObj: any = readJsonFileSync(rcPath);
@@ -96,6 +87,18 @@ export function getInputs(): GhActionInputs {
     basicAuthUsername,
     basicAuthPassword
   };
+}
+
+function parseOnOff(name: string, errorMsg: (v?: string) => string): boolean  {
+  let onOffInput = core.getInput(name, { trimWhitespace: true });
+  if (onOffInput === '') {
+    onOffInput = 'off';
+  }
+  if (onOffInput !== 'on' && onOffInput !== 'off') {
+    throw new Error(errorMsg(onOffInput));
+  }
+  // convert action input to boolean
+  return onOffInput === 'on';
 }
 
 /**

@@ -34,12 +34,9 @@ runs:
         INPUT_RCPATH: ${{ inputs.rcPath }}
         INPUT_VERBOSE: ${{ inputs.verbose }}
         INPUT_DRYRUN: ${{ inputs.dryRun }}
-    - name: Add reduced report as comment to the PR
-      uses: marocchino/sticky-pull-request-comment@v2
-      env:
-        commentDelete: ${{ input.keepComments}} === "off" }}
+    - name: Add reduced report as commen input.keepComments}} === "off" }}
       with:
-        delete: ${{commentDelete}}
+        hide: ${{commentDelete}}
         append: true
         header: user flow summary report
         message: ${{ steps.ruf.outputs.resultSummary }}
