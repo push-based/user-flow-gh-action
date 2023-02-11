@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "@push-based/node-cli-testing": "^0.2.3",
-    "@push-based/user-flow": "^0.16.1",
+    "@push-based/user-flow": "^0.18.1",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@push-based/node-cli-testing": "^0.2.3",
     "@commitlint/cli": "^17.0.0",
     "@commitlint/config-conventional": "^17.0.0",
     "@jscutlery/semver": "^2.29.3",
