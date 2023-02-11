@@ -3,6 +3,7 @@ export type GhActionInputs = {
   rcPath: string;
   verbose: boolean;
   dryRun: boolean;
+  keepComments: boolean;
   // collect
   url: string;
   // assert

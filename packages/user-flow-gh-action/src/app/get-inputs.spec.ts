@@ -4,7 +4,7 @@ import {
   noUrlError,
   rcPathError,
   serverBaseUrlServerTokenXorError,
-  wrongDryRunValue,
+  wrongDryRunValue, wrongKeepCommentsValue,
   wrongVerboseValue
 } from './get-inputs';
 import { CliProject, ProjectConfig } from '@push-based/node-cli-testing';
@@ -53,6 +53,7 @@ function resetProcessParams(): void {
   delete process.env['INPUT_RCPATH'];
   delete process.env['INPUT_VERBOSE'];
   delete process.env['INPUT_DRYRUN'];
+  delete process.env['INPUT_KEEPCOMMENTS'];
   // UPLOAD
   delete process.env['INPUT_SERVERBASEURL'];
   delete process.env['INPUT_SERVERTOKEN'];
@@ -121,7 +122,26 @@ describe('getInputs global', () => {
     expect(dryRun).toBe(false);
   });
 
+  // keepComments
+  test('should throw if wrong value is passed as keepComments', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_KEEPCOMMENTS'] = 'wrongValue';
+    expect(() => getInputs()).toThrow(wrongKeepCommentsValue(process.env['INPUT_KEEPCOMMENTS']));
+  });
 
+  test('should parse keepComments on to true', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_KEEPCOMMENTS'] = 'on';
+    const { keepComments } = getInputs();
+    expect(keepComments).toBe(true);
+  });
+
+  test('should parse keepComments off to false', () => {
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_KEEPCOMMENTS'] = 'off';
+    const { keepComments } = getInputs();
+    expect(keepComments).toBe(false);
+  });
 });
 
 describe('getInputs', () => {

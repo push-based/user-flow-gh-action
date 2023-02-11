@@ -1,7 +1,7 @@
 name: 'Lighthouse User Flow CI Action'
 description: "Audit URL's using Lighthouse user flow and test performance within PR's"
 inputs:
-  # GLOBAL ============================================
+  # USER_FLOW GLOBAL ============================================
   rcPath:
     description: 'Path to a UFCI user-flowrc.json file'
     required: false
@@ -16,6 +16,13 @@ inputs:
     required: false
     # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
     default: 'off'
+  # COMMENT =======================================================
+  keepComments:
+    description: 'If off old comments will get deleted and only the most recent remains in the PR'
+    required: false
+    # will get transformed to the comment inputs
+    default: 'on'
+
 runs:
   using: "composite"
   steps:
@@ -27,10 +34,10 @@ runs:
         INPUT_RCPATH: ${{ inputs.rcPath }}
         INPUT_VERBOSE: ${{ inputs.verbose }}
         INPUT_DRYRUN: ${{ inputs.dryRun }}
-    - name: Add reduced report as comment to the PR
-      uses: marocchino/sticky-pull-request-comment@v2
+    - name: Add reduced report as commen input.keepComments}} === "off" }}
       with:
-        hide_and_recreate: true # collapse old comment & append new comment at the end
+        hide: ${{commentDelete}}
+        append: true
         header: user flow summary report
         message: ${{ steps.ruf.outputs.resultSummary }}
 branding:

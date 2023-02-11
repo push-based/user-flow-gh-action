@@ -1800,7 +1800,7 @@ exports.executeUFCI = executeUFCI;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.hasAssertConfig = exports.getInputs = exports.wrongDryRunValue = exports.wrongVerboseValue = exports.wrongBooleanValue = exports.noUrlError = exports.serverBaseUrlServerTokenXorError = exports.rcPathError = void 0;
+exports.hasAssertConfig = exports.getInputs = exports.wrongKeepCommentsValue = exports.wrongDryRunValue = exports.wrongVerboseValue = exports.wrongBooleanValue = exports.noUrlError = exports.serverBaseUrlServerTokenXorError = exports.rcPathError = void 0;
 // A majority of this code is borrowed from [lhci-gh-action](https://github.com/treosh/lighthouse-ci-action)
 const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
 const path_1 = __webpack_require__("path");
@@ -1814,6 +1814,8 @@ const wrongVerboseValue = (val) => (0, exports.wrongBooleanValue)(val, 'verbose'
 exports.wrongVerboseValue = wrongVerboseValue;
 const wrongDryRunValue = (val) => (0, exports.wrongBooleanValue)(val, 'dryRun');
 exports.wrongDryRunValue = wrongDryRunValue;
+const wrongKeepCommentsValue = (val) => (0, exports.wrongBooleanValue)(val, 'keepComments');
+exports.wrongKeepCommentsValue = wrongKeepCommentsValue;
 function getInputs() {
     // GLOBAL PARAMS
     // Inspect user-flowrc file for malformations
@@ -1824,26 +1826,15 @@ function getInputs() {
         core.setFailed(exports.rcPathError);
         throw new Error(exports.rcPathError);
     }
-    let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
-    if (dryRunInput === '') {
-        dryRunInput = 'off';
-    }
-    if (dryRunInput !== 'on' && dryRunInput !== 'off') {
-        throw new Error((0, exports.wrongDryRunValue)(dryRunInput));
-    }
     // convert action input to boolean
-    const dryRun = dryRunInput === 'on';
+    const dryRun = parseOnOff('dryRun', exports.wrongDryRunValue);
     core.debug(`Input dryRun is ${dryRun}`);
-    let verboseInput = core.getInput('verbose', { trimWhitespace: true });
-    if (verboseInput === '') {
-        verboseInput = 'off';
-    }
-    if (verboseInput !== 'on' && verboseInput !== 'off') {
-        throw new Error((0, exports.wrongVerboseValue)(verboseInput));
-    }
     // convert action input to boolean
-    const verbose = verboseInput === 'on';
+    const verbose = parseOnOff('verbose', exports.wrongVerboseValue);
     core.debug(`Input verbose is ${verbose}`);
+    // convert action input to boolean
+    const keepComments = parseOnOff('keepComments', exports.wrongKeepCommentsValue);
+    core.debug(`Input keepComments is ${keepComments}`);
     // RC JSON
     const rcFileObj = (0, utils_1.readJsonFileSync)(rcPath);
     core.debug(`rcFileObj is ${JSON.stringify(rcFileObj)}`);
@@ -1879,6 +1870,7 @@ function getInputs() {
         rcPath,
         verbose,
         dryRun,
+        keepComments,
         // assert
         // collect
         url,
@@ -1890,6 +1882,17 @@ function getInputs() {
     };
 }
 exports.getInputs = getInputs;
+function parseOnOff(name, errorMsg) {
+    let onOffInput = core.getInput(name, { trimWhitespace: true });
+    if (onOffInput === '') {
+        onOffInput = 'off';
+    }
+    if (onOffInput !== 'on' && onOffInput !== 'off') {
+        throw new Error(errorMsg(onOffInput));
+    }
+    // convert action input to boolean
+    return onOffInput === 'on';
+}
 /**
  * Check if the file under `rcPath` has `assert` params set.
  *
