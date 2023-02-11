@@ -78,6 +78,7 @@ export function getInputs(): GhActionInputs {
     rcPath,
     verbose,
     dryRun,
+    keepComments,
     // assert
     // collect
     url,
