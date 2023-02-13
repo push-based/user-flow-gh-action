@@ -1,7 +1,6 @@
 // A majority of this code is borrowed from [lhci-gh-action](https://github.com/treosh/lighthouse-ci-action)
 import * as core from '@actions/core';
 import { resolve } from 'path';
-import { readFileSync } from 'fs';
 import { GhActionInputs } from './types';
 import { readJsonFileSync } from './utils';
 
@@ -13,7 +12,9 @@ export const wrongVerboseValue = (val: string) => wrongBooleanValue(val, 'verbos
 export const wrongDryRunValue = (val: string) => wrongBooleanValue(val, 'dryRun');
 
 export function getInputs(): GhActionInputs {
-  // GLOBAL PARAMS
+  const ghActionInputs = {} as any;
+
+  // GLOBAL PARAMS =================================================
 
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
@@ -22,18 +23,10 @@ export function getInputs(): GhActionInputs {
     // Fail and exit
     core.setFailed(rcPathError);
     throw new Error(rcPathError);
+  } else {
+    ghActionInputs.rcPath = rcPath;
   }
 
-  let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
-  if (dryRunInput === '') {
-    dryRunInput = 'off';
-  }
-  if (dryRunInput !== 'on' && dryRunInput !== 'off') {
-    throw new Error(wrongDryRunValue(dryRunInput));
-  }
-  // convert action input to boolean
-  const dryRun = dryRunInput === 'on';
-  core.debug(`Input dryRun is ${dryRun}`);
 
   let verboseInput = core.getInput('verbose', { trimWhitespace: true });
   if (verboseInput === '') {
@@ -51,21 +44,29 @@ export function getInputs(): GhActionInputs {
   core.debug(`rcFileObj is ${JSON.stringify(rcFileObj)}`);
 
   const { collect, persist, assert } = rcFileObj;
-  // COLLECT PARAMS
+  // COLLECT PARAMS  =================================================
   if (!collect) {
     throw new Error(`collect configuration has to be present in rc config.`);
   }
 
-  let { url } = collect;
-
-  // Check if we have a url
-  if (!url) {
-    core.setFailed(noUrlError);
-    throw new Error(noUrlError);
+  let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
+  if (dryRunInput === '') {
+    dryRunInput = 'off';
   }
-  // Get and interpolate URL's
-  url = interpolateProcessIntoUrl(url);
+  if (dryRunInput !== 'on' && dryRunInput !== 'off') {
+    throw new Error(wrongDryRunValue(dryRunInput));
+  }
+  // convert action input to boolean
+  const dryRun = dryRunInput === 'on';
+  core.debug(`Input dryRun is ${dryRun}`);
 
+  // Get and interpolate URL's
+  let url = core.getInput('url', { trimWhitespace: true });
+  core.debug(`Input url is ${url}`);
+
+  // @TODO test it or drop it!
+  url = interpolateProcessIntoUrl(url);
+/*
   // upload (action only?)
   const serverBaseUrl: string = core.getInput('serverBaseUrl');
   core.debug(`Input serverBaseUrl is ${serverBaseUrl}`);
@@ -82,20 +83,55 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
   const basicAuthPassword = core.getInput('basicAuthPassword');
   core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
-
-  return {
+*/
+  const ghI: GhActionInputs = {
     rcPath,
     verbose,
-    dryRun,
-    // assert
-    // collect
-    url,
-    serverBaseUrl,
-    // upload
-    serverToken,
-    basicAuthUsername,
-    basicAuthPassword
+    dryRun
   };
+
+  // collect
+  core.debug(`Input url is ${url}`);
+  url && (ghI.url = url);
+
+  const ufPath: string = core.getInput('ufPath');
+  core.debug(`Input ufPath is ${ufPath}`);
+  ufPath && (ghI.ufPath = ufPath);
+
+  const serveCommand: string = core.getInput('serveCommand');
+  core.debug(`Input serveCommand is ${serveCommand}`);
+  serveCommand && (ghI.serveCommand = serveCommand);
+
+  const awaitServerStdout: string = core.getInput('awaitServerStdout');
+  core.debug(`Input awaitServerStdout is ${awaitServerStdout}`);
+  awaitServerStdout && (ghI.awaitServerStdout = awaitServerStdout);
+
+  const configPath: string = core.getInput('configPath');
+  core.debug(`Input configPath is ${configPath}`);
+  configPath && (ghI.configPath = configPath);
+
+  // persist
+  const format: string[] = core.getInput('format').split(',');
+  core.debug(`Input format is ${format}`);
+  format && (ghI.format = format);
+
+  const outPath: string = core.getInput('outPath');
+  core.debug(`Input outPath is ${outPath}`);
+  outPath && (ghI.outPath = outPath);
+
+  // assert
+  const budgetPath: string = core.getInput('budgetPath');
+  core.debug(`Input budgetPath is ${budgetPath}`);
+  budgetPath && (ghI.budgetPath = budgetPath);
+
+  // upload ==
+  //serverBaseUrl,
+  //serverToken,
+  //basicAuthUsername,
+  //basicAuthPassword
+
+  return ghI;
+
 }
 
 /**
