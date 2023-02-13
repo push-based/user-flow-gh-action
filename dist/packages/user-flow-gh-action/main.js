@@ -1787,7 +1787,7 @@ run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
         const script = 'npx @push-based/user-flow';
         const command = 'collect';
         const processedParams = (0, utils_1.processParamsToParamsArray)(ghActionInputs);
-        core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(', ')}`);
+        core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);
         const res = run(script, command, processedParams);
         resolve(res);
     });
