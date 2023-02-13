@@ -1815,7 +1815,8 @@ exports.wrongVerboseValue = wrongVerboseValue;
 const wrongDryRunValue = (val) => (0, exports.wrongBooleanValue)(val, 'dryRun');
 exports.wrongDryRunValue = wrongDryRunValue;
 function getInputs() {
-    // GLOBAL PARAMS
+    const ghActionInputs = {};
+    // GLOBAL PARAMS =================================================
     // Inspect user-flowrc file for malformations
     const rcPath = core.getInput('rcPath') ? (0, path_1.resolve)(core.getInput('rcPath')) : null;
     core.debug(`Input rcPath is ${rcPath}`);
@@ -1824,16 +1825,9 @@ function getInputs() {
         core.setFailed(exports.rcPathError);
         throw new Error(exports.rcPathError);
     }
-    let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
-    if (dryRunInput === '') {
-        dryRunInput = 'off';
+    else {
+        ghActionInputs.rcPath = rcPath;
     }
-    if (dryRunInput !== 'on' && dryRunInput !== 'off') {
-        throw new Error((0, exports.wrongDryRunValue)(dryRunInput));
-    }
-    // convert action input to boolean
-    const dryRun = dryRunInput === 'on';
-    core.debug(`Input dryRun is ${dryRun}`);
     let verboseInput = core.getInput('verbose', { trimWhitespace: true });
     if (verboseInput === '') {
         verboseInput = 'off';
@@ -1848,10 +1842,20 @@ function getInputs() {
     const rcFileObj = (0, utils_1.readJsonFileSync)(rcPath);
     core.debug(`rcFileObj is ${JSON.stringify(rcFileObj)}`);
     const { collect, persist, assert } = rcFileObj;
-    // COLLECT PARAMS
+    // COLLECT PARAMS  =================================================
     if (!collect) {
         throw new Error(`collect configuration has to be present in rc config.`);
     }
+    let dryRunInput = core.getInput('dryRun', { trimWhitespace: true });
+    if (dryRunInput === '') {
+        dryRunInput = 'off';
+    }
+    if (dryRunInput !== 'on' && dryRunInput !== 'off') {
+        throw new Error((0, exports.wrongDryRunValue)(dryRunInput));
+    }
+    // convert action input to boolean
+    const dryRun = dryRunInput === 'on';
+    core.debug(`Input dryRun is ${dryRun}`);
     let { url } = collect;
     // Check if we have a url
     if (!url) {
@@ -1875,19 +1879,42 @@ function getInputs() {
     core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
     const basicAuthPassword = core.getInput('basicAuthPassword');
     core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
-    return {
+    const ghI = {
         rcPath,
         verbose,
         dryRun,
-        // assert
-        // collect
-        url,
-        serverBaseUrl,
-        // upload
-        serverToken,
-        basicAuthUsername,
-        basicAuthPassword
+        url
     };
+    // collect
+    const ufPath = core.getInput('ufPath');
+    core.debug(`Input ufPath is ${ufPath}`);
+    ufPath && (ghI.ufPath = ufPath);
+    const serveCommand = core.getInput('serveCommand');
+    core.debug(`Input serveCommand is ${serveCommand}`);
+    serveCommand && (ghI.serveCommand = serveCommand);
+    const awaitServerStdout = core.getInput('awaitServerStdout');
+    core.debug(`Input awaitServerStdout is ${awaitServerStdout}`);
+    awaitServerStdout && (ghI.awaitServerStdout = awaitServerStdout);
+    const configPath = core.getInput('configPath');
+    core.debug(`Input configPath is ${configPath}`);
+    configPath && (ghI.configPath = configPath);
+    // persist
+    const format = core.getInput('format').split(',');
+    core.debug(`Input format is ${format}`);
+    format && (ghI.format = format);
+    const outPath = core.getInput('outPath');
+    core.debug(`Input outPath is ${outPath}`);
+    outPath && (ghI.outPath = outPath);
+    // assert
+    const budgetPath = core.getInput('budgetPath');
+    core.debug(`Input budgetPath is ${budgetPath}`);
+    budgetPath && (ghI.budgetPath = budgetPath);
+    // upload ==
+    //serverBaseUrl,
+    //serverToken,
+    //basicAuthUsername,
+    //basicAuthPassword
+    return ghI;
 }
 exports.getInputs = getInputs;
 /**
