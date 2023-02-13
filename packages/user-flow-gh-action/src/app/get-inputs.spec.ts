@@ -1,13 +1,6 @@
 import { expect, test } from '@jest/globals';
-import {
-  getInputs,
-  noUrlError,
-  rcPathError,
-  serverBaseUrlServerTokenXorError,
-  wrongDryRunValue,
-  wrongVerboseValue
-} from './get-inputs';
-import { CliProject, withProject } from '@push-based/node-cli-testing';
+import { getInputs, rcPathError, wrongDryRunValue, wrongVerboseValue } from './get-inputs';
+import { withProject } from '@push-based/node-cli-testing';
 import { DEFAULT_RC_NAME } from '@push-based/user-flow';
 import { join } from 'path';
 
@@ -26,17 +19,6 @@ let prjCfg = {
   }
 };
 
-let prjCfgWithWrongUrl = {
-  root: rootPath,
-  bin: '',
-  rcFile: {
-    [DEFAULT_RC_NAME]: {
-      collect: {
-        url: ''
-      }
-    }
-  }
-};
 let rcPath: string;
 
 function resetProcessParams(): void {
@@ -195,19 +177,3 @@ describe('getInputs upload', () => {
 
 });
 */
-describe('getInputs with wrong RC', () => {
-
-  beforeAll(async () => {
-    process.chdir(rootPath);
-  });
-  beforeEach(() => {
-    resetProcessParams()
-  });
-
-  test('rcPath has NO collect.url given', withProject(prjCfgWithWrongUrl, async (prj) => {
-    rcPath = join(prj.root, DEFAULT_RC_NAME);
-    process.env['INPUT_RCPATH'] = rcPath;
-    expect(() => getInputs()).toThrow(noUrlError);
-  }));
-
-});

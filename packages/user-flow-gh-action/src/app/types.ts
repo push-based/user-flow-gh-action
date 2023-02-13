@@ -4,7 +4,7 @@ export type GhActionInputs = {
   verbose: boolean;
   dryRun: boolean;
   // collect
-  url: string;
+  url?: string;
   ufPath?: string;
   serveCommand?: string;
   awaitServerStdout?: string;

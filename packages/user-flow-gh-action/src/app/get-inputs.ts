@@ -60,18 +60,13 @@ export function getInputs(): GhActionInputs {
   const dryRun = dryRunInput === 'on';
   core.debug(`Input dryRun is ${dryRun}`);
 
-  let { url } = collect;
-
   // Get and interpolate URL's
-  url = core.getInput('url', { trimWhitespace: true }) !== '' ? core.getInput('url', { trimWhitespace: true }) : url;
-  // Check if we have a url
-  if (!url) {
-    core.setFailed(noUrlError);
-    throw new Error(noUrlError);
-  }
+  let url = core.getInput('url', { trimWhitespace: true });
+  core.debug(`Input url is ${url}`);
+
   // @TODO test it or drop it!
   url = interpolateProcessIntoUrl(url);
-
+/*
   // upload (action only?)
   const serverBaseUrl: string = core.getInput('serverBaseUrl');
   core.debug(`Input serverBaseUrl is ${serverBaseUrl}`);
@@ -88,15 +83,17 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
   const basicAuthPassword = core.getInput('basicAuthPassword');
   core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
-
+*/
   const ghI: GhActionInputs = {
     rcPath,
     verbose,
-    dryRun,
-    url
+    dryRun
   };
 
   // collect
+  core.debug(`Input url is ${url}`);
+  url && (ghI.url = url);
+
   const ufPath: string = core.getInput('ufPath');
   core.debug(`Input ufPath is ${ufPath}`);
   ufPath && (ghI.ufPath = ufPath);
