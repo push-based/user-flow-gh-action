@@ -3,18 +3,22 @@ import { REMOTE_PRJ_CFG, REMOTE_RC_NAME } from '@user-flow-gh-action-workspace/t
 import { withProject } from '@push-based/node-cli-testing';
 
 describe('main.js', () => {
+
   test('runs', withProject<any>({
     ...REMOTE_PRJ_CFG, env: {
-      INPUT_RCPATH: REMOTE_RC_NAME
+      INPUT_RCPATH: REMOTE_RC_NAME,
+      INPUT_FORMAT: 'html,json'
     }
   }, async (prj :any) => {
-    process.chdir(prj.root);
     const { stdout, stderr, exitCode } = await prj.exec();
 
 
     expect(stdout).toContain('Run main');
     expect(stdout).toContain('Get inputs form action.yml');
     expect(stdout).toContain('Execute user-flow');
+    expect(stdout).toContain('--format=md');
+    expect(stdout).toContain('--format=html');
+    expect(stdout).toContain('--format=json');
     expect(stdout).toContain('Validate results');
     expect(stdout).toContain('Process results');
     expect(exitCode).toBe(0);
