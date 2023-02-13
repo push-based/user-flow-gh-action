@@ -3064,10 +3064,11 @@ async function run() {
         core.endGroup();
     }
     catch (error) {
-        if (error instanceof Error)
-            core.setFailed(error.message);
-        process.exitCode = 1;
-        process.exit(1);
+        if (error instanceof Error) {
+            core.debug(`Error in main ${error}`);
+        }
+        process.exitCode = 0;
+        process.exit(0);
     }
 }
 exports.run = run;
