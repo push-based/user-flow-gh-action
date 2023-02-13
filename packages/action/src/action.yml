@@ -54,6 +54,15 @@ runs:
         INPUT_RCPATH: ${{ inputs.rcPath }}
         INPUT_VERBOSE: ${{ inputs.verbose }}
         INPUT_DRYRUN: ${{ inputs.dryRun }}
+        INPUT_URL: ${{ inputs.dryRun }}
+        INPUT_UFPATH: ${{ inputs.ufPath }}
+        INPUT_CONFIGPATH: ${{ inputs.configPath }}
+        INPUT_BUDGETPATH: ${{ inputs.budgetPath }}
+        INPUT_SERVECOMMAND: ${{ inputs.serveCommand }}
+        INPUT_AWAITSTDOUTFROMSERVE: ${{ inputs.awaitStdoutFromServe }}
+        INPUT_FORMAT: ${{ inputs.format }}
+        INPUT_OUTPATH: ${{ inputs.outPath }}
+
     - name: Add reduced report as comment to the PR
       uses: marocchino/sticky-pull-request-comment@v2
       with:

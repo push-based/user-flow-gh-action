@@ -27,11 +27,14 @@ function resetProcessParams(): void {
   delete process.env['INPUT_VERBOSE'];
   // COLLECT
   delete process.env['INPUT_DRYRUN'];
-  // UPLOAD
-  // delete process.env['INPUT_SERVERBASEURL'];
-  // delete process.env['INPUT_SERVERTOKEN'];
-  // delete process.env['INPUT_BASICAUTHUSERNAME'];
-  // delete process.env['INPUT_BASICAUTHPASSWORD'];
+  delete process.env['INPUT_URL'];
+  delete process.env['INPUT_UFPATH'];
+  delete process.env['INPUT_CONFIGPATH'];
+  delete process.env['INPUT_BUDGETPATH'];
+  delete process.env['INPUT_SERVECOMMAND'];
+  delete process.env['INPUT_AWAITSTDOUTFROMSERVE'];
+  delete process.env['INPUT_FORMAT'];
+  delete process.env['INPUT_OUTPATH'];
 }
 
 describe('getInputs global', () => {
