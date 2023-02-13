@@ -3041,9 +3041,11 @@ const path_1 = __webpack_require__("path");
 const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/process-result.ts");
 async function run() {
     core.debug(`Run main`);
+    let ghActionInputs;
+    let resPath = '';
     try {
         core.startGroup(`Get inputs form action.yml`);
-        let ghActionInputs = (0, get_inputs_1.getInputs)();
+        ghActionInputs = (0, get_inputs_1.getInputs)();
         core.endGroup();
         core.startGroup(`Execute user-flow`);
         // @TODO retrieve result
@@ -3055,8 +3057,17 @@ async function run() {
         if (!allResults.length) {
             throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
         }
-        const resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
+        resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
         core.endGroup();
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.debug(`Error in main ${error}`);
+        }
+        process.exitCode = 1;
+        process.exit(1);
+    }
+    try {
         core.startGroup(`Process results`);
         const { resultSummary, resultPath } = (0, process_result_1.processResult)(ghActionInputs);
         core.setOutput('resultPath', resultPath);
@@ -3065,10 +3076,10 @@ async function run() {
     }
     catch (error) {
         if (error instanceof Error) {
-            core.debug(`Error in main ${error}`);
+            core.debug(`Error in processResult ${error}`);
         }
-        process.exitCode = 0;
-        process.exit(0);
+        process.exitCode = 1;
+        process.exit(1);
     }
 }
 exports.run = run;
