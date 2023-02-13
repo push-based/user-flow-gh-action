@@ -23,7 +23,7 @@ export async function executeUFCI(
     const script =  'npx @push-based/user-flow';
     const command =  'collect';
     const processedParams =  processParamsToParamsArray(ghActionInputs);
-    core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(', ')}`);
+    core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);
 
     const res = run(script, command, processedParams);
     resolve(res);

@@ -8,6 +8,7 @@ describe('main.js', () => {
       INPUT_RCPATH: REMOTE_RC_NAME
     }
   }, async (prj :any) => {
+    process.chdir(prj.root);
     const { stdout, stderr, exitCode } = await prj.exec();
 
 
