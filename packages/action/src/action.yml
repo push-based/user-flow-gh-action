@@ -54,7 +54,7 @@ runs:
         INPUT_RCPATH: ${{ inputs.rcPath }}
         INPUT_VERBOSE: ${{ inputs.verbose }}
         INPUT_DRYRUN: ${{ inputs.dryRun }}
-        INPUT_URL: ${{ inputs.dryRun }}
+        INPUT_URL: ${{ inputs.url }}
         INPUT_UFPATH: ${{ inputs.ufPath }}
         INPUT_CONFIGPATH: ${{ inputs.configPath }}
         INPUT_BUDGETPATH: ${{ inputs.budgetPath }}
