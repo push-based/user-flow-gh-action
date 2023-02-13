@@ -62,12 +62,14 @@ export function getInputs(): GhActionInputs {
 
   let { url } = collect;
 
+  // Get and interpolate URL's
+  url = core.getInput('url', { trimWhitespace: true }) !== '' ? core.getInput('url', { trimWhitespace: true }) : url;
   // Check if we have a url
   if (!url) {
     core.setFailed(noUrlError);
     throw new Error(noUrlError);
   }
-  // Get and interpolate URL's
+  // @TODO test it or drop it!
   url = interpolateProcessIntoUrl(url);
 
   // upload (action only?)
