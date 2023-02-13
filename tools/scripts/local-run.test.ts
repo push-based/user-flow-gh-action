@@ -40,4 +40,6 @@ const resultSummary = process.argv[3];
 console.log(`resultSummaryExpected: ${resultSummary}`);
 if(!resultSummary.includes(resultSummaryExpected)) {
   throw new Error(`wrong resultSummary expected: ${resultSummaryExpected} received: ${resultSummary}`);
+  process.exitCode = 1;
+  process.exit(1);
 }
