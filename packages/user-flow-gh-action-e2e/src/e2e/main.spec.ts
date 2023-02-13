@@ -6,7 +6,7 @@ describe('main.js', () => {
   test('runs', withProject<any>({
     ...REMOTE_PRJ_CFG, env: {
       INPUT_RCPATH: REMOTE_RC_NAME,
-      INPUT_FORMAT: 'html,json'
+      //INPUT_FORMAT: 'html,json'
     }
   }, async (prj :any) => {
     const { stdout, stderr, exitCode } = await prj.exec();

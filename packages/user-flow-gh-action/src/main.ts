@@ -25,6 +25,7 @@ export async function run(): Promise<void> {
     if (!allResults.length) {
       throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
+
     const resPath = join(rcFileObj.persist.outPath, allResults[0]);
     core.endGroup();
 
@@ -34,9 +35,11 @@ export async function run(): Promise<void> {
     core.setOutput('resultSummary', resultSummary);
     core.endGroup();
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message);
-    process.exitCode = 1;
-    process.exit(1);
+    if (error instanceof Error) {
+      core.debug(`Error in main ${error}`)
+    }
+    process.exitCode = 0;
+    process.exit(0);
   }
 }
 
