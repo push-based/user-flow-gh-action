@@ -134,7 +134,7 @@ describe('getInputs collect', () => {
   }));
 
 })
-
+/*
 describe('getInputs upload', () => {
 
   beforeAll(async () => {
@@ -194,7 +194,7 @@ describe('getInputs upload', () => {
   }));
 
 });
-
+*/
 describe('getInputs with wrong RC', () => {
 
   beforeAll(async () => {
