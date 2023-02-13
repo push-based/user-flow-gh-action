@@ -1856,38 +1856,37 @@ function getInputs() {
     // convert action input to boolean
     const dryRun = dryRunInput === 'on';
     core.debug(`Input dryRun is ${dryRun}`);
-    let { url } = collect;
     // Get and interpolate URL's
-    url = core.getInput('url', { trimWhitespace: true }) !== '' ? core.getInput('url', { trimWhitespace: true }) : url;
-    // Check if we have a url
-    if (!url) {
-        core.setFailed(exports.noUrlError);
-        throw new Error(exports.noUrlError);
-    }
+    let url = core.getInput('url', { trimWhitespace: true });
+    core.debug(`Input url is ${url}`);
     // @TODO test it or drop it!
     url = interpolateProcessIntoUrl(url);
-    // upload (action only?)
-    const serverBaseUrl = core.getInput('serverBaseUrl');
-    core.debug(`Input serverBaseUrl is ${serverBaseUrl}`);
-    const serverToken = core.getInput('serverToken');
-    core.debug(`Input serverToken is ${serverToken}`);
-    // Make sure we don't have UFCI xor API token
-    if (!!serverBaseUrl != !!serverToken) {
+    /*
+      // upload (action only?)
+      const serverBaseUrl: string = core.getInput('serverBaseUrl');
+      core.debug(`Input serverBaseUrl is ${serverBaseUrl}`);
+      const serverToken: string = core.getInput('serverToken');
+      core.debug(`Input serverToken is ${serverToken}`);
+      // Make sure we don't have UFCI xor API token
+      if (!!serverBaseUrl != !!serverToken) {
         // Fail and exit
-        core.setFailed(exports.serverBaseUrlServerTokenXorError);
-        throw new Error(exports.serverBaseUrlServerTokenXorError);
-    }
-    const basicAuthUsername = core.getInput('basicAuthUsername') || 'user-flow';
-    core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
-    const basicAuthPassword = core.getInput('basicAuthPassword');
-    core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
+        core.setFailed(serverBaseUrlServerTokenXorError);
+        throw new Error(serverBaseUrlServerTokenXorError);
+      }
+    
+      const basicAuthUsername = core.getInput('basicAuthUsername') || 'user-flow';
+      core.debug(`Input basicAuthUsername is ${basicAuthUsername}`);
+      const basicAuthPassword = core.getInput('basicAuthPassword');
+      core.debug(`Input basicAuthPassword is ${basicAuthPassword}`);
+    */
     const ghI = {
         rcPath,
         verbose,
-        dryRun,
-        url
+        dryRun
     };
     // collect
+    core.debug(`Input url is ${url}`);
+    url && (ghI.url = url);
     const ufPath = core.getInput('ufPath');
     core.debug(`Input ufPath is ${ufPath}`);
     ufPath && (ghI.ufPath = ufPath);
