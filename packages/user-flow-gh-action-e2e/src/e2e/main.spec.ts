@@ -20,7 +20,7 @@ describe('main.js', () => {
     expect(stdout).toContain('Execute user-flow');
     expect(stdout).toContain('Validate results');
     expect(stdout).toContain('Process results');
-    //expect(stderr).toBe('');
+    expect(stderr).toBe('');
     //expect(exitCode).toBe(0);
   }), 180_000);
 
