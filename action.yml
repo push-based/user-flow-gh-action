@@ -11,11 +11,38 @@ inputs:
     required: false
     # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
     default: 'off'
+  # COLLECT ============================================
+  url:
+    description: 'URL to analyze'
+    required: false
+  ufPath:
+    description: 'Path to user-flow file or folder containing user-flow files to run. (`*.uf.ts` or `*.uf.js`)'
+    required: false
+  configPath:
+    description: 'Path to the lighthouse `config.json` file'
+    required: false
+  serveCommand:
+    description: 'Runs a npm script to serve the target app. This has to be used in combination with `--awaitServeStdout`'
+    required: false
+  awaitServeStdout:
+    description: 'Waits for stdout from the serve command to start collecting user-flows'
+    required: false
   dryRun:
     description: 'Faster runs due to dummy results for reports ("on" or "off")'
     required: false
     # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
     default: 'off'
+  # PERSIST ============================================
+  format:
+    description: 'Format of the creates reports ( `html`, `json`, `md`, `stdout`)'
+    required: false
+  outPath:
+    description: 'output folder for the user-flow reports'
+    required: false
+  # ASSERT =============================================
+  budgetPath:
+    description: 'Path to the lighthouse `budget.json` file'
+    required: false
 runs:
   using: "composite"
   steps:
