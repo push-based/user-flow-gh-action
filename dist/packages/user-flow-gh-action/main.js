@@ -1777,13 +1777,16 @@ async function executeUFCI(ghActionInputs,
 run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
     const { rcPath, verbose, dryRun, ...unusedInputs } = ghActionInputs;
     return new Promise((resolve, reject) => {
+        // as we need md format for the comment we have to ensure is is included
         if (!rcPath) {
-            reject('rcPath not given');
+            reject(`rcPath ${rcPath} not given`);
         }
-        const params = { rcPath, verbose, dryRun };
+        const rcFileObj = (0, utils_1.readJsonFileSync)(rcPath);
+        const { persist } = rcFileObj;
+        ghActionInputs.format = Array.from(new Set(['md'].concat(persist?.format || []).concat(ghActionInputs?.format || [])));
         const script = 'npx @push-based/user-flow';
         const command = 'collect';
-        const processedParams = (0, utils_1.processParamsToParamsArray)({ rcPath, verbose, dryRun, format: ['md'] });
+        const processedParams = (0, utils_1.processParamsToParamsArray)(ghActionInputs);
         core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(', ')}`);
         const res = run(script, command, processedParams);
         resolve(res);
