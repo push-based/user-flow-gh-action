@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "@push-based/user-flow": "^0.18.1",
+    "@push-based/user-flow": "^0.18.2",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
