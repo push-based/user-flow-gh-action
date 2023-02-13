@@ -9,9 +9,11 @@ import { GhActionInputs } from './app/types';
 
 export async function run(): Promise<void> {
   core.debug(`Run main`);
+  let ghActionInputs: GhActionInputs;
+  let resPath: string = '';
   try {
     core.startGroup(`Get inputs form action.yml`);
-    let ghActionInputs: GhActionInputs = getInputs();
+    ghActionInputs = getInputs();
     core.endGroup();
 
     core.startGroup(`Execute user-flow`);
@@ -25,9 +27,18 @@ export async function run(): Promise<void> {
     if (!allResults.length) {
       throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
+    resPath = join(rcFileObj.persist.outPath, allResults[0]);
 
-    const resPath = join(rcFileObj.persist.outPath, allResults[0]);
     core.endGroup();
+  } catch (error) {
+    if (error instanceof Error) {
+      core.debug(`Error in main ${error}`)
+    }
+    process.exitCode = 1;
+    process.exit(1);
+  }
+
+  try {
 
     core.startGroup(`Process results`);
     const { resultSummary, resultPath } = processResult(ghActionInputs);
@@ -36,10 +47,10 @@ export async function run(): Promise<void> {
     core.endGroup();
   } catch (error) {
     if (error instanceof Error) {
-      core.debug(`Error in main ${error}`)
+      core.debug(`Error in processResult ${error}`)
     }
-    process.exitCode = 0;
-    process.exit(0);
+    process.exitCode = 1;
+    process.exit(1);
   }
 }
 
