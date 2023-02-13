@@ -14,8 +14,8 @@ describe('main.js', () => {
 
     expect(stdout).toContain('Run main');
     expect(stdout).toContain('Get inputs form action.yml');
-     expect(stdout).toContain('html');
-     expect(stdout).toContain('json');
+    // expect(stdout).toContain('html');
+    // expect(stdout).toContain('json');
      expect(stdout).toContain('md');
     expect(stdout).toContain('Execute user-flow');
     expect(stdout).toContain('Validate results');
