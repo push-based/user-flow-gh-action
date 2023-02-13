@@ -1857,12 +1857,14 @@ function getInputs() {
     const dryRun = dryRunInput === 'on';
     core.debug(`Input dryRun is ${dryRun}`);
     let { url } = collect;
+    // Get and interpolate URL's
+    url = core.getInput('url', { trimWhitespace: true }) !== '' ? core.getInput('url', { trimWhitespace: true }) : url;
     // Check if we have a url
     if (!url) {
         core.setFailed(exports.noUrlError);
         throw new Error(exports.noUrlError);
     }
-    // Get and interpolate URL's
+    // @TODO test it or drop it!
     url = interpolateProcessIntoUrl(url);
     // upload (action only?)
     const serverBaseUrl = core.getInput('serverBaseUrl');
