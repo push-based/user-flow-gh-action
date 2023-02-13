@@ -24,7 +24,7 @@ describe('executeUFCI mock', () => {
 
   test('throws invalid number', async () => {
     const p = ({ rcPath: false } as unknown as any);
-    expect(executeUFCI(p)).rejects.toEqual('rcPath not given');
+    expect(executeUFCI(p)).rejects.toEqual(`rcPath ${p} not given`);
   });
 
   test('is call with run inside', withProject(prjCfg ,async () => {
