@@ -8,17 +8,9 @@ export async function executeUFCI(
   // for testing
   run: (bin: string, command: 'init' | 'collect', args: string[]) => any = runUserFlowCliCommand
 ): Promise<string> {
-  const { rcPath, verbose, dryRun, ...unusedInputs } = ghActionInputs;
   return new Promise((resolve, reject) => {
-
-    // as we need md format for the comment we have to ensure is is included
-    if (!rcPath) {
-      reject(`rcPath ${rcPath} not given`);
-    }
-    const rcFileObj: any = readJsonFileSync(rcPath);
-    const { persist } = rcFileObj;
-    ghActionInputs.format =  Array.from(new Set(['md'].concat(persist?.format || []).concat(ghActionInputs?.format || [])));
-
+    // override format
+    ghActionInputs.format =  ['md'];
 
     const script =  'npx @push-based/user-flow';
     const command =  'collect';
