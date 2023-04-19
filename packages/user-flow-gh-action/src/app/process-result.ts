@@ -19,7 +19,9 @@ export function processResult(outPath: string): { resultPath: string, resultSumm
   const resultSummary: string = resultPaths.map(resultPath => {
        return readFileSync(resultPath).toString();
   }).join(`
+
   ---
+
   `);
 
   core.debug(`Results: ${resultSummary}`);

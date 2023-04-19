@@ -10,7 +10,6 @@ import { GhActionInputs } from './app/types';
 export async function run(): Promise<void> {
   core.debug(`Run main`);
   let ghActionInputs: GhActionInputs;
-  let resPath: string = '';
   const outPath = "./user-flow-gh-tmp";
   try {
     core.startGroup(`Get inputs form action.yml`);
