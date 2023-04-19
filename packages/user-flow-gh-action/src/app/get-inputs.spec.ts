@@ -11,7 +11,7 @@ const RcJSON = {
     url: 'test'
   }
 };
-let prjCfg = {
+const prjCfg = {
   root: rootPath,
   bin: '',
   rcFile: {
