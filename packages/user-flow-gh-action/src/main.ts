@@ -42,7 +42,7 @@ export async function run(): Promise<void> {
   try {
 
     core.startGroup(`Process results`);
-    const { resultSummary, outPath: resultPath } = processResult(outPath);
+    const { resultSummary, resultPath } = processResult(outPath);
     // cleanup tmp folder
     if(existsSync(outPath)) {
       rmdirSync(outPath);
