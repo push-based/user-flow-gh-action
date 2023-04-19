@@ -1,33 +1,30 @@
 import * as core from '@actions/core';
-import { executeUFCI } from './app/executeUFCI';
-import { getInputs } from './app/get-inputs';
-import { readJsonFileSync } from './app/utils';
-import { readdirSync, readFileSync } from 'fs';
-import { join } from 'path';
-import { processResult } from './app/process-result';
-import { GhActionInputs } from './app/types';
+import {executeUFCI} from './app/executeUFCI';
+import {getInputs} from './app/get-inputs';
+import {existsSync, readdirSync, rmdirSync} from 'fs';
+import {processResult} from './app/process-result';
+import {GhActionInputs} from './app/types';
 
 export async function run(): Promise<void> {
   core.debug(`Run main`);
   let ghActionInputs: GhActionInputs;
-  let resPath: string = '';
+
   try {
     core.startGroup(`Get inputs form action.yml`);
     ghActionInputs = getInputs();
     core.endGroup();
 
     core.startGroup(`Execute user-flow`);
-    // @TODO retrieve result
+    // @TODO retrieve result instead of readdirSync(ghActionInputs.outPath)
     await executeUFCI(ghActionInputs);
     core.endGroup();
 
     core.startGroup(`Validate results`);
-    const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
-    const allResults = readdirSync(rcFileObj.persist.outPath);
+
+    const allResults = readdirSync(ghActionInputs.outPath);
     if (!allResults.length) {
-      throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
+      throw new Error(`No results present in folder ${ghActionInputs.outPath}`);
     }
-    resPath = join(rcFileObj.persist.outPath, allResults[0]);
 
     core.endGroup();
   } catch (error) {
@@ -39,9 +36,13 @@ export async function run(): Promise<void> {
   }
 
   try {
-
     core.startGroup(`Process results`);
-    const { resultSummary, resultPath } = processResult(ghActionInputs);
+    const {resultSummary, resultPath} = processResult(ghActionInputs.outPath);
+    // cleanup tmp folder
+    if (existsSync(ghActionInputs.outPath)) {
+      rmdirSync(ghActionInputs.outPath, {recursive: true});
+    }
+
     core.setOutput('resultPath', resultPath);
     core.setOutput('resultSummary', resultSummary);
     core.endGroup();
