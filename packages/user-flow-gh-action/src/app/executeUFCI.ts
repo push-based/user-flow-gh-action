@@ -8,15 +8,13 @@ export async function executeUFCI(
   // for testing
   run: (bin: string, command: 'init' | 'collect', args: string[]) => any = runUserFlowCliCommand
 ): Promise<string> {
-
   return new Promise((resolve, reject) => {
+    // override format
+    ghActionInputs.format =  ['md'];
 
     const script =  'npx @push-based/user-flow';
     const command =  'collect';
-    const processedParams =  processParamsToParamsArray({
-      ...ghActionInputs,
-      format: 'md'
-    });
+    const processedParams =  processParamsToParamsArray(ghActionInputs);
     core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);
 
     const res = run(script, command, processedParams);
