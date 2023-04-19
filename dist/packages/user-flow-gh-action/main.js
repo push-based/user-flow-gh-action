@@ -1975,7 +1975,9 @@ function processResult(outPath) {
     const resultSummary = resultPaths.map(resultPath => {
         return (0, fs_1.readFileSync)(resultPath).toString();
     }).join(`
+
   ---
+
   `);
     core.debug(`Results: ${resultSummary}`);
     return { resultPath: outPath, resultSummary };
@@ -3038,7 +3040,6 @@ const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src
 async function run() {
     core.debug(`Run main`);
     let ghActionInputs;
-    let resPath = '';
     const outPath = "./user-flow-gh-tmp";
     try {
         core.startGroup(`Get inputs form action.yml`);
