@@ -11,6 +11,7 @@ export const wrongBooleanValue = (val: string, prop: string) => `${prop} is ${va
 export const wrongVerboseValue = (val: string) => wrongBooleanValue(val, 'verbose');
 export const wrongDryRunValue = (val: string) => wrongBooleanValue(val, 'dryRun');
 
+const outPath = "./user-flow-gh-tmp";
 export function getInputs(): GhActionInputs {
   const ghActionInputs = {} as any;
 
@@ -115,7 +116,8 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input format is ${format}`);
   format && (ghI.format = format);
 
-  const outPath: string = core.getInput('outPath');
+  // we use a custom out path to avoid conflicts i the file system
+  // const outPath: string = core.getInput('outPath');
   core.debug(`Input outPath is ${outPath}`);
   outPath && (ghI.outPath = outPath);
 
