@@ -23,7 +23,7 @@
  * ```
  */
 // @TODO retrieve from file
-const resultPathExpected = 'user-flow-gh-action-e2e';
+const resultPathExpected = 'user-flow-gh-tmp';
 const resultPath = process.argv[2];
 
 console.log(`resultPath: ${resultPath}`);
