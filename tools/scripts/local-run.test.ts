@@ -27,18 +27,19 @@ import {join} from "path";
  */
 // @TODO retrieve from file
 const resultPathExpected = 'user-flow-gh-tmp';
-const resultPath = process.argv[2];
-
+/*
 console.log(`resultPath: ${resultPath}`);
 if(!resultPath.includes(resultPathExpected)) {
   throw new Error(`wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
 }
+*/
 
 const resultSummaryExpected = `Date/Time: **`;
-const resultSummary = process.argv[3];
+const resultSummary = process.argv[2];
 console.log(`resultSummaryExpected: ${resultSummary}`);
-if(!resultSummary.includes(resultSummaryExpected)) {
-  throw new Error(`wrong resultSummary expected: ${resultSummaryExpected} received: ${resultSummary}`);
+const hits = resultSummary.match(/`${resultSummaryExpected}`/gm).length;
+if(hits <= 1) {
+  throw new Error(`wrong resultSummary expected 2 matches for: ${resultSummaryExpected} received: ${hits}`);
   process.exitCode = 1;
   process.exit(1);
 }
