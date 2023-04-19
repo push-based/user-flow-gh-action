@@ -2,7 +2,7 @@ import * as core from '@actions/core';
 import { executeUFCI } from './app/executeUFCI';
 import { getInputs } from './app/get-inputs';
 import { readJsonFileSync } from './app/utils';
-import { readdirSync, readFileSync } from 'fs';
+import {existsSync, readdirSync, rmdirSync} from 'fs';
 import { join } from 'path';
 import { processResult } from './app/process-result';
 import { GhActionInputs } from './app/types';
@@ -11,9 +11,11 @@ export async function run(): Promise<void> {
   core.debug(`Run main`);
   let ghActionInputs: GhActionInputs;
   let resPath: string = '';
+  const outPath = "./user-flow-gh-tmp";
   try {
     core.startGroup(`Get inputs form action.yml`);
     ghActionInputs = getInputs();
+    ghActionInputs.outPath = outPath;
     core.endGroup();
 
     core.startGroup(`Execute user-flow`);
@@ -23,11 +25,10 @@ export async function run(): Promise<void> {
 
     core.startGroup(`Validate results`);
     const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
-    const allResults = readdirSync(rcFileObj.persist.outPath);
+    const allResults = readdirSync(outPath);
     if (!allResults.length) {
       throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
     }
-    resPath = join(rcFileObj.persist.outPath, allResults[0]);
 
     core.endGroup();
   } catch (error) {
@@ -41,7 +42,12 @@ export async function run(): Promise<void> {
   try {
 
     core.startGroup(`Process results`);
-    const { resultSummary, resultPath } = processResult(ghActionInputs);
+    const { resultSummary, outPath: resultPath } = processResult(outPath);
+    // cleanup tmp folder
+    if(existsSync(outPath)) {
+      rmdirSync(outPath);
+    }
+
     core.setOutput('resultPath', resultPath);
     core.setOutput('resultSummary', resultSummary);
     core.endGroup();
