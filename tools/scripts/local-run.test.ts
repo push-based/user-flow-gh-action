@@ -34,7 +34,7 @@ if(!resultPath.includes(resultPathExpected)) {
   throw new Error(`wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
 }
 
-const resultPath1 = readdirSync(resultPath).filter(s => s.endsWith('.md')).pop();
+const resultPath1 = readdirSync(resultPath.replace('--rp=', '')).filter(s => s.endsWith('.md')).pop();
 const date = resultPath1.split('-').pop().split('.').shift();
 const y = date.slice(0,4);
 const m = date.slice(4,6);
