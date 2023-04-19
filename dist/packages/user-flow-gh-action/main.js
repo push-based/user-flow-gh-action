@@ -1962,26 +1962,25 @@ exports.processResult = void 0;
 const fs_1 = __webpack_require__("fs");
 const path_1 = __webpack_require__("path");
 const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
-const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/utils.ts");
-function processResult(ghActionInputs) {
-    const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
-    const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
+function processResult(outPath) {
+    const allResults = (0, fs_1.readdirSync)(outPath);
     core.debug(`Output folder content: ${allResults.join(', ')}`);
     if (!allResults.length) {
-        throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
+        throw new Error(`No results present in folder ${outPath}`);
     }
-    const resultPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults.filter(v => v.endsWith('.md'))[0]);
-    core.debug(`Process results form: ${resultPath}`);
-    let resultSummary;
-    try {
-        resultSummary = (0, fs_1.readFileSync)(resultPath).toString();
-        (0, fs_1.rmSync)(resultPath);
-    }
-    catch (e) {
-        throw e;
-    }
+    const resultPaths = allResults
+        .filter((v) => v.endsWith('.md'))
+        .map(p => (0, path_1.join)(outPath, p));
+    core.debug(`Process results form: ${outPath}`);
+    const resultSummary = resultPaths.map(resultPath => {
+        return (0, fs_1.readFileSync)(resultPath).toString();
+    }).join(`
+
+  ---
+
+  `);
     core.debug(`Results: ${resultSummary}`);
-    return { resultPath, resultSummary };
+    return { resultPath: outPath, resultSummary };
 }
 exports.processResult = processResult;
 
@@ -3037,15 +3036,15 @@ const executeUFCI_1 = __webpack_require__("./packages/user-flow-gh-action/src/ap
 const get_inputs_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/get-inputs.ts");
 const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/utils.ts");
 const fs_1 = __webpack_require__("fs");
-const path_1 = __webpack_require__("path");
 const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/process-result.ts");
 async function run() {
     core.debug(`Run main`);
     let ghActionInputs;
-    let resPath = '';
+    const outPath = "./user-flow-gh-tmp";
     try {
         core.startGroup(`Get inputs form action.yml`);
         ghActionInputs = (0, get_inputs_1.getInputs)();
+        ghActionInputs.outPath = outPath;
         core.endGroup();
         core.startGroup(`Execute user-flow`);
         // @TODO retrieve result
@@ -3053,11 +3052,10 @@ async function run() {
         core.endGroup();
         core.startGroup(`Validate results`);
         const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
-        const allResults = (0, fs_1.readdirSync)(rcFileObj.persist.outPath);
+        const allResults = (0, fs_1.readdirSync)(outPath);
         if (!allResults.length) {
             throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
         }
-        resPath = (0, path_1.join)(rcFileObj.persist.outPath, allResults[0]);
         core.endGroup();
     }
     catch (error) {
@@ -3069,7 +3067,11 @@ async function run() {
     }
     try {
         core.startGroup(`Process results`);
-        const { resultSummary, resultPath } = (0, process_result_1.processResult)(ghActionInputs);
+        const { resultSummary, resultPath } = (0, process_result_1.processResult)(outPath);
+        // cleanup tmp folder
+        if ((0, fs_1.existsSync)(outPath)) {
+            (0, fs_1.rmdirSync)(outPath, { recursive: true });
+        }
         core.setOutput('resultPath', resultPath);
         core.setOutput('resultSummary', resultSummary);
         core.endGroup();
