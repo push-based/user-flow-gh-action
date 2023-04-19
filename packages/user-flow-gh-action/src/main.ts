@@ -1,32 +1,29 @@
 import * as core from '@actions/core';
-import { executeUFCI } from './app/executeUFCI';
-import { getInputs } from './app/get-inputs';
-import { readJsonFileSync } from './app/utils';
+import {executeUFCI} from './app/executeUFCI';
+import {getInputs} from './app/get-inputs';
 import {existsSync, readdirSync, rmdirSync} from 'fs';
-import { join } from 'path';
-import { processResult } from './app/process-result';
-import { GhActionInputs } from './app/types';
+import {processResult} from './app/process-result';
+import {GhActionInputs} from './app/types';
 
 export async function run(): Promise<void> {
   core.debug(`Run main`);
   let ghActionInputs: GhActionInputs;
-  const outPath = "./user-flow-gh-tmp";
+
   try {
     core.startGroup(`Get inputs form action.yml`);
     ghActionInputs = getInputs();
-    ghActionInputs.outPath = outPath;
     core.endGroup();
 
     core.startGroup(`Execute user-flow`);
-    // @TODO retrieve result
+    // @TODO retrieve result instead of readdirSync(ghActionInputs.outPath)
     await executeUFCI(ghActionInputs);
     core.endGroup();
 
     core.startGroup(`Validate results`);
-    const rcFileObj = readJsonFileSync(ghActionInputs.rcPath);
-    const allResults = readdirSync(outPath);
+
+    const allResults = readdirSync(ghActionInputs.outPath);
     if (!allResults.length) {
-      throw new Error(`No results present in folder ${rcFileObj.persist.outPath}`);
+      throw new Error(`No results present in folder ${ghActionInputs.outPath}`);
     }
 
     core.endGroup();
@@ -39,12 +36,11 @@ export async function run(): Promise<void> {
   }
 
   try {
-
     core.startGroup(`Process results`);
-    const { resultSummary, resultPath } = processResult(outPath);
+    const {resultSummary, resultPath} = processResult(ghActionInputs.outPath);
     // cleanup tmp folder
-    if(existsSync(outPath)) {
-      rmdirSync(outPath, {recursive: true});
+    if (existsSync(ghActionInputs.outPath)) {
+      rmdirSync(ghActionInputs.outPath, {recursive: true});
     }
 
     core.setOutput('resultPath', resultPath);
