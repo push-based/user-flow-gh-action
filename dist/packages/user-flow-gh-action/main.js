@@ -3070,7 +3070,7 @@ async function run() {
         const { resultSummary, resultPath } = (0, process_result_1.processResult)(outPath);
         // cleanup tmp folder
         if ((0, fs_1.existsSync)(outPath)) {
-            (0, fs_1.rmdirSync)(outPath);
+            (0, fs_1.rmdirSync)(outPath, { recursive: true });
         }
         core.setOutput('resultPath', resultPath);
         core.setOutput('resultSummary', resultSummary);
