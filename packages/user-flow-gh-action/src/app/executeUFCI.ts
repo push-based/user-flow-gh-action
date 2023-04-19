@@ -11,15 +11,12 @@ export async function executeUFCI(
 
   return new Promise((resolve, reject) => {
 
-    ghActionInputs = {
-      ...ghActionInputs,
-      format: Array.from(new Set(['md'].concat(ghActionInputs?.format || [])))
-    }
-
-
     const script =  'npx @push-based/user-flow';
     const command =  'collect';
-    const processedParams =  processParamsToParamsArray(ghActionInputs);
+    const processedParams =  processParamsToParamsArray({
+      ...ghActionInputs,
+      format: 'md'
+    });
     core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);
 
     const res = run(script, command, processedParams);
