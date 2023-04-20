@@ -34,12 +34,12 @@ if(!resultPath.includes(resultPathExpected)) {
 }
 */
 
-const resultSummaryExpected = 'Time: **';
+const resultSummaryExpected = /Time: \*\*/;
 const resultSummary = process.argv[2];
 console.log(`resultSummaryExpected: ${resultSummary}`);
 const regExp = new RegExp(resultSummaryExpected, 'gm');
-const hits = resultSummary.match(regExp).length;
-if(hits <= 1) {
+const hits = resultSummary.match(regExp);
+if(hits?.length <= 1) {
   throw new Error(`wrong resultSummary expected 2 matches for: ${resultSummaryExpected} received: ${hits}`);
   process.exitCode = 1;
   process.exit(1);
