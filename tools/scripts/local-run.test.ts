@@ -34,7 +34,7 @@ if(!resultPath.includes(resultPathExpected)) {
 }
 */
 
-const resultSummaryExpected = `Date/Time: **`;
+const resultSummaryExpected = `Time: **`;
 const resultSummary = process.argv[2];
 console.log(`resultSummaryExpected: ${resultSummary}`);
 const regExp = new RegExp(resultSummaryExpected, 'gm');
