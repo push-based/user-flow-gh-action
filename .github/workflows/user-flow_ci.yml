@@ -38,4 +38,4 @@ jobs:
           rcPath: ./.user-flowrc.json
           format: 'html,json'
       - name: test-e2e:user-flow-gh-action
-        run: npm run postLocalCiRunTest -- --rp="./user-flow-gh-tmp" --r="${{ steps.localRun.outputs.resultSummary }}"
+        run: npm run postLocalCiRunTest -- --r="${{ steps.localRun.outputs.resultSummary }}"
