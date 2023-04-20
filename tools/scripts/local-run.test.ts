@@ -25,14 +25,6 @@ import {join} from "path";
  *   run: ts-node local.run.ts --rp=${{ steps.localRun.outputs.result-path }} --r=${{ steps.localRun.outputs.results }}
  * ```
  */
-// @TODO retrieve from file
-const resultPathExpected = 'user-flow-gh-tmp';
-/*
-console.log(`resultPath: ${resultPath}`);
-if(!resultPath.includes(resultPathExpected)) {
-  throw new Error(`wrong resultPath expected: ${resultPathExpected} received: ${resultPath}`);
-}
-*/
 
 const resultSummaryExpected = /Time: \*\*/;
 const resultSummary = process.argv[2];
