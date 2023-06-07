@@ -91,6 +91,11 @@ export function getInputs(): GhActionInputs {
     dryRun
   };
 
+  // global
+  const customScript = core.getInput('customScript', { trimWhitespace: true });
+  core.debug(`Input customScript is ${customScript}`);
+  customScript && (ghI.customScript = customScript);
+
   // collect
   core.debug(`Input url is ${url}`);
   url && (ghI.url = url);

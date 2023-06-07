@@ -23,6 +23,7 @@ let rcPath: string;
 
 function resetProcessParams(): void {
   // GLOBAL
+  delete process.env['INPUT_CUSTOMSCRIPT'];
   delete process.env['INPUT_RCPATH'];
   delete process.env['INPUT_VERBOSE'];
   // COLLECT
@@ -86,6 +87,13 @@ describe('getInputs collect', () => {
     expect(() => getInputs()).toThrow(wrongDryRunValue(process.env['INPUT_DRYRUN']));
   }));
 
+  test('should parse customScript', withProject(prjCfg, async (prj) => {
+    rcPath = join(prj.root, DEFAULT_RC_NAME);
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_CUSTOMSCRIPT'] = 'nx user-flow project-name';
+    const { customScript } = getInputs();
+    expect(customScript).toBe( process.env['INPUT_CUSTOMSCRIPT'] );
+  }));
   test('should parse rcPath on to true', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
     process.env['INPUT_RCPATH'] = rcPath;
