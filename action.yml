@@ -54,6 +54,7 @@ runs:
       shell: bash
       run: node ${{ github.action_path }}/dist/packages/user-flow-gh-action/main.js
       env:
+        INPUT_CUSTOMSCRIPT: ${{ inputs.customScript }}
         INPUT_RCPATH: ${{ inputs.rcPath }}
         INPUT_VERBOSE: ${{ inputs.verbose }}
         INPUT_DRYRUN: ${{ inputs.dryRun }}
