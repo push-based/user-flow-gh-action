@@ -2,6 +2,18 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.3.0](https://github.com/push-based/user-flow-gh-action/compare/v0.2.0...v0.3.0) (2023-06-07)
+
+
+### Features
+
+* add custom script ([30c2376](https://github.com/push-based/user-flow-gh-action/commit/30c2376d45497e2b665abc92943860772003df14))
+
+
+### Bug Fixes
+
+* main test with formats ([ab7bada](https://github.com/push-based/user-flow-gh-action/commit/ab7badad129edc29fac22d27def6b2af5cace78e))
+
 ### [0.1.2](https://github.com/push-based/user-flow-gh-action/compare/v0.1.1...v0.1.2) (2023-02-13)
 
 ### [0.1.1](https://github.com/push-based/user-flow-gh-action/compare/v0.1.0...v0.1.1) (2023-02-07)

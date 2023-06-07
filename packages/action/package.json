@@ -1,6 +1,6 @@
 {
   "name": "user-flow-gh-action",
-  "version": "0.1.2",
+  "version": "0.3.0",
   "license": "MIT",
   "engines": {
     "node": "^16.19.0",
