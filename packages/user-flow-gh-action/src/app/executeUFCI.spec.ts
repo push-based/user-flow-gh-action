@@ -41,7 +41,7 @@ describe('executeUFCI mock', () => {
     const paramsFormatted = processParamsToParamsArray({...rcObj, verbose: true, dryRun: false, format: ['md']});
     expect(res).toBe(`Execute CLI: npx @push-based/user-flow collect ${paramsFormatted.join(', ')}`);
   }));
-  test('respects custom command', withProject(prjCfg, async () => {
+  test('respects custom script', withProject(prjCfg, async () => {
     const rcObj = {
       "url": "https://google.com",
       "ufPath": "./user-flows",
@@ -55,10 +55,9 @@ describe('executeUFCI mock', () => {
       return `Execute CLI: npx @push-based/user-flow collect ${args.join(', ')}` as any;
     };
 
-    const params = {...rcObj, verbose: true, dryRun: false, customCommand: 'echo "custom script"'} as unknown as any;
+    const params = {...rcObj, verbose: true, dryRun: false, customScript: 'custom script'} as unknown as any;
     const res = await executeUFCI((params), run);
-    const paramsFormatted = processParamsToParamsArray({...rcObj, verbose: true, dryRun: false, format: ['md']});
-    expect(res).toBe(`Execute CLI: npx @push-based/user-flow collect ${paramsFormatted.join(', ')}`);
+    expect(res).toContain(`custom script`);
   }));
 
 });

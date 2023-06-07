@@ -120,10 +120,12 @@ describe('getInputs collect', () => {
 
   test('should parse ufPath on to true', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
+    process.env['INPUT_CUSTOMSCRIPT'] = 'custom script';
     process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_UFPATH'] = 'ufPath-from-action';
-    const { ufPath } = getInputs();
+    const { ufPath, customScript } = getInputs();
     expect(ufPath).toBe('ufPath-from-action');
+    expect(customScript).toBe('custom script');
   }));
 
 })
