@@ -1821,7 +1821,6 @@ function getInputs() {
     // GLOBAL PARAMS =================================================
     // Inspect user-flowrc file for malformations
     const rcPath = core.getInput('rcPath') ? (0, path_1.resolve)(core.getInput('rcPath')) : null;
-    core.debug(`Input customScript is ${core.getInput('customScript')}`);
     core.debug(`Input rcPath is ${rcPath}`);
     if (!rcPath) {
         // Fail and exit
