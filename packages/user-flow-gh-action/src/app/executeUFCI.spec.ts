@@ -32,7 +32,7 @@ describe('executeUFCI mock', () => {
           "md"
         ]
     };
-    const run = (bin: string, command: 'init' | 'collect', args: string[]) => {
+    const run = (bin: string, args: string[]) => {
       return `Execute CLI: npx @push-based/user-flow collect ${args.join(', ')}` as any;
     };
 
@@ -51,7 +51,7 @@ describe('executeUFCI mock', () => {
         "md"
       ]
     };
-    const run = (bin: string, command: 'init' | 'collect', args: string[]) => {
+    const run = (bin: string, args: string[]) => {
       return `Execute CLI: npx @push-based/user-flow collect ${args.join(', ')}` as any;
     };
 
