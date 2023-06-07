@@ -1,6 +1,5 @@
 import { execSync, ExecSyncOptions } from 'child_process';
 import * as core from '@actions/core';
-
 export function runUserFlowCliCommand(bin: string, args: string[] = [], processOptions: { cwd?: string, env?: {} } = {}) {
   const combinedArgs = [bin, ...args];
   let { cwd, env } = processOptions;
@@ -15,6 +14,6 @@ export function runUserFlowCliCommand(bin: string, args: string[] = [], processO
   };
 
   core.debug(`CLI process options: ${JSON.stringify(options.env.CI)}`);
-  // @TODO use better approach
+  // @TODO use better approach to stream the process and get live logs
   return execSync(combinedArgs.join(' '), options);
 }
