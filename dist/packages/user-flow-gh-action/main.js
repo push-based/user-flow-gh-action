@@ -1778,15 +1778,15 @@ run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
     return new Promise((resolve, reject) => {
         // override format
         ghActionInputs.format = ['md'];
-        let script = 'npx @push-based/user-flow';
+        const command = 'collect';
+        let script = `npx @push-based/user-flow ${command}`;
         if (ghActionInputs.customScript !== undefined) {
             script = ghActionInputs.customScript;
             core.debug(`Execute CLI over custom script: ${script}`);
         }
-        const command = 'collect';
         const processedParams = (0, utils_1.processParamsToParamsArray)(ghActionInputs);
-        core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);
-        const res = run(script, command, processedParams);
+        core.debug(`Execute CLI: ${script} ${processedParams.join(' ')}`);
+        const res = run(script, processedParams);
         resolve(res);
     });
 }
@@ -2000,8 +2000,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runUserFlowCliCommand = void 0;
 const child_process_1 = __webpack_require__("child_process");
 const core = __webpack_require__("./node_modules/@actions/core/lib/core.js");
-function runUserFlowCliCommand(bin, command = 'collect', args = [], processOptions = {}) {
-    const combinedArgs = [bin, command, ...args];
+function runUserFlowCliCommand(bin, args = [], processOptions = {}) {
+    const combinedArgs = [bin, ...args];
     let { cwd, env } = processOptions;
     env = env || process.env;
     // Ensure we run in cliMode "CI"

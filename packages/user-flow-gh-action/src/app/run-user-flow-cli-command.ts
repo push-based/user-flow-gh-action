@@ -1,8 +1,8 @@
 import { execSync, ExecSyncOptions } from 'child_process';
 import * as core from '@actions/core';
 
-export function runUserFlowCliCommand(bin: string, command: 'collect' = 'collect', args: string[] = [], processOptions: { cwd?: string, env?: {} } = {}) {
-  const combinedArgs = [bin, command, ...args];
+export function runUserFlowCliCommand(bin: string, args: string[] = [], processOptions: { cwd?: string, env?: {} } = {}) {
+  const combinedArgs = [bin, ...args];
   let { cwd, env } = processOptions;
   env = env || process.env;
   // Ensure we run in cliMode "CI"

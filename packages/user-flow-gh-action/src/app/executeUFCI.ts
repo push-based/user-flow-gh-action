@@ -6,23 +6,23 @@ import { processParamsToParamsArray, readJsonFileSync } from './utils';
 export async function executeUFCI(
   ghActionInputs: GhActionInputs,
   // for testing
-  run: (bin: string, command: 'init' | 'collect', args: string[]) => any = runUserFlowCliCommand
+  run: (bin: string, args: string[]) => any = runUserFlowCliCommand
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     // override format
     ghActionInputs.format =  ['md'];
 
-    let script = 'npx @push-based/user-flow';
+    const command =  'collect';
+    let script = `npx @push-based/user-flow ${command}`;
     if(ghActionInputs.customScript !== undefined) {
       script = ghActionInputs.customScript;
       core.debug(`Execute CLI over custom script: ${script}`);
     }
 
-    const command =  'collect';
     const processedParams =  processParamsToParamsArray(ghActionInputs);
-    core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);
+    core.debug(`Execute CLI: ${script} ${processedParams.join(' ')}`);
 
-    const res = run(script, command, processedParams);
+    const res = run(script, processedParams);
     resolve(res);
   });
 }
