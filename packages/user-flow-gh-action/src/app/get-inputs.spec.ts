@@ -23,6 +23,7 @@ let rcPath: string;
 
 function resetProcessParams(): void {
   // GLOBAL
+  delete process.env['INPUT_CUSTOMSCRIPT'];
   delete process.env['INPUT_RCPATH'];
   delete process.env['INPUT_VERBOSE'];
   // COLLECT
@@ -78,6 +79,9 @@ describe('getInputs global', () => {
 });
 
 describe('getInputs collect', () => {
+  beforeEach(() => {
+    resetProcessParams()
+  });
   // dryRun
   test('should throw if wrong value is passed as dryRun', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
@@ -86,6 +90,13 @@ describe('getInputs collect', () => {
     expect(() => getInputs()).toThrow(wrongDryRunValue(process.env['INPUT_DRYRUN']));
   }));
 
+  test('should parse customScript', withProject(prjCfg, async (prj) => {
+    rcPath = join(prj.root, DEFAULT_RC_NAME);
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_CUSTOMSCRIPT'] = 'nx user-flow project-name';
+    const { customScript } = getInputs();
+    expect(customScript).toBe( process.env['INPUT_CUSTOMSCRIPT'] );
+  }));
   test('should parse rcPath on to true', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
     process.env['INPUT_RCPATH'] = rcPath;
@@ -112,10 +123,12 @@ describe('getInputs collect', () => {
 
   test('should parse ufPath on to true', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
+    process.env['INPUT_CUSTOMSCRIPT'] = 'custom script';
     process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_UFPATH'] = 'ufPath-from-action';
-    const { ufPath } = getInputs();
+    const { ufPath, customScript } = getInputs();
     expect(ufPath).toBe('ufPath-from-action');
+    expect(customScript).toBe('custom script');
   }));
 
 })

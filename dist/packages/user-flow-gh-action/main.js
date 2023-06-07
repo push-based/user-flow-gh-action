@@ -1778,7 +1778,11 @@ run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
     return new Promise((resolve, reject) => {
         // override format
         ghActionInputs.format = ['md'];
-        const script = 'npx @push-based/user-flow';
+        let script = 'npx @push-based/user-flow';
+        if (ghActionInputs.customScript !== undefined) {
+            script = ghActionInputs.customScript;
+            core.debug(`Execute CLI over custom script: ${script}`);
+        }
         const command = 'collect';
         const processedParams = (0, utils_1.processParamsToParamsArray)(ghActionInputs);
         core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);
@@ -1882,6 +1886,10 @@ function getInputs() {
         verbose,
         dryRun
     };
+    // global
+    const customScript = core.getInput('customScript', { trimWhitespace: true });
+    core.debug(`Input customScript is ${customScript}`);
+    customScript && (ghI.customScript = customScript);
     // collect
     core.debug(`Input url is ${url}`);
     url && (ghI.url = url);

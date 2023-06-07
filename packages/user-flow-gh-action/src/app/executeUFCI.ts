@@ -12,7 +12,12 @@ export async function executeUFCI(
     // override format
     ghActionInputs.format =  ['md'];
 
-    const script =  'npx @push-based/user-flow';
+    let script = 'npx @push-based/user-flow';
+    if(ghActionInputs.customScript !== undefined) {
+      script = ghActionInputs.customScript;
+      core.debug(`Execute CLI over custom script: ${script}`);
+    }
+
     const command =  'collect';
     const processedParams =  processParamsToParamsArray(ghActionInputs);
     core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);

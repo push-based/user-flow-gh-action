@@ -1,5 +1,6 @@
 export type GhActionInputs = {
   // global
+  customScript?: string;
   rcPath: string;
   verbose: boolean;
   dryRun: boolean;
