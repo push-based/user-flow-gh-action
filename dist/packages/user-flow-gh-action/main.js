@@ -1778,7 +1778,11 @@ run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
     return new Promise((resolve, reject) => {
         // override format
         ghActionInputs.format = ['md'];
-        const script = ghActionInputs.customScript || 'npx @push-based/user-flow';
+        let script = 'npx @push-based/user-flow';
+        if (ghActionInputs.customScript !== undefined) {
+            script = ghActionInputs.customScript;
+            core.debug(`Execute CLI over custom script: ${script}`);
+        }
         const command = 'collect';
         const processedParams = (0, utils_1.processParamsToParamsArray)(ghActionInputs);
         core.debug(`Execute CLI: ${script} ${command} ${processedParams.join(' ')}`);
@@ -1817,6 +1821,7 @@ function getInputs() {
     // GLOBAL PARAMS =================================================
     // Inspect user-flowrc file for malformations
     const rcPath = core.getInput('rcPath') ? (0, path_1.resolve)(core.getInput('rcPath')) : null;
+    core.debug(`Input customScript is ${core.getInput('customScript')}`);
     core.debug(`Input rcPath is ${rcPath}`);
     if (!rcPath) {
         // Fail and exit
