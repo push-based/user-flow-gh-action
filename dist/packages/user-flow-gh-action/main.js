@@ -2013,7 +2013,7 @@ function runUserFlowCliCommand(bin, args = [], processOptions = {}) {
         env
     };
     core.debug(`CLI process options: ${JSON.stringify(options.env.CI)}`);
-    // @TODO use better approach
+    // @TODO use better approach to stream the process and get live logs
     return (0, child_process_1.execSync)(combinedArgs.join(' '), options);
 }
 exports.runUserFlowCliCommand = runUserFlowCliCommand;
