@@ -21,7 +21,6 @@ export async function executeUFCI(
 
     const processedParams =  processParamsToParamsArray(ghActionInputs);
     core.debug(`Execute CLI: ${script} ${processedParams.join(' ')}`);
-
     const res = run(script, processedParams);
     resolve(res);
   });
