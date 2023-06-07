@@ -7,6 +7,7 @@ describe('main.js', () => {
   test('runs', withProject<any>({
     ...REMOTE_PRJ_CFG, env: {
       INPUT_CUSTOMSCRIPT: "npx @push-based/user-flow",
+      INPUT_OUTPATH: "dist/user-flow",
       INPUT_RCPATH: REMOTE_RC_NAME,
       INPUT_FORMAT: 'html,json'
     }
