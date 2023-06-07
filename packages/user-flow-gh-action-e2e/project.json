@@ -16,6 +16,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
+      "dependsOn": ["dependencies"],
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "packages/user-flow-gh-action-e2e/jest.config.ts",
@@ -24,6 +25,7 @@
     },
     "e2e": {
       "executor": "@nrwl/workspace:run-commands",
+      "dependsOn": ["dependencies"],
       "options": {
         "commands": [
           {
