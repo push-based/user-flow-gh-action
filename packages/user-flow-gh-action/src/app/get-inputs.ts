@@ -19,7 +19,6 @@ export function getInputs(): GhActionInputs {
 
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
-  core.debug(`Input customScript is ${core.getInput('customScript')}`);
   core.debug(`Input rcPath is ${rcPath}`);
   if (!rcPath) {
     // Fail and exit

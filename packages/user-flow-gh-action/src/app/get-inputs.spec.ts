@@ -79,6 +79,9 @@ describe('getInputs global', () => {
 });
 
 describe('getInputs collect', () => {
+  beforeEach(() => {
+    resetProcessParams()
+  });
   // dryRun
   test('should throw if wrong value is passed as dryRun', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
