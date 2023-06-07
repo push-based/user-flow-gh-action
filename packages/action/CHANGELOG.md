@@ -2,6 +2,13 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+### [0.3.1](https://github.com/push-based/user-flow-gh-action/compare/v0.3.0...v0.3.1) (2023-06-07)
+
+
+### Bug Fixes
+
+* forward action input ([2673c44](https://github.com/push-based/user-flow-gh-action/commit/2673c4493d2b2a3dabc08a47aa25c24f3c3c2de9))
+
 ## [0.3.0](https://github.com/push-based/user-flow-gh-action/compare/v0.2.0...v0.3.0) (2023-06-07)
 
 
