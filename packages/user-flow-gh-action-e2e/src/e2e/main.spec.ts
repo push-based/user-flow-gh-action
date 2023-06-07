@@ -18,8 +18,8 @@ describe('main.js', () => {
     expect(stdout).toContain('Get inputs form action.yml');
     expect(stdout).toContain('Execute user-flow');
     expect(stdout).toContain('--format=md');
-    //expect(stdout).toContain('--format=html');
-    //expect(stdout).toContain('--format=json');
+    expect(stdout).toContain('--format=html');
+    expect(stdout).toContain('--format=json');
     expect(stdout).toContain('Validate results');
     expect(stdout).toContain('Process results');
     expect(exitCode).toBe(0);
