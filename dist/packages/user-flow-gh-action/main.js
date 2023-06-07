@@ -1815,7 +1815,6 @@ const wrongVerboseValue = (val) => (0, exports.wrongBooleanValue)(val, 'verbose'
 exports.wrongVerboseValue = wrongVerboseValue;
 const wrongDryRunValue = (val) => (0, exports.wrongBooleanValue)(val, 'dryRun');
 exports.wrongDryRunValue = wrongDryRunValue;
-const outPath = "./user-flow-gh-tmp";
 function getInputs() {
     const ghActionInputs = {};
     // GLOBAL PARAMS =================================================
@@ -1909,8 +1908,7 @@ function getInputs() {
     const format = core.getInput('format').split(',');
     core.debug(`Input format is ${format}`);
     format && (ghI.format = format);
-    // we use a custom out path to avoid conflicts i the file system
-    // const outPath: string = core.getInput('outPath');
+    const outPath = core.getInput('outPath');
     core.debug(`Input outPath is ${outPath}`);
     outPath && (ghI.outPath = outPath);
     // assert
