@@ -10,9 +10,9 @@ export async function run(): Promise<void> {
   let ghActionInputs: GhActionInputs;
 
   try {
-    core.startGroup(`Get inputs form action.yml`);
+   // core.startGroup(`Get inputs form action.yml`);
     ghActionInputs = getInputs();
-    core.endGroup();
+   // core.endGroup();
 
     core.startGroup(`Execute user-flow`);
     // @TODO retrieve result instead of readdirSync(ghActionInputs.outPath)

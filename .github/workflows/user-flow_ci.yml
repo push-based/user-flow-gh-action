@@ -35,7 +35,8 @@ jobs:
         with:
           dryRun: 'off'
           verbose: 'on'
-          rcPath: ./.user-flowrc.json
+          url: https://google.com
           format: 'html,json'
+          rcPath: ./.user-flowrc.json
       - name: test-e2e:user-flow-gh-action
         run: npm run postLocalCiRunTest -- --r="${{ steps.localRun.outputs.resultSummary }}"
