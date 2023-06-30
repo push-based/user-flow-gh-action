@@ -8,7 +8,7 @@ describe('main.js', () => {
     ...REMOTE_PRJ_CFG, env: {
       INPUT_CUSTOMSCRIPT: "npx @push-based/user-flow",
       INPUT_RCPATH: REMOTE_RC_NAME,
-      INPUT_URL: 'url',
+      INPUT_URL: 'https://google.com',
       INPUT_FORMAT: 'html,json'
     }
   }, async (prj :any) => {
@@ -19,7 +19,7 @@ describe('main.js', () => {
     expect(stdout).toContain('Get inputs form action.yml');
     expect(stdout).toContain('Execute user-flow');
     expect(stdout).toContain('--format=md');
-    expect(stdout).toContain('--url=url');
+    expect(stdout).toContain('--url=https://google.com');
     //expect(stdout).toContain('--format=html');
     //expect(stdout).toContain('--format=json');
     expect(stdout).toContain('Validate results');
