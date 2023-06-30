@@ -1,12 +1,7 @@
 {
-  "collect": {
-    "ufPath": "./user-flows"
-  },
+  "collect": {},
   "persist": {
-    "outPath": "./packages/user-flow-gh-action-e2e/measures",
-    "format": [
-      "md"
-    ]
+    "budgets": []
   },
   "assert": {}
 }
