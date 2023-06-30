@@ -3044,9 +3044,9 @@ async function run() {
     core.debug(`Run main`);
     let ghActionInputs;
     try {
-        core.startGroup(`Get inputs form action.yml`);
+        // core.startGroup(`Get inputs form action.yml`);
         ghActionInputs = (0, get_inputs_1.getInputs)();
-        core.endGroup();
+        // core.endGroup();
         core.startGroup(`Execute user-flow`);
         // @TODO retrieve result instead of readdirSync(ghActionInputs.outPath)
         await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
