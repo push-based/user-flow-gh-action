@@ -33,9 +33,12 @@ jobs:
         id: localRun
         uses: ./dist/packages/user-flow-gh-action/
         with:
-          dryRun: 'off'
-          verbose: 'on'
+          dryRun: off
+          verbose: on
+          url: https://google.com
+          ufPath: ./user-flows
+          outPath: ./packages/user-flow-gh-action-e2e/measures
+          format: html,json
           rcPath: ./.user-flowrc.json
-          format: 'html,json'
       - name: test-e2e:user-flow-gh-action
         run: npm run postLocalCiRunTest -- --r="${{ steps.localRun.outputs.resultSummary }}"

@@ -31,7 +31,10 @@ jobs:
         id: localRun
         uses: ./
         with:
-          dryRun: 'off'
-          verbose: 'on'
+          dryRun: off
+          verbose: on
+          url: https://google.com
+          ufPath: ./user-flows
+          outPath: ./packages/user-flow-gh-action-e2e/measures
+          format: html,json
           rcPath: ./.user-flowrc.json
-          format: 'html,json'
