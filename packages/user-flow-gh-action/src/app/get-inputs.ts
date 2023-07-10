@@ -108,9 +108,9 @@ export function getInputs(): GhActionInputs {
   core.debug(`Input serveCommand is ${serveCommand}`);
   serveCommand && (ghI.serveCommand = serveCommand);
 
-  const awaitServerStdout: string = core.getInput('awaitServerStdout');
-  core.debug(`Input awaitServerStdout is ${awaitServerStdout}`);
-  awaitServerStdout && (ghI.awaitServerStdout = awaitServerStdout);
+  const awaitServeStdout: string = core.getInput('awaitServeStdout');
+  core.debug(`Input awaitServeStdout is ${awaitServeStdout}`);
+  awaitServeStdout && (ghI.awaitServeStdout = awaitServeStdout);
 
   const configPath: string = core.getInput('configPath');
   core.debug(`Input configPath is ${configPath}`);
