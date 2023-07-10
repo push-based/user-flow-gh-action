@@ -1775,7 +1775,7 @@ const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/util
 async function executeUFCI(ghActionInputs, 
 // for testing
 run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         // override format
         ghActionInputs.format = ['md'];
         const command = 'collect';
@@ -1899,9 +1899,9 @@ function getInputs() {
     const serveCommand = core.getInput('serveCommand');
     core.debug(`Input serveCommand is ${serveCommand}`);
     serveCommand && (ghI.serveCommand = serveCommand);
-    const awaitServerStdout = core.getInput('awaitServerStdout');
-    core.debug(`Input awaitServerStdout is ${awaitServerStdout}`);
-    awaitServerStdout && (ghI.awaitServerStdout = awaitServerStdout);
+    const awaitServeStdout = core.getInput('awaitServeStdout');
+    core.debug(`Input awaitServeStdout is ${awaitServeStdout}`);
+    awaitServeStdout && (ghI.awaitServeStdout = awaitServeStdout);
     const configPath = core.getInput('configPath');
     core.debug(`Input configPath is ${configPath}`);
     configPath && (ghI.configPath = configPath);
