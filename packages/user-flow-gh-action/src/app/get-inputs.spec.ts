@@ -33,7 +33,7 @@ function resetProcessParams(): void {
   delete process.env['INPUT_CONFIGPATH'];
   delete process.env['INPUT_BUDGETPATH'];
   delete process.env['INPUT_SERVECOMMAND'];
-  delete process.env['INPUT_AWAITSTDOUTFROMSERVE'];
+  delete process.env['INPUT_AWAITSERVESTDOUT'];
   delete process.env['INPUT_FORMAT'];
   delete process.env['INPUT_OUTPATH'];
 }
@@ -131,7 +131,20 @@ describe('getInputs collect', () => {
     expect(customScript).toBe('custom script');
   }));
 
-})
+
+test('should parse serveCommand and awaitServeStdout', withProject(prjCfg, async (prj) => {
+  rcPath = join(prj.root, DEFAULT_RC_NAME);
+  process.env['INPUT_RCPATH'] = rcPath;
+  process.env['INPUT_UFPATH'] = 'ufPath-from-action';
+  process.env['INPUT_SERVECOMMAND'] = 'serve on localhost:4000';
+  process.env['INPUT_AWAITSERVESTDOUT'] = 'server running';
+
+  const { serveCommand, awaitServeStdout } = getInputs();
+  expect(serveCommand).toBe('serve on localhost:4000');
+  expect(awaitServeStdout).toBe('server running');
+}));
+
+});
 /*
 describe('getInputs upload', () => {
 

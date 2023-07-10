@@ -8,7 +8,7 @@ export type GhActionInputs = {
   url?: string;
   ufPath?: string;
   serveCommand?: string;
-  awaitServerStdout?: string;
+  awaitServeStdout?: string;
   configPath?: string;
   // persist
   format?: string[];
