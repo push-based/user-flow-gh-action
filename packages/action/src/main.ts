@@ -4,4 +4,3 @@
  * - sticky-pull-request-comment in GitHub under `marocchino/sticky-pull-request-comment@v2`.
  *
  */
-const EMPTY_VAR = null;
