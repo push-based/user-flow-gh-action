@@ -2,6 +2,21 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+### [0.3.2](https://github.com/push-based/user-flow-gh-action/compare/v0.3.1...v0.3.2) (2023-07-10)
+
+
+### Bug Fixes
+
+* release ([eae11bd](https://github.com/push-based/user-flow-gh-action/commit/eae11bdbcc54e23a44ec0086846adff7dd46f934))
+* release ([e72fa64](https://github.com/push-based/user-flow-gh-action/commit/e72fa64276447549a1a02dc373d7b280489d30a3))
+* release ([a1d7998](https://github.com/push-based/user-flow-gh-action/commit/a1d7998efcfa8ae6f36200db52ef085216bd2bd1))
+* release ([4513bd3](https://github.com/push-based/user-flow-gh-action/commit/4513bd3b0009593d1d47d4982c5f2fc4d700b163))
+* release ([f40efb9](https://github.com/push-based/user-flow-gh-action/commit/f40efb95bbafdaba14f441a7a7bff29e80506c3d))
+* release ([40f49db](https://github.com/push-based/user-flow-gh-action/commit/40f49dbbbbb16cfe67c3f691ee3f111ba173313c))
+* release 2 ([1be8195](https://github.com/push-based/user-flow-gh-action/commit/1be81952109d1195820d02f3e5d96b4792977a13))
+* release 3 ([6b100bf](https://github.com/push-based/user-flow-gh-action/commit/6b100bf650afe17b903bcfc616b724c76e162b1d))
+* release BREAKING ([86fa307](https://github.com/push-based/user-flow-gh-action/commit/86fa30799160847665382f22677e354f37e2df3b))
+
 ### [0.3.1](https://github.com/push-based/user-flow-gh-action/compare/v0.3.0...v0.3.1) (2023-06-07)
 
 
