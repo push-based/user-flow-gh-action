@@ -33,7 +33,7 @@ jobs:
         id: localRun
         uses: ./dist/packages/user-flow-gh-action/
         with:
-          commentId: "user-flow_ci"
+          commentId: "test-e2e-the-outputs"
           dryRun: off
           verbose: on
           url: https://google.com
@@ -43,3 +43,15 @@ jobs:
           rcPath: ./.user-flowrc.json
       - name: test-e2e:user-flow-gh-action
         run: npm run postLocalCiRunTest -- --r="${{ steps.localRun.outputs.resultSummary }}"
+      - name: run:user-flow-gh-action (needed to test multiple comments)
+        id: localRun
+        uses: ./dist/packages/user-flow-gh-action/
+        with:
+          commentId: "test-multiple-comments"
+          dryRun: off
+          verbose: on
+          url: https://google.com
+          ufPath: ./user-flows/flow.uf.ts
+          outPath: ./packages/user-flow-gh-action-e2e/measures
+          format: html,json
+          rcPath: ./.user-flowrc.json
