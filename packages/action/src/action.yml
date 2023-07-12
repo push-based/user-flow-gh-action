@@ -2,6 +2,10 @@ name: 'Lighthouse User Flow CI Action'
 description: "Audit URL's using Lighthouse user flow and test performance within PR's"
 inputs:
   # GLOBAL ============================================
+  commentId:
+    description: 'A custom id needed if multiple runs add comments to the same PR'
+    required: false
+    default: "user flow summary report"
   customScript:
     description: 'A custom way to execute userflow. This is helpful if another lib wraps the userflow execution in the CI'
     required: false
@@ -71,7 +75,7 @@ runs:
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         hide_and_recreate: true # collapse old comment & append new comment at the end
-        header: user flow summary report
+        header: ${{ inputs.customScript }}
         message: ${{ steps.ruf.outputs.resultSummary }}
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
