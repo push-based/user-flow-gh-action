@@ -48,7 +48,7 @@ jobs:
         uses: ./dist/packages/user-flow-gh-action/
         with:
           commentId: "test-multiple-comments"
-          dryRun: off
+          dryRun: on
           verbose: on
           url: https://google.com
           ufPath: ./user-flows/flow.uf.ts
