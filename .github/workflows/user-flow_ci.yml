@@ -43,8 +43,9 @@ jobs:
           rcPath: ./.user-flowrc.json
       - name: test-e2e:user-flow-gh-action
         run: npm run postLocalCiRunTest -- --r="${{ steps.localRun.outputs.resultSummary }}"
+
       - name: run:user-flow-gh-action (needed to test multiple comments)
-        id: localRun
+        id: localRun2
         uses: ./dist/packages/user-flow-gh-action/
         with:
           commentId: "test-multiple-comments"
