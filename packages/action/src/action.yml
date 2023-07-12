@@ -3,7 +3,7 @@ description: "Audit URL's using Lighthouse user flow and test performance within
 inputs:
   # GLOBAL ============================================
   commentId:
-    description: 'A custom id needed if multiple runs add comments to the same PR'
+    description: 'A custom id to identify a comments in a PR'
     required: false
     default: "user flow summary report"
   customScript:
