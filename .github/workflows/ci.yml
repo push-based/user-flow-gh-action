@@ -31,7 +31,7 @@ jobs:
         id: localRun
         uses: ./
         with:
-          customId: "ci"
+          commentId: "ci"
           dryRun: off
           verbose: on
           url: https://google.com

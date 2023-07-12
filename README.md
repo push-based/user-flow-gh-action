@@ -8,7 +8,7 @@ It automatically detects flows, executes them and produces md reports as comment
 **Inputs:**  
 | Name                         |  Type     | Default                     |  Description                                                                                               |  
 |------------------------------| --------- | --------------------------- |----------------------------------------------------------------------------------------------------------- |  
-| **`--customId`**             | `string`  | `user flow summary report`  | Custom id used to identify a comment in the PR (useful if multiple actions run user-flow for the same PR)  |  
+| **`--commentId`**            | `string`  | `user flow summary report`  | Id used to identify a comment in the PR (useful if multiple actions run user-flow for the same PR)  |  
 | **`--customScript`**         | `string`  | `undefined`                 | Custom way to execute user-flow (helpfule if the default way of execution is not given)                    |  
 | **`--rcPath`**               | `string`  | `./user-flowrc.json`        | Path to user-flow.config.json. e.g. `./user-flowrc.json`                                                   |  
 | **`--verbose`**              | `string`  | `off`                       | Run with verbose logging (only 'on' and 'off' is possible)                                                 |  
