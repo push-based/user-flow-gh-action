@@ -33,6 +33,7 @@ jobs:
         id: localRun
         uses: ./dist/packages/user-flow-gh-action/
         with:
+          customId: "user-flow_ci"
           dryRun: off
           verbose: on
           url: https://google.com
