@@ -39,3 +39,15 @@ jobs:
           outPath: ./packages/user-flow-gh-action-e2e/measures
           format: html,json
           rcPath: ./.user-flowrc.json
+      - name: run:action2
+        id: localRun
+        uses: ./
+        with:
+          commentId: "ci-2"
+          dryRun: on
+          verbose: on
+          url: https://google.com
+          ufPath: ./user-flows
+          outPath: ./packages/user-flow-gh-action-e2e/measures
+          format: html,json
+          rcPath: ./.user-flowrc.json
