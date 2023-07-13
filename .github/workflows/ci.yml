@@ -27,14 +27,21 @@ jobs:
           add: '*'
       - name: test-unit:action
         run: npm run nx test action
-      - name: run:action
-        id: localRun
+      - name: run:action ( e2e test run for real output )
         uses: ./
         with:
+          commentId: test-e2e-first-run
           dryRun: off
           verbose: on
           url: https://google.com
           ufPath: ./user-flows
           outPath: ./packages/user-flow-gh-action-e2e/measures
           format: html,json
+          rcPath: ./.user-flowrc.json
+      - name: run:action ( dummy run for to test multiple comments )
+        uses: ./
+        with:
+          commentId: test-e2e-second-run
+          dryRun: on
+          ufPath: ./user-flows/flow.uf.ts
           rcPath: ./.user-flowrc.json

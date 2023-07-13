@@ -33,6 +33,7 @@ jobs:
         id: localRun
         uses: ./dist/packages/user-flow-gh-action/
         with:
+          commentId: test-e2e-the-outputs
           dryRun: off
           verbose: on
           url: https://google.com
