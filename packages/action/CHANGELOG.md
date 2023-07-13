@@ -2,6 +2,14 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.4.0](https://github.com/push-based/user-flow-gh-action/compare/v0.3.2...v0.4.0) (2023-07-13)
+
+
+### Features
+
+* add comment id ([0cd5fa1](https://github.com/push-based/user-flow-gh-action/commit/0cd5fa132d0089592d6d5fb31d872491f028f14a))
+* add commentId to support multiple runs in the same PR ([6445167](https://github.com/push-based/user-flow-gh-action/commit/644516793c382c13ce3c4cac5a0e524f80dbb642))
+
 ### [0.3.2](https://github.com/push-based/user-flow-gh-action/compare/v0.3.1...v0.3.2) (2023-07-10)
 
 
