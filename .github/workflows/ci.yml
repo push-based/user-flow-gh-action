@@ -40,7 +40,7 @@ jobs:
           format: html,json
           rcPath: ./.user-flowrc.json
       - name: run:action2
-        id: localRun
+        id: localRun2
         uses: ./
         with:
           commentId: "ci-2"
