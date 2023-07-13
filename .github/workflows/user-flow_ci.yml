@@ -29,7 +29,7 @@ jobs:
         run: npm run nx test user-flow-gh-action
       - name: test-integration:user-flow-gh-action
         run: npm run nx test user-flow-gh-action-e2e
-      - name: run:user-flow-gh-action (needed to test-e2e the outputs & commentId=test-e2e-the-outputs)
+      - name: run:user-flow-gh-action (needed to test-e2e the outputs)
         id: localRun
         uses: ./dist/packages/user-flow-gh-action/
         with:

@@ -27,8 +27,7 @@ jobs:
           add: '*'
       - name: test-unit:action
         run: npm run nx test action
-      - name: run:action
-        id: localRun
+      - name: run:action ( commentId=test-e2e-the-outputs )
         uses: ./
         with:
           dryRun: off
