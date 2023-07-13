@@ -75,7 +75,7 @@ runs:
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         hide_and_recreate: true # collapse old comment & append new comment at the end
-        header: ${{ inputs.customScript }}
+        header: ${{ inputs.commentId }}
         message: ${{ steps.ruf.outputs.resultSummary }}
 branding:
   icon: 'bar-chart-2' # un-sorted bar chart
