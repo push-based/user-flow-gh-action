@@ -34,7 +34,7 @@ jobs:
           dryRun: off
           verbose: on
           url: https://google.com
-          ufPath: ./user-flows/flow.uf.ts
+          ufPath: ./user-flows
           outPath: ./packages/user-flow-gh-action-e2e/measures
           format: html,json
           rcPath: ./.user-flowrc.json
@@ -42,10 +42,6 @@ jobs:
         uses: ./
         with:
           commentId: test-e2e-second-run
-          dryRun: off
-          verbose: on
-          url: https://google.com
+          dryRun: on
           ufPath: ./user-flows/flow.uf.ts
-          outPath: ./packages/user-flow-gh-action-e2e/measures
-          format: html,json
           rcPath: ./.user-flowrc.json

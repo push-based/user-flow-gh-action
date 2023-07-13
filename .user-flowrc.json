@@ -1,7 +1,12 @@
 {
-  "collect": {},
+  "collect": {
+    "url": "https://google.com",
+    "ufPath": "./user-flows"
+  },
   "persist": {
-    "budgets": []
+    "budgets": [],
+    "outPath": "./packages/user-flow-gh-action-e2e/measures",
+    "format": ["json"]
   },
   "assert": {}
 }
