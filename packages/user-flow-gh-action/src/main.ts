@@ -14,11 +14,14 @@ export async function run(): Promise<void> {
     ghActionInputs = getInputs();
     core.endGroup();
 
+    if(ghActionInputs.onlyComments) {
+      core.debug(`Skip running tests. onlyComments is given`);
+    } else {
     core.startGroup(`Execute user-flow`);
     // @TODO retrieve result instead of readdirSync(ghActionInputs.outPath)
     await executeUFCI(ghActionInputs);
     core.endGroup();
-
+    }
     core.startGroup(`Validate results`);
 
     const allResults = readdirSync(ghActionInputs.outPath);

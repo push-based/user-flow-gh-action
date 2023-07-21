@@ -1,6 +1,6 @@
 export type GhActionInputs = {
   // global
-  customScript?: string;
+  onlyComments?: boolean;
   rcPath: string;
   verbose: boolean;
   dryRun: boolean;

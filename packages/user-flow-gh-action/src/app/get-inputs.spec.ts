@@ -90,12 +90,12 @@ describe('getInputs collect', () => {
     expect(() => getInputs()).toThrow(wrongDryRunValue(process.env['INPUT_DRYRUN']));
   }));
 
-  test('should parse customScript', withProject(prjCfg, async (prj) => {
+  test('should parse onlyComments', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
     process.env['INPUT_RCPATH'] = rcPath;
-    process.env['INPUT_CUSTOMSCRIPT'] = 'nx user-flow project-name';
-    const { customScript } = getInputs();
-    expect(customScript).toBe( process.env['INPUT_CUSTOMSCRIPT'] );
+    process.env['INPUT_ONLYCOMMENTS'] = 'off';
+    const { onlyComments } = getInputs();
+    expect(onlyComments).toBe( false );
   }));
   test('should parse rcPath on to true', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
@@ -121,14 +121,14 @@ describe('getInputs collect', () => {
     expect(url).toBe('url-from-action');
   }));
 
-  test('should parse ufPath on to true', withProject(prjCfg, async (prj) => {
+  test('should parse onlyComments on to true', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
-    process.env['INPUT_CUSTOMSCRIPT'] = 'custom script';
+    process.env['INPUT_ONLYCOMMENTS'] = 'on';
     process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_UFPATH'] = 'ufPath-from-action';
-    const { ufPath, customScript } = getInputs();
+    const { ufPath, onlyComments } = getInputs();
     expect(ufPath).toBe('ufPath-from-action');
-    expect(customScript).toBe('custom script');
+    expect(onlyComments).toBe(true);
   }));
 
 

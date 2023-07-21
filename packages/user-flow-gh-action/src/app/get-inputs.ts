@@ -11,7 +11,7 @@ export const wrongBooleanValue = (val: string, prop: string) => `${prop} is ${va
 export const wrongVerboseValue = (val: string) => wrongBooleanValue(val, 'verbose');
 export const wrongDryRunValue = (val: string) => wrongBooleanValue(val, 'dryRun');
 
-const outPath = "./user-flow-gh-tmp";
+// const outPath = "./user-flow-gh-tmp";
 export function getInputs(): GhActionInputs {
   const ghActionInputs = {} as any;
 
@@ -92,9 +92,14 @@ export function getInputs(): GhActionInputs {
   };
 
   // global
-  const customScript = core.getInput('customScript', { trimWhitespace: true });
-  core.debug(`Input customScript is ${customScript}`);
-  customScript && (ghI.customScript = customScript);
+  const onlyCommentsInput = core.getInput('onlyComments', { trimWhitespace: true });
+  if (onlyCommentsInput !== 'on' && onlyCommentsInput !== 'off') {
+    throw new Error(wrongVerboseValue(onlyCommentsInput));
+  }
+  core.debug(`Input onlyComments is ${onlyCommentsInput}`);
+
+  // convert action input to boolean
+  ghI.onlyComments = onlyCommentsInput === 'on';
 
   // collect
   core.debug(`Input url is ${url}`);
@@ -122,7 +127,7 @@ export function getInputs(): GhActionInputs {
   format && (ghI.format = format);
 
   // we use a custom out path to avoid conflicts i the file system
-  // const outPath: string = core.getInput('outPath');
+  const outPath: string = core.getInput('outPath');
   core.debug(`Input outPath is ${outPath}`);
   outPath && (ghI.outPath = outPath);
 
