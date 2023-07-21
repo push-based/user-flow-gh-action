@@ -1890,7 +1890,8 @@ function getInputs() {
     const ghI = {
         rcPath,
         verbose,
-        dryRun
+        dryRun,
+        onlyComments
     };
     // collect
     core.debug(`Input url is ${url}`);
