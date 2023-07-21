@@ -1,0 +1,83 @@
+name: 'Lighthouse User Flow CI Action'
+description: "Audit URL's using Lighthouse user flow and test performance within PR's"
+inputs:
+  # GLOBAL ============================================
+  commentId:
+    description: 'A custom id to identify a comments in a PR'
+    required: false
+    default: "user flow summary report"
+  onlyComments:
+    description: 'No execution of userflow. Just creation of the comments in the PR.'
+    required: false
+    default: "off"
+  rcPath:
+    description: 'Path to a UFCI user-flowrc.json file'
+    required: false
+    default: '.user-flowrc.json'
+  verbose:
+    description: 'Verbose logging flag ("on" or "off")'
+    required: false
+    # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
+    default: 'off'
+  # COLLECT ============================================
+  url:
+    description: 'URL to analyze'
+    required: false
+  ufPath:
+    description: 'Path to user-flow file or folder containing user-flow files to run. (`*.uf.ts` or `*.uf.js`)'
+    required: false
+  configPath:
+    description: 'Path to the lighthouse `config.json` file'
+    required: false
+  serveCommand:
+    description: 'Runs a npm script to serve the target app. This has to be used in combination with `--awaitServeStdout`'
+    required: false
+  awaitServeStdout:
+    description: 'Waits for stdout from the serve command to start collecting user-flows'
+    required: false
+  dryRun:
+    description: 'Faster runs due to dummy results for reports ("on" or "off")'
+    required: false
+    # has to be in line with @push-based/user-flow/packages/cli/src/lib/pre-set.ts#CI_PRESET
+    default: 'off'
+  # PERSIST ============================================
+  format:
+    description: 'Format of the creates reports ( `html`, `json`, `md`, `stdout`)'
+    required: false
+  outPath:
+    description: 'output folder for the user-flow reports'
+    required: false
+  # ASSERT =============================================
+  budgetPath:
+    description: 'Path to the lighthouse `budget.json` file'
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: run:user-flow
+      id: ruf
+      shell: bash
+      run: node ./dist/packages/user-flow-gh-action/main.js
+      env:
+        INPUT_ONLYCOMMENTS: ${{ inputs.onlyComments }}
+        INPUT_RCPATH: ${{ inputs.rcPath }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
+        INPUT_DRYRUN: ${{ inputs.dryRun }}
+        INPUT_URL: ${{ inputs.url }}
+        INPUT_UFPATH: ${{ inputs.ufPath }}
+        INPUT_CONFIGPATH: ${{ inputs.configPath }}
+        INPUT_BUDGETPATH: ${{ inputs.budgetPath }}
+        INPUT_SERVECOMMAND: ${{ inputs.serveCommand }}
+        INPUT_AWAITSTDOUTFROMSERVE: ${{ inputs.awaitStdoutFromServe }}
+        INPUT_FORMAT: ${{ inputs.format }}
+        INPUT_OUTPATH: ${{ inputs.outPath }}
+
+    - name: Add reduced report as comment to the PR
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        hide_and_recreate: true # collapse old comment & append new comment at the end
+        header: ${{ inputs.commentId }}
+        message: ${{ steps.ruf.outputs.resultSummary }}
+branding:
+  icon: 'bar-chart-2' # un-sorted bar chart
+  color: 'gray-dark'

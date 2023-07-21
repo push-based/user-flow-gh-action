@@ -3043,9 +3043,11 @@ const executeUFCI_1 = __webpack_require__("./packages/user-flow-gh-action/src/ap
 const get_inputs_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/get-inputs.ts");
 const fs_1 = __webpack_require__("fs");
 const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/process-result.ts");
+const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/utils.ts");
 async function run() {
     core.debug(`Run user-flow login in main`);
     let ghActionInputs;
+    let resultsOutPath = undefined;
     try {
         core.startGroup(`Get inputs form action.yml`);
         ghActionInputs = (0, get_inputs_1.getInputs)();
@@ -3060,9 +3062,13 @@ async function run() {
             core.endGroup();
         }
         core.startGroup(`Validate results`);
-        const allResults = (0, fs_1.readdirSync)(ghActionInputs.outPath);
+        const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
+        const { persist } = rcFileObj;
+        const rcOutPath = persist.outPath;
+        resultsOutPath = ghActionInputs.outPath || rcOutPath;
+        const allResults = (0, fs_1.readdirSync)(resultsOutPath);
         if (!allResults.length) {
-            throw new Error(`No results present in folder ${ghActionInputs.outPath}`);
+            throw new Error(`No results present in folder ${resultsOutPath}`);
         }
         core.endGroup();
     }
@@ -3075,10 +3081,10 @@ async function run() {
     }
     try {
         core.startGroup(`Process results`);
-        const { resultSummary, resultPath } = (0, process_result_1.processResult)(ghActionInputs.outPath);
+        const { resultSummary, resultPath } = (0, process_result_1.processResult)(resultsOutPath);
         // cleanup tmp folder
-        if ((0, fs_1.existsSync)(ghActionInputs.outPath)) {
-            (0, fs_1.rmdirSync)(ghActionInputs.outPath, { recursive: true });
+        if ((0, fs_1.existsSync)(resultsOutPath)) {
+            (0, fs_1.rmdirSync)(resultsOutPath, { recursive: true });
         }
         core.setOutput('resultPath', resultPath);
         core.setOutput('resultSummary', resultSummary);
