@@ -6,9 +6,10 @@ inputs:
     description: 'A custom id to identify a comments in a PR'
     required: false
     default: "user flow summary report"
-  customScript:
-    description: 'A custom way to execute userflow. This is helpful if another lib wraps the userflow execution in the CI'
+  onlyComments:
+    description: 'No execution of userflow. Just creation of the comments in the PR.'
     required: false
+    default: "off"
   rcPath:
     description: 'Path to a UFCI user-flowrc.json file'
     required: false
@@ -58,7 +59,7 @@ runs:
       shell: bash
       run: node ./dist/packages/user-flow-gh-action/main.js
       env:
-        INPUT_CUSTOMSCRIPT: ${{ inputs.customScript }}
+        INPUT_ONLYCOMMENTS: ${{ inputs.onlyComments }}
         INPUT_RCPATH: ${{ inputs.rcPath }}
         INPUT_VERBOSE: ${{ inputs.verbose }}
         INPUT_DRYRUN: ${{ inputs.dryRun }}

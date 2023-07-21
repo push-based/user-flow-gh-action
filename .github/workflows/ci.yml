@@ -38,10 +38,22 @@ jobs:
           outPath: ./packages/user-flow-gh-action-e2e/measures
           format: html,json
           rcPath: ./.user-flowrc.json
+
       - name: run:action ( dummy run for to test multiple comments )
         uses: ./
         with:
           commentId: test-e2e-second-run
           dryRun: on
           ufPath: ./user-flows/flow.uf.ts
-          rcPath: ./.user-flowrc.json
+
+
+      - name: use user-flow-nx-plugin
+        run: npm run nx user-flow user-flow-gh-action-e2e
+
+      - name: run:action ( test commentsOnly input )
+        uses: ./
+        with:
+          verbose: on
+          commentId: test-commentsOnly
+          onlyComments: on
+          outPath: ./dist/user-flow/user-flow-gh-action-e2e

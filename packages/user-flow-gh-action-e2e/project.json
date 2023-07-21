@@ -36,6 +36,18 @@
           }
         ]
       }
+    },
+    "user-flow": {
+      "executor": "@push-based/user-flow-nx-plugin:user-flow",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "verbose": true,
+        "url": "https://google.com",
+        "rcPath": "./packages/user-flow-gh-action-e2e/.user-flowrc.json",
+        "ufPath": "./packages/user-flow-gh-action-e2e/user-flows",
+        "outputPath": "./dist/user-flow/user-flow-gh-action-e2e",
+        "format": ["md"]
+      }
     }
   },
   "tags": []

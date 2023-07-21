@@ -11,11 +11,22 @@ export const wrongBooleanValue = (val: string, prop: string) => `${prop} is ${va
 export const wrongVerboseValue = (val: string) => wrongBooleanValue(val, 'verbose');
 export const wrongDryRunValue = (val: string) => wrongBooleanValue(val, 'dryRun');
 
-const outPath = "./user-flow-gh-tmp";
+// const outPath = "./user-flow-gh-tmp";
 export function getInputs(): GhActionInputs {
   const ghActionInputs = {} as any;
 
   // GLOBAL PARAMS =================================================
+
+  let onlyCommentsInput = core.getInput('onlyComments', { trimWhitespace: true });
+  if (onlyCommentsInput === '') {
+    onlyCommentsInput = 'off';
+  }
+  if (onlyCommentsInput !== 'on' && onlyCommentsInput !== 'off') {
+    throw new Error(wrongDryRunValue(onlyCommentsInput));
+  }
+  // convert action input to boolean
+  const onlyComments = onlyCommentsInput === 'on';
+  core.debug(`Input onlyComments is ${onlyComments}`);
 
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
@@ -63,7 +74,7 @@ export function getInputs(): GhActionInputs {
 
   // Get and interpolate URL's
   let url = core.getInput('url', { trimWhitespace: true });
-  core.debug(`Input url is ${url}`);
+  core.debug(`Parsed url is ${url}`);
 
   // @TODO test it or drop it!
   url = interpolateProcessIntoUrl(url);
@@ -88,13 +99,9 @@ export function getInputs(): GhActionInputs {
   const ghI: GhActionInputs = {
     rcPath,
     verbose,
-    dryRun
+    dryRun,
+    onlyComments
   };
-
-  // global
-  const customScript = core.getInput('customScript', { trimWhitespace: true });
-  core.debug(`Input customScript is ${customScript}`);
-  customScript && (ghI.customScript = customScript);
 
   // collect
   core.debug(`Input url is ${url}`);
@@ -122,7 +129,7 @@ export function getInputs(): GhActionInputs {
   format && (ghI.format = format);
 
   // we use a custom out path to avoid conflicts i the file system
-  // const outPath: string = core.getInput('outPath');
+  const outPath: string = core.getInput('outPath');
   core.debug(`Input outPath is ${outPath}`);
   outPath && (ghI.outPath = outPath);
 

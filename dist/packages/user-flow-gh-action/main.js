@@ -1779,11 +1779,7 @@ run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
         // override format
         ghActionInputs.format = ['md'];
         const command = 'collect';
-        let script = `npx @push-based/user-flow ${command}`;
-        if (ghActionInputs.customScript !== undefined) {
-            script = ghActionInputs.customScript;
-            core.debug(`Execute CLI over custom script: ${script}`);
-        }
+        const script = `npx @push-based/user-flow ${command}`;
         const processedParams = (0, utils_1.processParamsToParamsArray)(ghActionInputs);
         core.debug(`Execute CLI: ${script} ${processedParams.join(' ')}`);
         const res = run(script, processedParams);
@@ -1815,10 +1811,20 @@ const wrongVerboseValue = (val) => (0, exports.wrongBooleanValue)(val, 'verbose'
 exports.wrongVerboseValue = wrongVerboseValue;
 const wrongDryRunValue = (val) => (0, exports.wrongBooleanValue)(val, 'dryRun');
 exports.wrongDryRunValue = wrongDryRunValue;
-const outPath = "./user-flow-gh-tmp";
+// const outPath = "./user-flow-gh-tmp";
 function getInputs() {
     const ghActionInputs = {};
     // GLOBAL PARAMS =================================================
+    let onlyCommentsInput = core.getInput('onlyComments', { trimWhitespace: true });
+    if (onlyCommentsInput === '') {
+        onlyCommentsInput = 'off';
+    }
+    if (onlyCommentsInput !== 'on' && onlyCommentsInput !== 'off') {
+        throw new Error((0, exports.wrongDryRunValue)(onlyCommentsInput));
+    }
+    // convert action input to boolean
+    const onlyComments = onlyCommentsInput === 'on';
+    core.debug(`Input onlyComments is ${onlyComments}`);
     // Inspect user-flowrc file for malformations
     const rcPath = core.getInput('rcPath') ? (0, path_1.resolve)(core.getInput('rcPath')) : null;
     core.debug(`Input rcPath is ${rcPath}`);
@@ -1860,7 +1866,7 @@ function getInputs() {
     core.debug(`Input dryRun is ${dryRun}`);
     // Get and interpolate URL's
     let url = core.getInput('url', { trimWhitespace: true });
-    core.debug(`Input url is ${url}`);
+    core.debug(`Parsed url is ${url}`);
     // @TODO test it or drop it!
     url = interpolateProcessIntoUrl(url);
     /*
@@ -1884,12 +1890,9 @@ function getInputs() {
     const ghI = {
         rcPath,
         verbose,
-        dryRun
+        dryRun,
+        onlyComments
     };
-    // global
-    const customScript = core.getInput('customScript', { trimWhitespace: true });
-    core.debug(`Input customScript is ${customScript}`);
-    customScript && (ghI.customScript = customScript);
     // collect
     core.debug(`Input url is ${url}`);
     url && (ghI.url = url);
@@ -1910,7 +1913,7 @@ function getInputs() {
     core.debug(`Input format is ${format}`);
     format && (ghI.format = format);
     // we use a custom out path to avoid conflicts i the file system
-    // const outPath: string = core.getInput('outPath');
+    const outPath = core.getInput('outPath');
     core.debug(`Input outPath is ${outPath}`);
     outPath && (ghI.outPath = outPath);
     // assert
@@ -3040,21 +3043,32 @@ const executeUFCI_1 = __webpack_require__("./packages/user-flow-gh-action/src/ap
 const get_inputs_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/get-inputs.ts");
 const fs_1 = __webpack_require__("fs");
 const process_result_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/process-result.ts");
+const utils_1 = __webpack_require__("./packages/user-flow-gh-action/src/app/utils.ts");
 async function run() {
-    core.debug(`Run main`);
+    core.debug(`Run user-flow login in main`);
     let ghActionInputs;
+    let resultsOutPath = undefined;
     try {
         core.startGroup(`Get inputs form action.yml`);
         ghActionInputs = (0, get_inputs_1.getInputs)();
         core.endGroup();
-        core.startGroup(`Execute user-flow`);
-        // @TODO retrieve result instead of readdirSync(ghActionInputs.outPath)
-        await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
-        core.endGroup();
+        if (ghActionInputs.onlyComments) {
+            core.debug(`Skip running tests. onlyComments is given`);
+        }
+        else {
+            core.startGroup(`Execute user-flow`);
+            // @TODO retrieve result instead of readdirSync(ghActionInputs.outPath)
+            await (0, executeUFCI_1.executeUFCI)(ghActionInputs);
+            core.endGroup();
+        }
         core.startGroup(`Validate results`);
-        const allResults = (0, fs_1.readdirSync)(ghActionInputs.outPath);
+        const rcFileObj = (0, utils_1.readJsonFileSync)(ghActionInputs.rcPath);
+        const { persist } = rcFileObj;
+        const rcOutPath = persist.outPath;
+        resultsOutPath = ghActionInputs.outPath || rcOutPath;
+        const allResults = (0, fs_1.readdirSync)(resultsOutPath);
         if (!allResults.length) {
-            throw new Error(`No results present in folder ${ghActionInputs.outPath}`);
+            throw new Error(`No results present in folder ${resultsOutPath}`);
         }
         core.endGroup();
     }
@@ -3067,10 +3081,10 @@ async function run() {
     }
     try {
         core.startGroup(`Process results`);
-        const { resultSummary, resultPath } = (0, process_result_1.processResult)(ghActionInputs.outPath);
+        const { resultSummary, resultPath } = (0, process_result_1.processResult)(resultsOutPath);
         // cleanup tmp folder
-        if ((0, fs_1.existsSync)(ghActionInputs.outPath)) {
-            (0, fs_1.rmdirSync)(ghActionInputs.outPath, { recursive: true });
+        if ((0, fs_1.existsSync)(resultsOutPath)) {
+            (0, fs_1.rmdirSync)(resultsOutPath, { recursive: true });
         }
         core.setOutput('resultPath', resultPath);
         core.setOutput('resultSummary', resultSummary);
