@@ -55,5 +55,5 @@ jobs:
         with:
           verbose: on
           commentId: test-commentsOnly
-          commentOnly: on
+          onlyComments: on
           outPath: .dist/user-flow/packages/user-flow-gh-action-e2e
