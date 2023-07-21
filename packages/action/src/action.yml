@@ -9,6 +9,7 @@ inputs:
   onlyComments:
     description: 'No execution of userflow. Just creation of the comments in the PR.'
     required: false
+    default: "off"
   rcPath:
     description: 'Path to a UFCI user-flowrc.json file'
     required: false

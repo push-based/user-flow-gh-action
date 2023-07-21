@@ -41,23 +41,5 @@ describe('executeUFCI mock', () => {
     const paramsFormatted = processParamsToParamsArray({...rcObj, verbose: true, dryRun: false, format: ['md']});
     expect(res).toBe(`Execute CLI: npx @push-based/user-flow collect ${paramsFormatted.join(', ')}`);
   }));
-  test('respects custom script', withProject(prjCfg, async () => {
-    const rcObj = {
-      "url": "https://google.com",
-      "ufPath": "./user-flows",
-
-      "outPath": "./packages/user-flow-gh-action-e2e/measures",
-      "format": [
-        "md"
-      ]
-    };
-    const run = (bin: string, args: string[]) => {
-      return `Execute CLI: npx @push-based/user-flow collect ${args.join(', ')}` as any;
-    };
-
-    const params = {...rcObj, verbose: true, dryRun: false, customScript: 'custom script'} as unknown as any;
-    const res = await executeUFCI((params), run);
-    expect(res).toContain(`custom script`);
-  }));
 
 });

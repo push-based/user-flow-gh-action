@@ -6,7 +6,7 @@ import {processResult} from './app/process-result';
 import {GhActionInputs} from './app/types';
 
 export async function run(): Promise<void> {
-  core.debug(`Run main`);
+  core.debug(`Run user-flow login in main`);
   let ghActionInputs: GhActionInputs;
 
   try {

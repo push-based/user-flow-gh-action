@@ -23,7 +23,7 @@ let rcPath: string;
 
 function resetProcessParams(): void {
   // GLOBAL
-  delete process.env['INPUT_CUSTOMSCRIPT'];
+  delete process.env['INPUT_ONLYCOMMETNS'];
   delete process.env['INPUT_RCPATH'];
   delete process.env['INPUT_VERBOSE'];
   // COLLECT
@@ -90,27 +90,48 @@ describe('getInputs collect', () => {
     expect(() => getInputs()).toThrow(wrongDryRunValue(process.env['INPUT_DRYRUN']));
   }));
 
-  test('should parse onlyComments', withProject(prjCfg, async (prj) => {
+  test('should parse dryRun', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
     process.env['INPUT_RCPATH'] = rcPath;
-    process.env['INPUT_ONLYCOMMENTS'] = 'off';
     const { onlyComments } = getInputs();
     expect(onlyComments).toBe( false );
   }));
-  test('should parse rcPath on to true', withProject(prjCfg, async (prj) => {
+  test('should parse dryRun on to true', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
     process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_DRYRUN'] = 'on';
     const { dryRun } = getInputs();
     expect(dryRun).toBe(true);
   }));
-
-  test('should parse rcPath off to false', withProject(prjCfg, async (prj) => {
+  test('should parse dryRun off to false', withProject(prjCfg, async (prj) => {
     rcPath = join(prj.root, DEFAULT_RC_NAME);
     process.env['INPUT_RCPATH'] = rcPath;
     process.env['INPUT_DRYRUN'] = 'off';
     const { dryRun } = getInputs();
     expect(dryRun).toBe(false);
+  }));
+
+  // onlyComments
+
+  test('should parse onlyComments', withProject(prjCfg, async (prj) => {
+    rcPath = join(prj.root, DEFAULT_RC_NAME);
+    process.env['INPUT_RCPATH'] = rcPath;
+    const { onlyComments } = getInputs();
+    expect(onlyComments).toBe( false );
+  }));
+  test('should parse onlyComments on to true', withProject(prjCfg, async (prj) => {
+    rcPath = join(prj.root, DEFAULT_RC_NAME);
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_ONLYCOMMENTS'] = 'on';
+    const { onlyComments } = getInputs();
+    expect(onlyComments).toBe(true);
+  }));
+  test('should parse onlyComments off to false', withProject(prjCfg, async (prj) => {
+    rcPath = join(prj.root, DEFAULT_RC_NAME);
+    process.env['INPUT_RCPATH'] = rcPath;
+    process.env['INPUT_ONLYCOMMENTS'] = 'off';
+    const { onlyComments } = getInputs();
+    expect(onlyComments).toBe(false);
   }));
 
   test('should parse url on to true',  withProject(prjCfg, async (prj) => {

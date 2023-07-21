@@ -6,16 +6,14 @@ describe('main.js', () => {
 
   test('runs', withProject<any>({
     ...REMOTE_PRJ_CFG, env: {
-      INPUT_CUSTOMSCRIPT: "npx @push-based/user-flow",
       INPUT_RCPATH: REMOTE_RC_NAME,
       INPUT_URL: 'https://google.com',
       INPUT_FORMAT: 'html,json'
     }
   }, async (prj :any) => {
-    const { stdout, stderr, exitCode } = await prj.exec();
+    const { stdout, _, exitCode } = await prj.exec();
 
     expect(stdout).toContain('Run main');
-    expect(stdout).toContain('CLI over custom script:');
     expect(stdout).toContain('Get inputs form action.yml');
     expect(stdout).toContain('Execute user-flow');
     expect(stdout).toContain('--format=md');
@@ -26,5 +24,28 @@ describe('main.js', () => {
     expect(stdout).toContain('Process results');
     expect(exitCode).toBe(0);
   }), 180_000);
+
+
+  test('runs only comment if onlyComments is given', withProject<any>({
+    ...REMOTE_PRJ_CFG, env: {
+      INPUT_ONLYCOMMENTS: "on",
+      INPUT_RCPATH: REMOTE_RC_NAME,
+      INPUT_URL: 'https://google.com',
+      INPUT_FORMAT: 'html,json'
+    }
+  }, async (prj :any) => {
+    const { stdout, stderr, exitCode } = await prj.exec();
+
+    expect(stdout).toContain('Run main');
+    expect(stdout).toContain('Get inputs form action.yml');
+    expect(stdout).not.toContain('Execute user-flow');
+    expect(stdout).not.toContain('--format=md');
+    expect(stdout).not.toContain('--url=https://google.com');
+    expect(stdout).toContain(`Skip running tests. onlyComments is given`);
+    expect(stdout).toContain('Validate results');
+    expect(stdout).toContain('Process results');
+    expect(exitCode).toBe(0);
+  }), 180_000);
+
 
 });
