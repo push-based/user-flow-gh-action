@@ -99,7 +99,8 @@ export function getInputs(): GhActionInputs {
   const ghI: GhActionInputs = {
     rcPath,
     verbose,
-    dryRun
+    dryRun,
+    onlyComments
   };
 
   // collect
