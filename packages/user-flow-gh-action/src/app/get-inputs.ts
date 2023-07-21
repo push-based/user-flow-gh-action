@@ -17,6 +17,17 @@ export function getInputs(): GhActionInputs {
 
   // GLOBAL PARAMS =================================================
 
+  let onlyCommentsInput = core.getInput('onlyComments', { trimWhitespace: true });
+  if (onlyCommentsInput === '') {
+    onlyCommentsInput = 'off';
+  }
+  if (onlyCommentsInput !== 'on' && onlyCommentsInput !== 'off') {
+    throw new Error(wrongDryRunValue(onlyCommentsInput));
+  }
+  // convert action input to boolean
+  const onlyComments = onlyCommentsInput === 'on';
+  core.debug(`Input onlyComments is ${onlyComments}`);
+
   // Inspect user-flowrc file for malformations
   const rcPath: string | null = core.getInput('rcPath') ? resolve(core.getInput('rcPath')) : null;
   core.debug(`Input rcPath is ${rcPath}`);
@@ -90,16 +101,6 @@ export function getInputs(): GhActionInputs {
     verbose,
     dryRun
   };
-
-  // global
-  const onlyCommentsInput = core.getInput('onlyComments', { trimWhitespace: true });
-  if (onlyCommentsInput !== 'on' && onlyCommentsInput !== 'off') {
-    throw new Error(wrongVerboseValue(onlyCommentsInput));
-  }
-  core.debug(`Input onlyComments is ${onlyCommentsInput}`);
-
-  // convert action input to boolean
-  ghI.onlyComments = onlyCommentsInput === 'on';
 
   // collect
   core.debug(`Input url is ${url}`);
