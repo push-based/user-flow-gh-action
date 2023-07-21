@@ -74,7 +74,7 @@ export function getInputs(): GhActionInputs {
 
   // Get and interpolate URL's
   let url = core.getInput('url', { trimWhitespace: true });
-  core.debug(`Input url is ${url}`);
+  core.debug(`Parsed url is ${url}`);
 
   // @TODO test it or drop it!
   url = interpolateProcessIntoUrl(url);

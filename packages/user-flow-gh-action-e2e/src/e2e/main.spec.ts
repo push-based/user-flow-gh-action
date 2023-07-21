@@ -13,9 +13,10 @@ describe('main.js', () => {
   }, async (prj :any) => {
     const { stdout, _, exitCode } = await prj.exec();
 
-    expect(stdout).toContain('Run main');
+    expect(stdout).toContain('Run user-flow login in main');
     expect(stdout).toContain('Get inputs form action.yml');
     expect(stdout).toContain('Execute user-flow');
+    expect(stdout).not.toContain('-onlyComments');
     expect(stdout).toContain('--format=md');
     expect(stdout).toContain('--url=https://google.com');
     //expect(stdout).toContain('--format=html');
@@ -36,7 +37,7 @@ describe('main.js', () => {
   }, async (prj :any) => {
     const { stdout, stderr, exitCode } = await prj.exec();
 
-    expect(stdout).toContain('Run main');
+    expect(stdout).toContain('Run user-flow login in main');
     expect(stdout).toContain('Get inputs form action.yml');
     expect(stdout).not.toContain('Execute user-flow');
     expect(stdout).not.toContain('--format=md');
