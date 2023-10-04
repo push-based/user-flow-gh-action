@@ -10,7 +10,11 @@ export async function executeUFCI(
 ): Promise<string> {
   return new Promise((resolve) => {
     // override format
-    ghActionInputs.format =  ['md'];
+    if (!ghActionInputs.format) {
+      ghActionInputs.format =  ['md'];
+    } else if (!ghActionInputs.format.includes('md')) {
+      ghActionInputs.format.push('md');
+    }
 
     const command =  'collect';
     const script = `npx @push-based/user-flow ${command}`;

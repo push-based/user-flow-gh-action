@@ -50,10 +50,6 @@ export async function run(): Promise<void> {
   try {
     core.startGroup(`Process results`);
     const {resultSummary, resultPath} = processResult(resultsOutPath);
-    // cleanup tmp folder
-    if (existsSync(resultsOutPath)) {
-      rmdirSync(resultsOutPath, {recursive: true});
-    }
 
     core.setOutput('resultPath', resultPath);
     core.setOutput('resultSummary', resultSummary);
