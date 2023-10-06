@@ -9,9 +9,10 @@ export async function executeUFCI(
   run: (bin: string, args: string[]) => any = runUserFlowCliCommand
 ): Promise<string> {
   return new Promise((resolve) => {
-    // override format
-    if (!ghActionInputs.format) {
-      ghActionInputs.format =  ['md'];
+    // append markdown format
+    // ghActionInputs.format can be an array containing an empty string
+    if (!ghActionInputs.format || (ghActionInputs.format.length === 1 && !ghActionInputs.format[0]) ) {
+      ghActionInputs.format = ['md'];
     } else if (!ghActionInputs.format.includes('md')) {
       ghActionInputs.format.push('md');
     }

@@ -1776,8 +1776,9 @@ async function executeUFCI(ghActionInputs,
 // for testing
 run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
     return new Promise((resolve) => {
-        // override format
-        if (!ghActionInputs.format) {
+        // append markdown format
+        // ghActionInputs.format can be an array containing an empty string
+        if (!ghActionInputs.format || (ghActionInputs.format.length === 1 && !ghActionInputs.format[0])) {
             ghActionInputs.format = ['md'];
         }
         else if (!ghActionInputs.format.includes('md')) {
