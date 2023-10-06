@@ -1776,8 +1776,14 @@ async function executeUFCI(ghActionInputs,
 // for testing
 run = run_user_flow_cli_command_1.runUserFlowCliCommand) {
     return new Promise((resolve) => {
-        // override format
-        ghActionInputs.format = ['md'];
+        // append markdown format
+        // ghActionInputs.format can be an array containing an empty string
+        if (!ghActionInputs.format || (ghActionInputs.format.length === 1 && !ghActionInputs.format[0])) {
+            ghActionInputs.format = ['md'];
+        }
+        else if (!ghActionInputs.format.includes('md')) {
+            ghActionInputs.format.push('md');
+        }
         const command = 'collect';
         const script = `npx @push-based/user-flow ${command}`;
         const processedParams = (0, utils_1.processParamsToParamsArray)(ghActionInputs);
@@ -3082,10 +3088,6 @@ async function run() {
     try {
         core.startGroup(`Process results`);
         const { resultSummary, resultPath } = (0, process_result_1.processResult)(resultsOutPath);
-        // cleanup tmp folder
-        if ((0, fs_1.existsSync)(resultsOutPath)) {
-            (0, fs_1.rmdirSync)(resultsOutPath, { recursive: true });
-        }
         core.setOutput('resultPath', resultPath);
         core.setOutput('resultSummary', resultSummary);
         core.endGroup();
